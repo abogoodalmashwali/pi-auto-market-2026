@@ -1,7 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Auto Market 2026</title>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f8f9fa; margin: 0; text-align: center; color: #333; }
+        header { background-color: #5b2c91; color: white; padding: 25px; border-bottom: 5px solid #ffa000; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1000px; margin: auto; }
+        .car { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .car-img { width: 100%; height: 200px; background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .pi-pay-btn { background-color: #5b2c91; color: white; padding: 12px; border-radius: 8px; border: none; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .legal { background: #f9f9f9; padding: 20px; margin-top: 30px; border-top: 1px solid #ddd; font-size: 14px; color: #666; }
+    </style>
+</head>
 <body>
-    <h1>أهلاً بك! الموقع يعمل الآن.</h1>
+<header>
+    <h1>منصة الوسيط الآمن لبيع وشراء السيارات بعملة Pi 🚗</h1>
+    <p>إشراف: أبو جود المشولي</p>
+</header>
+
+<div class="gallery">
+    <div class="car"><div class="car-img" style="background-image: url('lexus-lx.png');"></div><h3>Lexus LX 2026</h3><button class="pi-pay-btn" onclick="createPayment('Lexus LX 2026')">π ادفع 1 Pi للاستفسار</button></div>
+    <div class="car"><div class="car-img" style="background-image: url('toyota-camry.png');"></div><h3>Toyota Camry 2026</h3><button class="pi-pay-btn" onclick="createPayment('Toyota Camry 2026')">π ادفع 1 Pi للاستفسار</button></div>
+    <div class="car"><div class="car-img" style="background-image: url('toyota-hilux.png');"></div><h3>Toyota Hilux 2026</h3><button class="pi-pay-btn" onclick="createPayment('Toyota Hilux 2026')">π ادفع 1 Pi للاستفسار</button></div>
+    <div class="car"><div class="car-img" style="background-image: url('hyundai-elantra.png');"></div><h3>Hyundai Elantra 2026</h3><button class="pi-pay-btn" onclick="createPayment('Hyundai Elantra 2026')">π ادفع 1 Pi للاستفسار</button></div>
+</div>
+
+<div class="legal">
+    <h4>🛡️ سياسة الخصوصية وإخلاء المسؤولية</h4>
+    <p>نحن منصة وساطة تقنية. لا نطلب بيانات محفظتك. جميع العمليات تجريبية لغرض العرض فقط.</p>
+</div>
+
+<script>
+    // 1. تهيئة النظام (q3lbzzghlpy8hddplkwbhicmtzypjl6pqgigvdrdlczpy1b1mmecbsni8s9tnrru)
+    Pi.init({ version: "2.0", sandbox: true, apiKey: "ضع_مفتاحك_هنا" });
+
+    // 2. دالة تشغيل نافذة الدفع
+    function createPayment(carName) {
+        Pi.createPayment({
+            amount: 1,
+            memo: "شراء سيارة: " + carName,
+            metadata: { car: carName },
+        }, {
+            onReadyForServerApproval: (paymentId) => alert("تم إنشاء الطلب: " + paymentId),
+            onReadyForServerCompletion: (paymentId, txid) => alert("اكتمل الدفع بنجاح!"),
+            onCancel: (paymentId) => alert("تم إلغاء العملية"),
+            onError: (error, paymentId) => alert("خطأ في العملية: " + error),
+        });
+    }
+</script>
 </body>
 </html>
-
