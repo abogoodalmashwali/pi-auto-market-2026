@@ -34,14 +34,21 @@
     });
 
     async function init() {
-        try {
-            const auth = await Pi.authenticate(['username', 'payments'], () => {});
-            document.getElementById('user-info').innerText = "مرحباً: " + auth.user.username;
-        } catch (e) {
-            document.getElementById('user-info').innerText = "فشل الاتصال";
-        }
+    try {
+        console.log("جاري محاولة الاتصال بـ Pi...");
+        const auth = await Pi.authenticate(['username', 'payments'], (authResult) => {
+            console.log("تمت المصادقة:", authResult);
+        });
+        document.getElementById('user-info').innerText = "مرحباً: " + auth.user.username;
+    } catch (e) {
+        console.error("خطأ:", e);
+        document.getElementById('user-info').innerText = "جاري إعادة المحاولة...";
+        setTimeout(init, 3000); // محاولة الاتصال مجدداً تلقائياً
     }
-    window.onload = init;
+}
+
+window.onload = init;
+
 
     // دالة الدفع باستخدام رابط الباكيند الخاص بك
     const BACKEND_URL = "https://pi-backend-kappa.vercel.app";
