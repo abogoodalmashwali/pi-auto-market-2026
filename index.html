@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f8f9fa; margin: 0; text-align: center; color: #333; }
         header { background-color: #5b2c91; color: white; padding: 25px; border-bottom: 5px solid #ffa000; }
@@ -35,8 +35,7 @@
 
 <script>
     // 1. تهيئة النظام (q3lbzzghlpy8hddplkwbhicmtzypjl6pqgigvdrdlczpy1b1mmecbsni8s9tnrru)
-    Pi.init({ version: "2.0", sandbox: true, apiKey: "ضع_مفتاحك_هنا" });
-
+    
     // 2. دالة تشغيل نافذة الدفع
     function createPayment(carName) {
         Pi.createPayment({
