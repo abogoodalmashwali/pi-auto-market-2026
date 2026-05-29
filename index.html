@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
-    <!-- الكود مصلح ومكتوب بشكل صحيح هنا -->
+    <!-- رابط الـ SDK الصحيح والرسمي للشبكة -->
     <script src="https://minepi.com"></script>
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f8f9fa; margin: 0; text-align: center; color: #333; }
@@ -37,10 +37,8 @@
 </div>
 
 <script>
-    // 1. تهيئة الـ SDK للشبكة
     Pi.init({ version: "2.0" });
 
-    // تسجيل دخول المستخدم تلقائياً عند فتح الموقع لتهيئة محفظته للتجربة
     async function initPiUser() {
         try {
             const scopes = ['username', 'payments'];
@@ -56,7 +54,6 @@
         console.log("هناك معاملة معلقة قديمة:", payment.identifier);
     }
 
-    // 2. الرابط مصلح ومربوط بسيرفرك المباشر والمستقر على Vercel ليعطي موافقات الدفع التجريبية
     const BACKEND_URL = "https://vercel.app"; 
 
     function createPayment(carName) {
@@ -66,7 +63,6 @@
             metadata: { car: carName },
         }, {
             onReadyForServerApproval: async (paymentId) => {
-                console.log("تم إنشاء المعاملة، جاري طلب الموافقة من السيرفر...");
                 const response = await fetch(`${BACKEND_URL}/approve-payment`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -74,11 +70,10 @@
                 });
                 const result = await response.json();
                 if (result.success) {
-                    console.log("وافق السيرفر بنجاح! ستفتح محفظة الـ Testnet الآن.");
+                    console.log("وافق السيرفر! ستفتح المحفظة الآن.");
                 }
             },
             onReadyForServerCompletion: async (paymentId, txid) => {
-                console.log("وقع المستخدم المعاملة، جاري تأكيد الإتمام...");
                 const response = await fetch(`${BACKEND_URL}/complete-payment`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -94,13 +89,5 @@
         });
     }
 
-    // تشغيل الدالة تلقائياً فور تحميل الصفحة
     window.onload = initPiUser;
 </script>
-</body>
-</html>
-    // تشغيل الدالة تلقائياً فور تحميل الصفحة
-    window.onload = initPiUser;
-</script>
-</body>
-</html>
