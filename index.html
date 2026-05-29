@@ -2,10 +2,100 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>متجر السيارات</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Auto Market 2026</title>
+    <!-- تضمين مكتبة Pi SDK الرسمية -->
+    <script src="https://minepi.com"></script>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f8f9fa; margin: 0; text-align: center; color: #333; }
+        header { background-color: #5b2c91; color: white; padding: 25px; border-bottom: 5px solid #ffa000; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1000px; margin: auto; }
+        .car { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .car-img { width: 100%; height: 200px; background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .pi-pay-btn { background-color: #5b2c91; color: white; padding: 12px; border-radius: 8px; border: none; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .legal { background: #f9f9f9; padding: 20px; margin-top: 30px; border-top: 1px solid #ddd; font-size: 14px; color: #666; }
+        #user-info { color: #ffa000; font-weight: bold; margin-top: 10px; }
+    </style>
 </head>
 <body>
-    <h1>مرحباً بكم في متجر السيارات 2026</h1>
-    <p>الموقع يعمل بنجاح!</p>
+<header>
+    <h1>منصة الوسيط الآمن لبيع وشراء السيارات بعملة Pi 🚗</h1>
+    <p>إشراف: أبو جود المشولي</p>
+    <div id="user-info">جاري الاتصال بشبكة Pi...</div>
+</header>
+
+<div class="gallery">
+    <div class="car"><div class="car-img" style="background-image: url('lexus-lx.png');"></div><h3>Lexus LX 2026</h3><button class="pi-pay-btn" onclick="createPayment('Lexus LX 2026')">π ادفع 1 Pi للاستفسار</button></div>
+    <div class="car"><div class="car-img" style="background-image: url('toyota-camry.png');"></div><h3>Toyota Camry 2026</h3><button class="pi-pay-btn" onclick="createPayment('Toyota Camry 2026')">π ادفع 1 Pi للاستفسار</button></div>
+    <div class="car"><div class="car-img" style="background-image: url('toyota-hilux.png');"></div><h3>Toyota Hilux 2026</h3><button class="pi-pay-btn" onclick="createPayment('Toyota Hilux 2026')">π ادفع 1 Pi للاستفسار</button></div>
+    <div class="car"><div class="car-img" style="background-image: url('hyundai-elantra.png');"></div><h3>Hyundai Elantra 2026</h3><button class="pi-pay-btn" onclick="createPayment('Hyundai Elantra 2026')">π ادفع 1 Pi للاستفسار</button></div>
+</div>
+
+<div class="legal">
+    <h4>🛡️ سياسة الخصوصية وإخلاء المسؤولية</h4>
+    <p>نحن منصة وساطة تقنية. لا نطلب بيانات محفظتك. جميع العمليات تجريبية لغرض العرض فقط.</p>
+</div>
+
+<script>
+    // 1. تهيئة الـ SDK للشبكة
+    Pi.init({ version: "2.0" });
+
+    // تسجيل دخول المستخدم تلقائياً عند فتح الموقع لتهيئة محفظته للتجربة
+    async function initPiUser() {
+        try {
+            const scopes = ['username', 'payments'];
+            const authResult = await Pi.authenticate(scopes, onIncompletePaymentFound);
+            document.getElementById('user-info').innerText = "مرحباً بك: " + authResult.user.username;
+        } catch (error) {
+            document.getElementById('user-info').innerText = "فشل الاتصال، يرجى فتح الموقع من داخل Pi Browser";
+            console.error("خطأ في المصادقة:", error);
+        }
+    }
+
+    function onIncompletePaymentFound(payment) {
+        console.log("هناك معاملة معلقة قديمة:", payment.identifier);
+    }
+
+    // 2. رابط السيرفر المخصص لك على Vercel بعد التعديل ليعطي موافقات الدفع
+    const BACKEND_URL = "https://vercel.app"; 
+
+    function createPayment(carName) {
+        Pi.createPayment({
+            amount: 1,
+            memo: "تجربة شراء سيارة: " + carName,
+            metadata: { car: carName },
+        }, {
+            onReadyForServerApproval: async (paymentId) => {
+                console.log("تم إنشاء المعاملة، جاري طلب الموافقة من السيرفر...");
+                const response = await fetch(`${BACKEND_URL}/approve-payment`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ paymentId })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    console.log("وافق السيرفر بنجاح! ستفتح محفظة الـ Testnet الآن.");
+                }
+            },
+            onReadyForServerCompletion: async (paymentId, txid) => {
+                console.log("وقع المستخدم المعاملة، جاري تأكيد الإتمام...");
+                const response = await fetch(`${BACKEND_URL}/complete-payment`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ paymentId, txid })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert("نجحت التجربة! تم خصم 1 Pi من محفظة الاختبار بنجاح 🚗");
+                }
+            },
+            onCancel: (paymentId) => { alert("أُلغيت العملية التجريبية."); },
+            onError: (error, paymentId) => { alert("خطأ تجريبي: " + error.message); },
+        });
+    }
+
+    // تشغيل الدالة تلقائياً فور تحميل الصفحة
+    window.onload = initPiUser;
+</script>
 </body>
 </html>
