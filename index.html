@@ -7,17 +7,17 @@
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f8f9fa; text-align: center; color: #333; }
-        header { background-color: #28a745; color: white; padding: 25px; } /* اللون الأخضر كما طلبت */
+        header { background-color: #28a745; color: white; padding: 25px; }
         .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
         .car { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .pi-pay-btn { background-color: #28a745; color: white; padding: 12px; border-radius: 8px; border: none; width: 100%; cursor: pointer; }
+        .pi-pay-btn { background-color: #28a745; color: white; padding: 12px; border-radius: 8px; border: none; width: 100%; cursor: pointer; margin-top: 10px; }
         #user-info { color: #ffffff; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
 <header>
     <h1>Pi Auto Market 2026</h1>
-    <div id="user-info">جاري الاتصال بشبكة Pi...</div>
+    <div id="user-info">جاري التحقق من الاتصال بشبكة Pi...</div>
 </header>
 
 <div class="gallery">
@@ -26,39 +26,44 @@
 </div>
 
 <script>
-    // التهيئة مع تفعيل وضع الاختبار
+    // تهيئة الـ SDK مع التأكد من إعدادات الـ sandbox
     Pi.init({ version: "2.0", sandbox: true });
 
     async function init() {
         try {
-            const auth = await Pi.authenticate(['username', 'payments']);
-            document.getElementById('user-info').innerText = "مرحباً بك: " + auth.user.username;
+            // المصادقة مع طلب صلاحية الدفع
+            const auth = await Pi.authenticate(['username', 'payments'], (user) => {
+                document.getElementById('user-info').innerText = "مرحباً بك: " + user.username;
+            }, (error) => {
+                alert("فشل المصادقة: " + error);
+            });
         } catch (e) {
-            document.getElementById('user-info').innerText = "خطأ في الاتصال، حاول إعادة التحميل.";
+            console.error("خطأ:", e);
+            document.getElementById('user-info').innerText = "يجب فتح التطبيق داخل Pi Browser";
         }
     }
+    
+    // تشغيل المصادقة عند تحميل الصفحة
     window.onload = init;
 
-    // دالة الدفع المعدلة (مباشرة)
     async function createPayment(carName) {
         try {
             Pi.createPayment({
                 amount: 1,
-                memo: "شراء: " + carName,
+                memo: "شراء سيارة: " + carName,
                 metadata: { car: carName },
             }, {
                 onReadyForServerApproval: (paymentId) => {
-                    console.log("تم إنشاء الطلب، يرجى الموافقة:", paymentId);
-                    alert("الطلب جاهز، يرجى تأكيد الدفع في المحفظة.");
+                    alert("تم إنشاء طلب الدفع، جاري تحويلك للمحفظة...");
                 },
                 onReadyForServerCompletion: (paymentId, txid) => {
                     alert("تمت العملية بنجاح! رقم المعاملة: " + txid);
                 },
-                onCancel: () => alert("تم إلغاء العملية من قبل المستخدم."),
+                onCancel: () => alert("تم إلغاء العملية."),
                 onError: (err) => alert("خطأ في الدفع: " + err.message)
             });
         } catch (e) {
-            alert("حدث خطأ تقني في استدعاء المحفظة: " + e.message);
+            alert("حدث خطأ في طلب الدفع: " + e.message);
         }
     }
 </script>
