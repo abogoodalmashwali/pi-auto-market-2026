@@ -7,16 +7,16 @@
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
         body { font-family: 'Arial', sans-serif; background-color: #f8f9fa; text-align: center; color: #333; }
-        header { background-color: #5b2c91; color: white; padding: 25px; }
+        header { background-color: #28a745; color: white; padding: 25px; } /* اللون الأخضر كما طلبت */
         .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
         .car { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .pi-pay-btn { background-color: #5b2c91; color: white; padding: 12px; border-radius: 8px; border: none; width: 100%; cursor: pointer; }
-        #user-info { color: #ffa000; font-weight: bold; margin-top: 10px; }
+        .pi-pay-btn { background-color: #28a745; color: white; padding: 12px; border-radius: 8px; border: none; width: 100%; cursor: pointer; }
+        #user-info { color: #ffffff; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
 <header>
-    <h1>منصة الوسيط الآمن للسيارات</h1>
+    <h1>Pi Auto Market 2026</h1>
     <div id="user-info">جاري الاتصال بشبكة Pi...</div>
 </header>
 
@@ -26,56 +26,40 @@
 </div>
 
 <script>
-    // التهيئة
-    Pi.init({ 
-        version: "2.0", 
-        sandbox: true, 
-        appID: "m5ssgwfw5lb6yhwcrwir7i6ll5tiv7cpt5uj6utbge" 
-    });
+    // التهيئة مع تفعيل وضع الاختبار
+    Pi.init({ version: "2.0", sandbox: true });
 
     async function init() {
-    try {
-        console.log("جاري محاولة الاتصال بـ Pi...");
-        const auth = await Pi.authenticate(['username', 'payments']);
-        console.log("تمت المصادقة بنجاح:", auth);
-        document.getElementById('user-info').innerText = "مرحباً: " + auth.user.username;
-    } catch (e) {
-        console.error("خطأ في المصادقة:", e);
-        document.getElementById('user-info').innerText = "فشل الاتصال، يرجى التحديث.";
+        try {
+            const auth = await Pi.authenticate(['username', 'payments']);
+            document.getElementById('user-info').innerText = "مرحباً بك: " + auth.user.username;
+        } catch (e) {
+            document.getElementById('user-info').innerText = "خطأ في الاتصال، حاول إعادة التحميل.";
+        }
     }
-}
+    window.onload = init;
 
-
-window.onload = init;
-
-
-    // دالة الدفع باستخدام رابط الباكيند الخاص بك
-    const BACKEND_URL = "https://pi-backend-kappa.vercel.app";
-
+    // دالة الدفع المعدلة (مباشرة)
     async function createPayment(carName) {
-        Pi.createPayment({
-            amount: 1,
-            memo: "شراء: " + carName,
-            metadata: { car: carName },
-        }, {
-            onReadyForServerApproval: async (paymentId) => {
-                await fetch(`${BACKEND_URL}/approve`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ paymentId })
-                });
-            },
-            onReadyForServerCompletion: async (paymentId, txid) => {
-                await fetch(`${BACKEND_URL}/complete`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ paymentId, txid })
-                });
-                alert("تمت العملية بنجاح!");
-            },
-            onCancel: () => alert("تم الإلغاء"),
-            onError: (err) => alert("خطأ: " + err.message)
-        });
+        try {
+            Pi.createPayment({
+                amount: 1,
+                memo: "شراء: " + carName,
+                metadata: { car: carName },
+            }, {
+                onReadyForServerApproval: (paymentId) => {
+                    console.log("تم إنشاء الطلب، يرجى الموافقة:", paymentId);
+                    alert("الطلب جاهز، يرجى تأكيد الدفع في المحفظة.");
+                },
+                onReadyForServerCompletion: (paymentId, txid) => {
+                    alert("تمت العملية بنجاح! رقم المعاملة: " + txid);
+                },
+                onCancel: () => alert("تم إلغاء العملية من قبل المستخدم."),
+                onError: (err) => alert("خطأ في الدفع: " + err.message)
+            });
+        } catch (e) {
+            alert("حدث خطأ تقني في استدعاء المحفظة: " + e.message);
+        }
     }
 </script>
 </body>
