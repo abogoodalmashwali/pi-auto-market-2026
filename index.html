@@ -6,18 +6,18 @@
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 </head>
 <body>
-    <h1>مرحباً بك في سوق سيارات Pi</h1>
-    <div id="status">جاري الاتصال بـ Pi...</div>
+    <h1>مرحباً بك في سوق سيارات Pi (نسخة التجربة)</h1>
+    <div id="status">جاري الاتصال بـ Pi Testnet...</div>
 
     <script>
-        // إعداد Pi SDK للشبكة الحقيقية
+        // إعداد Pi SDK لبيئة التجربة (Testnet)
         const Pi = window.Pi;
-        // قمنا بتغيير sandbox إلى false ليعمل التطبيق على الشبكة الفعلية
-        Pi.init({ version: "2.0", sandbox: false });
+        // يجب أن تكون sandbox مضبوطة على true للعمل على Testnet
+        Pi.init({ version: "2.0", sandbox: true });
 
         // محاولة المصادقة
         Pi.authenticate(['username'], function(auth) {
-            document.getElementById('status').innerText = "تم الاتصال بنجاح! أهلاً بك: " + auth.user.username;
+            document.getElementById('status').innerText = "تم الاتصال بنجاح! أهلاً بك يا: " + auth.user.username;
         }, function(error) {
             document.getElementById('status').innerText = "خطأ في الاتصال: " + error.message;
         });
