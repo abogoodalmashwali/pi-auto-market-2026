@@ -10,9 +10,10 @@
     <div id="status">جاري الاتصال بـ Pi...</div>
 
     <script>
-        // إعداد Pi SDK فوراً
+        // إعداد Pi SDK للشبكة الحقيقية
         const Pi = window.Pi;
-        Pi.init({ version: "2.0", sandbox: true });
+        // قمنا بتغيير sandbox إلى false ليعمل التطبيق على الشبكة الفعلية
+        Pi.init({ version: "2.0", sandbox: false });
 
         // محاولة المصادقة
         Pi.authenticate(['username'], function(auth) {
