@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <title>Auto Market Pi 2026</title>
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        #status { font-weight: bold; margin-bottom: 20px; }
+        .footer-legal { margin-top: 50px; padding: 20px; background-color: #f9f9f9; border-top: 2px solid #562375; text-align: right; }
+    </style>
 </head>
 <body>
     <h1>مرحباً بك في سوق سيارات Pi (نسخة التجربة)</h1>
     <div id="status">جاري الاتصال بـ Pi...</div>
     
-    <!-- زر الدفع التجريبي (سيظهر فقط بعد نجاح الاتصال) -->
+    <!-- زر الدفع التجريبي -->
     <button id="payButton" style="display:none; padding: 15px; font-size: 18px;">ادفع 10 Pi للاستفسار</button>
 
     <script>
@@ -19,16 +24,28 @@
         // 1. محاولة الاتصال
         Pi.authenticate(['username'], function(auth) {
             document.getElementById('status').innerText = "أهلاً بك: " + auth.user.username;
-            // إظهار زر الدفع بعد نجاح الاتصال
             document.getElementById('payButton').style.display = 'block';
         }, function(error) {
             document.getElementById('status').innerText = "خطأ في الاتصال: " + error.message;
         });
 
-        // 2. وظيفة الزر (تجريبية)
+        // 2. وظيفة الزر
         document.getElementById('payButton').addEventListener('click', function() {
             alert("هذا الزر يعمل! الآن الخطوة التالية هي ربطه بـ Pi.createPayment بعد إعداد السيرفر.");
         });
     </script>
+
+    <!-- قسم سياسة الخصوصية وإخلاء المسؤولية -->
+    <div class="footer-legal">
+        <div>
+            <h3>🔒 سياسة الخصوصية:</h3>
+            <p>نحن نلتزم بحماية خصوصيتك؛ لا نجمع بيانات شخصية أو مالية تلقائياً، وهدفنا هو الوساطة التقنية الآمنة فقط.</p>
+        </div>
+        <hr>
+        <div>
+            <h3>⚖️ إخلاء مسؤولية قانوني</h3>
+            <p>منصة <strong>Pi Auto Market 2026</strong> هي منصة وسيطة لعرض السيارات ضمن نظام Pi Network البيئي. نحن <strong>لا نطلب</strong> أي دفعات مالية مسبقة أو تحويلات عبر الموقع حالياً، كما نؤكد أننا <strong>لن نطلب أبداً</strong> كلمة السر (Passphrase) الخاصة بمحفظتك. جميع التفاهمات تتم عبر التواصل المباشر لضمان أمان وخصوصية الجميع.</p>
+        </div>
+    </div>
 </body>
 </html>
