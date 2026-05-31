@@ -2,19 +2,34 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Auto Market Pi 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Auto Market 2026</title>
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-        #status { font-weight: bold; margin-bottom: 20px; }
-        .footer-legal { margin-top: 50px; padding: 20px; background-color: #f9f9f9; border-top: 2px solid #562375; text-align: right; }
+        body { font-family: 'Arial', sans-serif; padding: 20px; line-height: 1.6; color: #333; }
+        #status { font-weight: bold; margin-bottom: 20px; color: #562375; }
+        
+        /* تنسيق قسم القانوني ليطابق الصورة تماماً */
+        .footer-legal { 
+            margin-top: 40px; 
+            padding: 25px; 
+            background-color: #ffffff; 
+            border: 1px solid #e0e0e0; 
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .footer-legal h4 { color: #2c3e50; margin-bottom: 10px; }
+        .footer-legal p { font-size: 15px; color: #555; }
+        .footer-legal b { color: #d32f2f; } /* لون أحمر للكلمات الهامة مثل "لا نطلب" */
     </style>
 </head>
 <body>
     <h1>مرحباً بك في سوق سيارات Pi (نسخة التجربة)</h1>
     <div id="status">جاري الاتصال بـ Pi...</div>
     
-    <button id="payButton" style="display:none; padding: 15px; font-size: 18px;">ادفع 10 Pi للاستفسار</button>
+    <button id="payButton" style="display:none; padding: 15px; font-size: 18px; background-color: #562375; color: white; border: none; border-radius: 8px;">
+        ادفع 10 Pi للاستفسار
+    </button>
 
     <script>
         const Pi = window.Pi;
@@ -26,22 +41,17 @@
         }, function(error) {
             document.getElementById('status').innerText = "خطأ في الاتصال: " + error.message;
         });
-
-        document.getElementById('payButton').addEventListener('click', function() {
-            alert("هذا الزر يعمل! الآن الخطوة التالية هي ربطه بـ Pi.createPayment بعد إعداد السيرفر.");
-        });
     </script>
 
+    <!-- القسم القانوني المعدل -->
     <div class="footer-legal">
-        <div>
-            <h3>🔒 سياسة الخصوصية:</h3>
-            <p>نحن نلتزم بحماية خصوصيتك؛ لا نجمع بيانات شخصية أو مالية تلقائياً، وهدفنا هو الوساطة التقنية الآمنة فقط.</p>
-        </div>
-        <hr>
-        <div>
-            <h3>⚖️ إخلاء مسؤولية قانوني</h3>
-            <p>منصة <strong>Pi Auto Market 2026</strong> هي منصة وسيطة لعرض السيارات ضمن نظام Pi Network البيئي. نحن <strong>لا نطلب</strong> أي دفعات مالية مسبقة أو تحويلات عبر الموقع حالياً، كما نؤكد أننا <strong>لن نطلب أبداً</strong> كلمة السر (Passphrase) الخاصة بمحفظتك. جميع التفاهمات تتم عبر التواصل المباشر لضمان أمان وخصوصية الجميع.</p>
-        </div>
+        <h4>🔒 سياسة الخصوصية:</h4>
+        <p>نحن نلتزم بحماية خصوصيتك؛ لا نجمع بيانات شخصية أو مالية تلقائياً، وهدفنا هو الوساطة التقنية الآمنة فقط.</p>
+        
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        
+        <h4>⚖️ إخلاء مسؤولية قانوني</h4>
+        <p>منصة <b>Pi Auto Market 2026</b> هي منصة وسيطة لعرض السيارات ضمن نظام Pi Network البيئي. نحن <b>لا نطلب</b> أي دفعات مالية مسبقة أو تحويلات عبر الموقع حالياً، كما نؤكد أننا <b>لن نطلب أبداً</b> كلمة السر (Passphrase) الخاصة بمحفظتك. جميع التفاهمات تتم عبر التواصل المباشر لضمان أمان وخصوصية الجميع.</p>
     </div>
 </body>
 </html>
