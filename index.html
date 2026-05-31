@@ -14,14 +14,12 @@
     <h1>مرحباً بك في سوق سيارات Pi (نسخة التجربة)</h1>
     <div id="status">جاري الاتصال بـ Pi...</div>
     
-    <!-- زر الدفع التجريبي -->
     <button id="payButton" style="display:none; padding: 15px; font-size: 18px;">ادفع 10 Pi للاستفسار</button>
 
     <script>
         const Pi = window.Pi;
         Pi.init({ version: "2.0", sandbox: true });
 
-        // 1. محاولة الاتصال
         Pi.authenticate(['username'], function(auth) {
             document.getElementById('status').innerText = "أهلاً بك: " + auth.user.username;
             document.getElementById('payButton').style.display = 'block';
@@ -29,13 +27,11 @@
             document.getElementById('status').innerText = "خطأ في الاتصال: " + error.message;
         });
 
-        // 2. وظيفة الزر
         document.getElementById('payButton').addEventListener('click', function() {
             alert("هذا الزر يعمل! الآن الخطوة التالية هي ربطه بـ Pi.createPayment بعد إعداد السيرفر.");
         });
     </script>
 
-    <!-- قسم سياسة الخصوصية وإخلاء المسؤولية -->
     <div class="footer-legal">
         <div>
             <h3>🔒 سياسة الخصوصية:</h3>
