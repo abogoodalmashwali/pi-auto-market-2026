@@ -3,28 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Pi Auto Market 2026</title>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .footer-legal { margin-top: 40px; padding: 25px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px; }
+        #status { font-weight: bold; margin-bottom: 20px; color: #562375; }
+        .car-item { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+    </style>
 </head>
 <body>
-    <h1>مرحباً بكم في متجر Pi Auto Market 2026</h1>
-    
-    <div>
-        <h3>لكزس LX</h3>
-        <img src="images/lexus-lx.png" alt="Lexus LX" width="300">
+
+    <div class="header">
+        <h1>منصة الوسيط لبيع وشراء السيارات باستخدام عملة Pi</h1>
+        <p>بإشراف: <strong>أبو جود المشولي</strong></p>
     </div>
 
-    <div>
-        <h3>تويوتا كامري</h3>
-        <img src="images/toyota-camry.png" alt="Toyota Camry" width="300">
+    <div id="status">جاري التحقق من الاتصال بـ Pi...</div>
+    <button id="payButton" style="display:none; padding: 15px 25px; font-size: 18px; background-color: #562375; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        إتمام عملية الدفع بواسطة Pi
+    </button>
+
+    <div class="car-item"><h3>لكزس LX</h3><img src="images/lexus-lx.png" width="300"></div>
+    <div class="car-item"><h3>تويوتا كامري</h3><img src="images/toyota-camry.png" width="300"></div>
+    <div class="car-item"><h3>تويوتا هايلكس</h3><img src="images/toyota-hilux.png" width="300"></div>
+    <div class="car-item"><h3>هيونداي النترا</h3><img src="images/hyundai-elantra.png" width="300"></div>
+
+    <div class="footer-legal">
+        <h4>سياسة الخصوصية</h4>
+        <p>نحن نلتزم بحماية خصوصيتك ولا نجمع بيانات شخصية إلا ما تطلبه عملية الوساطة.</p>
+        <hr>
+        <h4>إخلاء مسؤولية</h4>
+        <p>منصة Pi Auto Market 2026 هي منصة وسيطة لعرض السيارات. لسنا مسؤولين عن أي اتفاقات مالية تتم خارج نطاق شبكة Pi الرسمية.</p>
     </div>
 
-    <div>
-        <h3>تويوتا هايلكس</h3>
-        <img src="images/toyota-hilux.png" alt="Toyota Hilux" width="300">
-    </div>
-
-    <div>
-        <h3>هيونداي النترا</h3>
-        <img src="images/hyundai-elantra.png" alt="Hyundai Elantra" width="300">
-    </div>
+    <script>
+        const Pi = window.Pi;
+        Pi.init({ version: "2.0", sandbox: true });
+        Pi.authenticate(['username'], function(auth) {
+            document.getElementById('status').innerText = "أهلاً بك يا " + auth.user.username;
+            document.getElementById('payButton').style.display = 'block';
+        }, function(error) {
+            document.getElementById('status').innerText = "خطأ في الاتصال: " + error.message;
+        });
+    </script>
 </body>
 </html>
