@@ -2,56 +2,29 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <style>
-        body { font-family: 'Arial', sans-serif; padding: 20px; line-height: 1.6; color: #333; }
-        #status { font-weight: bold; margin-bottom: 20px; color: #562375; }
-        
-        /* تنسيق قسم القانوني ليطابق الصورة تماماً */
-        .footer-legal { 
-            margin-top: 40px; 
-            padding: 25px; 
-            background-color: #ffffff; 
-            border: 1px solid #e0e0e0; 
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .footer-legal h4 { color: #2c3e50; margin-bottom: 10px; }
-        .footer-legal p { font-size: 15px; color: #555; }
-        .footer-legal b { color: #d32f2f; } /* لون أحمر للكلمات الهامة مثل "لا نطلب" */
-    </style>
 </head>
 <body>
-    <h1>مرحباً بك في سوق سيارات Pi (نسخة التجربة)</h1>
-    <div id="status">جاري الاتصال بـ Pi...</div>
+    <h1>مرحباً بكم في متجر Pi Auto Market 2026</h1>
     
-    <button id="payButton" style="display:none; padding: 15px; font-size: 18px; background-color: #562375; color: white; border: none; border-radius: 8px;">
-        ادفع 10 Pi للاستفسار
-    </button>
+    <div>
+        <h3>لكزس LX</h3>
+        <img src="images/lexus-lx.png" alt="Lexus LX" width="300">
+    </div>
 
-    <script>
-        const Pi = window.Pi;
-        Pi.init({ version: "2.0", sandbox: true });
+    <div>
+        <h3>تويوتا كامري</h3>
+        <img src="images/toyota-camry.png" alt="Toyota Camry" width="300">
+    </div>
 
-        Pi.authenticate(['username'], function(auth) {
-            document.getElementById('status').innerText = "أهلاً بك: " + auth.user.username;
-            document.getElementById('payButton').style.display = 'block';
-        }, function(error) {
-            document.getElementById('status').innerText = "خطأ في الاتصال: " + error.message;
-        });
-    </script>
+    <div>
+        <h3>تويوتا هايلكس</h3>
+        <img src="images/toyota-hilux.png" alt="Toyota Hilux" width="300">
+    </div>
 
-    <!-- القسم القانوني المعدل -->
-    <div class="footer-legal">
-        <h4>🔒 سياسة الخصوصية:</h4>
-        <p>نحن نلتزم بحماية خصوصيتك؛ لا نجمع بيانات شخصية أو مالية تلقائياً، وهدفنا هو الوساطة التقنية الآمنة فقط.</p>
-        
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-        
-        <h4>⚖️ إخلاء مسؤولية قانوني</h4>
-        <p>منصة <b>Pi Auto Market 2026</b> هي منصة وسيطة لعرض السيارات ضمن نظام Pi Network البيئي. نحن <b>لا نطلب</b> أي دفعات مالية مسبقة أو تحويلات عبر الموقع حالياً، كما نؤكد أننا <b>لن نطلب أبداً</b> كلمة السر (Passphrase) الخاصة بمحفظتك. جميع التفاهمات تتم عبر التواصل المباشر لضمان أمان وخصوصية الجميع.</p>
+    <div>
+        <h3>هيونداي النترا</h3>
+        <img src="images/hyundai-elantra.png" alt="Hyundai Elantra" width="300">
     </div>
 </body>
 </html>
