@@ -2,24 +2,32 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Pi Auto Market</title>
+    <title>Auto Market Pi 2026</title>
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 </head>
 <body>
     <h1>مرحباً بك في سوق سيارات Pi (نسخة التجربة)</h1>
-    <div id="status">جاري الاتصال بـ Pi Testnet...</div>
+    <div id="status">جاري الاتصال بـ Pi...</div>
+    
+    <!-- زر الدفع التجريبي (سيظهر فقط بعد نجاح الاتصال) -->
+    <button id="payButton" style="display:none; padding: 15px; font-size: 18px;">ادفع 10 Pi للاستفسار</button>
 
     <script>
-        // إعداد Pi SDK لبيئة التجربة (Testnet)
         const Pi = window.Pi;
-        // يجب أن تكون sandbox مضبوطة على true للعمل على Testnet
         Pi.init({ version: "2.0", sandbox: true });
 
-        // محاولة المصادقة
+        // 1. محاولة الاتصال
         Pi.authenticate(['username'], function(auth) {
-            document.getElementById('status').innerText = "تم الاتصال بنجاح! أهلاً بك يا: " + auth.user.username;
+            document.getElementById('status').innerText = "أهلاً بك: " + auth.user.username;
+            // إظهار زر الدفع بعد نجاح الاتصال
+            document.getElementById('payButton').style.display = 'block';
         }, function(error) {
             document.getElementById('status').innerText = "خطأ في الاتصال: " + error.message;
+        });
+
+        // 2. وظيفة الزر (تجريبية)
+        document.getElementById('payButton').addEventListener('click', function() {
+            alert("هذا الزر يعمل! الآن الخطوة التالية هي ربطه بـ Pi.createPayment بعد إعداد السيرفر.");
         });
     </script>
 </body>
