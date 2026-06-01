@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pi Auto Market 2026</title>
-<!-- إضافة مكتبة Pi SDK -->
-<script src="https://sdk.minepi.com/pi-sdk.js"></script>
-<style>
-    body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
-    .header { background: #6a1b9a; color: white; padding: 15px; text-align: center; }
-    .logo { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; padding: 15px; }
-    .card { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-    .card img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; }
-    .footer { background: #ffffff; padding: 15px; border-top: 2px solid #6a1b9a; position: sticky; bottom: 0; text-align: center; }
-    .btn-pay { display: block; width: 100%; background: #6a1b9a; color: white; padding: 15px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Auto Market 2026</title>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
+        .header { background: #6a1b9a; color: white; padding: 15px; text-align: center; }
+        .logo { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; padding: 15px; }
+        .card { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .card img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; }
+        .footer { background: #ffffff; padding: 15px; border-top: 2px solid #6a1b9a; position: sticky; bottom: 0; text-align: center; }
+        .btn-pay { display: block; width: 100%; background: #6a1b9a; color: white; padding: 15px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+    </style>
 </head>
 <body>
 
@@ -32,7 +31,6 @@
 </div>
 
 <div class="footer">
-    <!-- الزر الآن ينادي دالة JavaScript -->
     <button class="btn-pay" onclick="payWithPi()">ادفع 1 Pi للاستفسار</button>
     <div style="margin-top: 10px;">
         <a href="policy.html" style="color: #6a1b9a; font-size: 0.8em;">سياسة الخصوصية وإخلاء المسؤولية</a>
@@ -40,19 +38,19 @@
 </div>
 
 <script>
-    // إعداد الـ SDK
     Pi.init({ version: "2.0" });
 
     function payWithPi() {
         Pi.createPayment({
-            amount: 1,
+            amount: 1.0,
             memo: "استفسار Pi Auto Market 2026",
-            metadata: { type: "inquiry" }
+            // هنا قمت بوضع عنوان محفظتك التجريبية الذي زودتني به
+            recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
         }, {
-            onReadyForServerSignature: function(paymentId) { alert("جاهز للتحقق: " + paymentId); },
-            onSuccess: function(payment) { alert("تم الدفع بنجاح! رقم العملية: " + payment.txid); },
-            onCancel: function(paymentId) { alert("تم إلغاء العملية"); },
-            onError: function(error, payment) { alert("حدث خطأ"); }
+            onReadyForServerSignature: function(paymentId) { console.log("جاهز للتحقق: " + paymentId); },
+            onSuccess: function(payment) { alert("تمت عملية الدفع بنجاح! رقم العملية: " + payment.txid); },
+            onCancel: function(paymentId) { alert("تم إلغاء عملية الدفع."); },
+            onError: function(error, payment) { alert("حدث خطأ في عملية الدفع."); }
         });
     }
 </script>
