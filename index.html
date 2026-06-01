@@ -3,58 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Pi Auto Market 2026</title>
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
-        .header { background-color: #562375; color: white; padding: 20px; text-align: center; border-bottom: 5px solid #ffa500; }
-        .alert { background-color: #fff3cd; border: 1px solid #ffeeba; padding: 15px; margin: 20px; text-align: center; border-radius: 10px; font-weight: bold; }
-        .car-card { background: white; margin: 20px; padding: 15px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; }
+        body { font-family: 'Arial', sans-serif; background-color: #f9f9f9; text-align: center; margin: 0; padding: 20px; }
+        
+        /* الشعار */
+        .logo-section { margin-bottom: 30px; }
+        .logo-section img { max-width: 350px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+
+        /* السيارات */
+        .car-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .car-card { background: white; width: 300px; padding: 15px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .car-card img { width: 100%; border-radius: 10px; }
-        .btn { background-color: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 25px; font-size: 18px; cursor: pointer; margin-top: 10px; }
-        .footer { background: #fff; padding: 20px; margin-top: 30px; border-top: 2px solid #562375; text-align: center; }
+        .car-card h3 { color: #333; margin-top: 15px; }
+
+        /* السياسات */
+        .footer { background: #fff; padding: 20px; margin-top: 40px; border-top: 3px solid #562375; font-size: 14px; color: #444; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>منصة الوسيط الآمن لبيع وشراء السيارات باستخدام عملة Pi</h1>
-        <p>إشراف: أبو جود المشولي</p>
-    </div>
-
-    <div class="alert">
-        <p>📢 تنبيه هام: الصور والأسعار المعروضة هي نماذج تجريبية للمستقبل.</p>
-    </div>
-
-    <!-- زر الدفع -->
-    <div style="text-align: center;">
-        <button id="payButton" class="btn" style="display:none;">إتمام عملية الدفع بواسطة Pi</button>
-        <p id="status">جاري التحقق من الاتصال...</p>
+    <!-- الشعار الرسمي -->
+    <div class="logo-section">
+        <img src="1000247523.png" alt="شعار Pi Auto Market 2026">
     </div>
 
     <!-- قائمة السيارات -->
-    <div class="car-card"><h3>لكزس LX 2026</h3><img src="images/lexus-lx.png" alt="Lexus"></div>
-    <div class="car-card"><h3>تويوتا كامري</h3><img src="images/toyota-camry.png" alt="Toyota Camry"></div>
-    <div class="car-card"><h3>تويوتا هايلكس</h3><img src="images/toyota-hilux.png" alt="Toyota Hilux"></div>
-    <div class="car-card"><h3>هيونداي النترا</h3><img src="images/hyundai-elantra.png" alt="Hyundai Elantra"></div>
+    <div class="car-container">
+        <!-- السيارة 1 -->
+        <div class="car-card">
+            <img src="1000247529.jpg" alt="لكزس">
+            <h3>Lexus LX 2026</h3>
+        </div>
+        <!-- السيارة 2 -->
+        <div class="car-card">
+            <img src="1000247530.jpg" alt="كامري">
+            <h3>Toyota Camry 2026</h3>
+        </div>
+        <!-- السيارة 3 -->
+        <div class="car-card">
+            <img src="1000247532.jpg" alt="هايلكس">
+            <h3>Toyota Hilux</h3>
+        </div>
+        <!-- السيارة 4 -->
+        <div class="car-card">
+            <img src="1000247531.jpg" alt="النترا">
+            <h3>Hyundai Elantra 2026</h3>
+        </div>
+    </div>
 
+    <!-- قسم السياسات -->
     <div class="footer">
         <h3>🔐 سياسة الخصوصية</h3>
-        <p>نحن نلتزم بحماية خصوصيتك؛ لا نجمع بيانات شخصية أو مالية تلقائياً.</p>
+        <p>نحن نلتزم بحماية خصوصيتك؛ لا نجمع بيانات شخصية أو مالية تلقائياً، وهدفنا هو الوساطة التقنية الآمنة فقط.</p>
         <hr>
         <h3>⚖️ إخلاء مسؤولية قانوني</h3>
-        <p>منصة Pi Auto Market 2026 هي منصة وسيطة لعرض السيارات. <strong>لا نطلب</strong> أي دفعات مسبقة.</p>
+        <p>منصة Pi Auto Market 2026 هي منصة وسيطة لعرض السيارات ضمن نظام Pi Network. نحن <strong>لا نطلب</strong> أي دفعات مالية مسبقة أو تحولات عبر الموقع حالياً، كما نؤكد أننا <strong>لن نطلب أبداً</strong> كلمة السر (Passphrase) الخاصة بمحفظتك.</p>
         <p>© 2026 أبو جود المشولي</p>
     </div>
 
-    <script>
-        const Pi = window.Pi;
-        Pi.init({ version: "2.0", sandbox: true });
-        Pi.authenticate(['username'], function(auth) {
-            document.getElementById('status').innerText = "أهلاً بك يا " + auth.user.username;
-            document.getElementById('payButton').style.display = 'inline-block';
-        }, function(error) {
-            document.getElementById('status').innerText = "يرجى تسجيل الدخول عبر تطبيق Pi";
-        });
-    </script>
 </body>
 </html>
