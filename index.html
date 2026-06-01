@@ -5,53 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
-        .header { background: #6a1b9a; color: white; padding: 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
-        .card { background: white; border-radius: 12px; padding: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; transition: transform 0.2s; }
-        .card:hover { transform: scale(1.03); }
-        .card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
-        .card h3 { margin: 5px 0; font-size: 1.1em; color: #6a1b9a; }
-        .card p { font-weight: bold; color: #e65100; margin: 5px 0; }
-        .footer { background: #ffffff; padding: 20px; border-top: 2px solid #6a1b9a; position: sticky; bottom: 0; z-index: 100; }
-        .btn-pay { display: block; background: #6a1b9a; color: white; padding: 15px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: bold; font-size: 1.1em; }
-        .btn-pay:active { background: #4a148c; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
+        .header { background: #6a1b9a; color: white; padding: 15px; text-align: center; }
+        .logo { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; padding: 15px; }
+        .card { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .card img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; }
+        .footer { background: #ffffff; padding: 15px; border-top: 2px solid #6a1b9a; position: sticky; bottom: 0; }
+        .btn-pay { display: block; background: #6a1b9a; color: white; padding: 12px; border-radius: 5px; text-align: center; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="header">
+    <img src="logo.png" alt="Logo" class="logo">
     <h1>Pi Auto Market 2026</h1>
 </div>
 
 <div class="grid">
-    <!-- بطاقات السيارات -->
-    <div class="card">
-        <img src="https://images.unsplash.com/photo-1583121274614-41d27976241e?w=300" alt="Lexus">
-        <h3>Lexus LX</h3>
-        <p>1000 Pi</p>
-    </div>
-    <div class="card">
-        <img src="https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=300" alt="Camry">
-        <h3>Toyota Camry</h3>
-        <p>500 Pi</p>
-    </div>
-    <div class="card">
-        <img src="https://images.unsplash.com/photo-1616422285623-13ff016217ea?w=300" alt="Hilux">
-        <h3>Toyota Hilux</h3>
-        <p>600 Pi</p>
-    </div>
-    <div class="card">
-        <img src="https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=300" alt="Elantra">
-        <h3>Hyundai Elantra</h3>
-        <p>400 Pi</p>
-    </div>
+    <div class="card"><img src="images/lexus-lx.png" alt="Lexus"><h3>Lexus LX</h3></div>
+    <div class="card"><img src="images/toyota-camry.png" alt="Camry"><h3>Camry</h3></div>
+    <div class="card"><img src="images/toyota-hilux.png" alt="Hilux"><h3>Hilux</h3></div>
+    <div class="card"><img src="images/hyundai-elantra.png" alt="Elantra"><h3>Elantra</h3></div>
 </div>
 
 <div class="footer">
-    <a href="pi://pay?address=GBBSWDK3LGGRVQFIWVFH3BDQYWTZOY7Z7EJHJDUXXV3QKTRGEOJ5OKWF&amount=1&memo=PiAutoMarket" class="btn-pay">
-        ادفع 1 Pi للاستفسار
-    </a>
+    <a href="pi://pay?address=GBBSWDK3LGGRVQFIWVFH3BDQYWTZOY7Z7EJHJDUXXV3QKTRGEOJ5OKWF&amount=1&memo=PiAutoMarket" class="btn-pay">ادفع 1 Pi للاستفسار</a>
+    <div style="text-align: center; margin-top: 10px;">
+        <a href="policy.html" style="color: #6a1b9a; font-size: 0.8em;">سياسة الخصوصية وإخلاء المسؤولية</a>
+    </div>
 </div>
 
 </body>
