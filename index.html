@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pi Auto Market 2026</title>
+<!-- إضافة مكتبة Pi SDK -->
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
 <style>
     body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
     .header { background: #6a1b9a; color: white; padding: 15px; text-align: center; }
@@ -23,18 +25,37 @@
 </div>
 
 <div class="grid">
-    <div class="card"><img src="images/lexus-lx.png" alt="Lexus"><h3>Lexus LX</h3></div>
-    <div class="card"><img src="images/toyota-camry.png" alt="Camry"><h3>Toyota Camry</h3></div>
-    <div class="card"><img src="images/toyota-hilux.png" alt="Hilux"><h3>Toyota Hilux</h3></div>
-    <div class="card"><img src="images/hyundai-elantra.png" alt="Elantra"><h3>Hyundai Elantra</h3></div>
+    <div class="card"><img src="lexus-lx.png" alt="Lexus"><h3>Lexus LX</h3></div>
+    <div class="card"><img src="toyota-camry.png" alt="Camry"><h3>Toyota Camry</h3></div>
+    <div class="card"><img src="toyota-hilux.png" alt="Hilux"><h3>Toyota Hilux</h3></div>
+    <div class="card"><img src="hyundai-elantra.png" alt="Elantra"><h3>Hyundai Elantra</h3></div>
 </div>
 
 <div class="footer">
-    <button class="btn-pay" onclick="window.location.href='pi://pay?amount=1&memo=PiAutoMarket2026&address=GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF'">ادفع 1 Pi للاستفسار</button>
+    <!-- الزر الآن ينادي دالة JavaScript -->
+    <button class="btn-pay" onclick="payWithPi()">ادفع 1 Pi للاستفسار</button>
     <div style="margin-top: 10px;">
         <a href="policy.html" style="color: #6a1b9a; font-size: 0.8em;">سياسة الخصوصية وإخلاء المسؤولية</a>
     </div>
 </div>
+
+<script>
+    // إعداد الـ SDK
+    Pi.init({ version: "2.0" });
+
+    function payWithPi() {
+        Pi.createPayment({
+            amount: 1,
+            memo: "استفسار Pi Auto Market 2026",
+            metadata: { type: "inquiry" }
+        }, {
+            onReadyForServerSignature: function(paymentId) { alert("جاهز للتحقق: " + paymentId); },
+            onSuccess: function(payment) { alert("تم الدفع بنجاح! رقم العملية: " + payment.txid); },
+            onCancel: function(paymentId) { alert("تم إلغاء العملية"); },
+            onError: function(error, payment) { alert("حدث خطأ"); }
+        });
+    }
+</script>
 
 </body>
 </html>
