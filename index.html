@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pi Auto Market 2026</title>
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
 <style>
     body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
     .header { background: #6a1b9a; color: white; padding: 15px; text-align: center; }
@@ -12,7 +13,9 @@
     .card { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
     .card img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; }
     .footer { background: #ffffff; padding: 15px; border-top: 2px solid #6a1b9a; position: sticky; bottom: 0; text-align: center; }
-    .btn-pay { display: block; width: 100%; background: #6a1b9a; color: white; padding: 15px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+    .btn-action { display: block; width: 100%; margin-bottom: 10px; padding: 15px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+    .btn-pay { background: #6a1b9a; color: white; }
+    .btn-auth { background: #4a90e2; color: white; }
 </style>
 </head>
 <body>
@@ -30,11 +33,52 @@
 </div>
 
 <div class="footer">
-    <button class="btn-pay" onclick="window.location.href='pi://pay?amount=1&memo=PiAutoMarket2026&address=GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF'">ادفع 1 Pi للاستفسار</button>
+    <button class="btn-action btn-auth" onclick="authenticateUser()">تسجيل الدخول بـ Pi</button>
+    <button class="btn-action btn-pay" onclick="requestPayment()">ادفع 1 Pi للاستفسار</button>
     <div style="margin-top: 10px;">
         <a href="policy.html" style="color: #6a1b9a; font-size: 0.8em;">سياسة الخصوصية وإخلاء المسؤولية</a>
     </div>
 </div>
+
+<script>
+    const Pi = window.Pi;
+    
+    async function authenticateUser() {
+        try {
+            await Pi.init({ version: "2.0", sandbox: true });
+            const auth = await Pi.authenticate(['username'], {
+                onIncompletePaymentFound: function(payment) { console.log("Incomplete payment found"); }
+            });
+            
+            // Send token to backend
+            const response = await fetch('/api/validate-auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ accessToken: auth.accessToken })
+            });
+            
+            const result = await response.json();
+            console.log("Authenticated as:", result.username);
+        } catch (err) {
+            console.error("Auth failed:", err);
+        }
+    }
+
+    function requestPayment() {
+        Pi.createPayment({
+            amount: 1.0,
+            memo: "استفسار Pi Auto Market 2026",
+            recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
+        }, {
+            onSuccess: function(payment) { alert("تمت العملية بنجاح!"); },
+            onCancel: function(paymentId) { alert("تم إلغاء الدفع."); },
+            onError: function(error, payment) { alert("خطأ: " + error.message); }
+        });
+    }
+
+    // Auto-authenticate on load
+    window.addEventListener('load', authenticateUser);
+</script>
 
 </body>
 </html>
