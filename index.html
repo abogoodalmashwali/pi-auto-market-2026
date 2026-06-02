@@ -43,24 +43,20 @@
 <script>
     const Pi = window.Pi;
     
+    // تهيئة الـ SDK مع إعدادات Testnet (sandbox: false)
+    Pi.init({ version: "2.0", sandbox: false });
+
     async function authenticateUser() {
         try {
-            await Pi.init({ version: "2.0", sandbox: true });
             const auth = await Pi.authenticate(['username'], {
-                onIncompletePaymentFound: function(payment) { console.log("Incomplete payment found"); }
+                onIncompletePaymentFound: function(payment) { 
+                    console.log("Incomplete payment found");
+                }
             });
-            
-            // Send token to backend
-            const response = await fetch('/api/validate-auth', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accessToken: auth.accessToken })
-            });
-            
-            const result = await response.json();
-            console.log("Authenticated as:", result.username);
+            alert("مرحباً بك يا " + auth.user.username);
         } catch (err) {
             console.error("Auth failed:", err);
+            alert("فشل تسجيل الدخول: يرجى المحاولة مرة أخرى من داخل متصفح Pi");
         }
     }
 
@@ -70,14 +66,14 @@
             memo: "استفسار Pi Auto Market 2026",
             recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
         }, {
+            onReadyForServerApproval: function(paymentId) {
+                console.log("Payment created, ready for server approval:", paymentId);
+            },
             onSuccess: function(payment) { alert("تمت العملية بنجاح!"); },
             onCancel: function(paymentId) { alert("تم إلغاء الدفع."); },
-            onError: function(error, payment) { alert("خطأ: " + error.message); }
+            onError: function(error, payment) { alert("خطأ في الدفع: " + error.message); }
         });
     }
-
-    // Auto-authenticate on load
-    window.addEventListener('load', authenticateUser);
 </script>
 
 </body>
