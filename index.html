@@ -33,8 +33,8 @@
 </div>
 
 <div class="footer">
-    <button class="btn-action btn-auth" onclick="authenticateUser()">تسجيل الدخول بـ Pi</button>
-    <button class="btn-action btn-pay" onclick="requestPayment()">ادفع 1 Pi للاستفسار</button>
+    <button type="button" class="btn-action btn-auth" onclick="authenticateUser()">تسجيل الدخول بـ Pi</button>
+    <button type="button" id="payButton" class="btn-action btn-pay">ادفع 1 Pi للاستفسار</button>
     <div style="margin-top: 10px;">
         <a href="policy.html" style="color: #6a1b9a; font-size: 0.8em;">سياسة الخصوصية وإخلاء المسؤولية</a>
     </div>
@@ -42,21 +42,14 @@
 
 <script>
     const Pi = window.Pi;
-    
-    // تهيئة الـ SDK مع إعدادات Testnet (sandbox: false)
     Pi.init({ version: "2.0", sandbox: false });
 
     async function authenticateUser() {
         try {
-            const auth = await Pi.authenticate(['username'], {
-                onIncompletePaymentFound: function(payment) { 
-                    console.log("Incomplete payment found");
-                }
-            });
+            const auth = await Pi.authenticate(['username'], {});
             alert("مرحباً بك يا " + auth.user.username);
         } catch (err) {
-            console.error("Auth failed:", err);
-            alert("فشل تسجيل الدخول: يرجى المحاولة مرة أخرى من داخل متصفح Pi");
+            alert("فشل تسجيل الدخول");
         }
     }
 
@@ -66,14 +59,14 @@
             memo: "استفسار Pi Auto Market 2026",
             recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
         }, {
-            onReadyForServerApproval: function(paymentId) {
-                console.log("Payment created, ready for server approval:", paymentId);
-            },
             onSuccess: function(payment) { alert("تمت العملية بنجاح!"); },
             onCancel: function(paymentId) { alert("تم إلغاء الدفع."); },
-            onError: function(error, payment) { alert("خطأ في الدفع: " + error.message); }
+            onError: function(error, payment) { alert("خطأ: " + error.message); }
         });
     }
+
+    // ربط الزر برمجياً لضمان الاستجابة
+    document.getElementById("payButton").addEventListener("click", requestPayment);
 </script>
 
 </body>
