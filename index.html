@@ -42,6 +42,7 @@
 
 <script>
     const Pi = window.Pi;
+    // تهيئة الـ SDK
     Pi.init({ version: "2.0", sandbox: false });
 
     async function authenticateUser() {
@@ -53,19 +54,23 @@
         }
     }
 
-    function requestPayment() {
-        Pi.createPayment({
-            amount: 1.0,
-            memo: "استفسار Pi Auto Market 2026",
-            recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
-        }, {
-            onSuccess: function(payment) { alert("تمت العملية بنجاح!"); },
-            onCancel: function(paymentId) { alert("تم إلغاء الدفع."); },
-            onError: function(error, payment) { alert("خطأ: " + error.message); }
-        });
+    async function requestPayment() {
+        try {
+            // تنفيذ الدفع للمحفظة الجديدة
+            await Pi.createPayment({
+                amount: 1.0,
+                memo: "استفسار Pi Auto Market 2026",
+                recipient: "GBSLOAZVJCUXPDTD7PMB2IU5NCO27EVPWR4CZIEG5VFQX3H3T3EI3273"
+            }, {
+                onSuccess: function(payment) { alert("تمت العملية بنجاح! تم ربط المحفظة."); },
+                onCancel: function(paymentId) { alert("تم إلغاء الدفع."); },
+                onError: function(error, payment) { alert("خطأ في الدفع: " + error.message); }
+            });
+        } catch (e) {
+            alert("خطأ: تأكد أنك تستخدم متصفح Pi والرابط الرسمي .pinet.com");
+        }
     }
 
-    // ربط الزر برمجياً لضمان الاستجابة
     document.getElementById("payButton").addEventListener("click", requestPayment);
 </script>
 
