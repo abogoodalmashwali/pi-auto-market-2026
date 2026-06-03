@@ -1,40 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Auto Market 2026</title>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        .logo { width: 150px; margin-bottom: 20px; }
+        .car-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .car-img { width: 100%; border-radius: 10px; }
+        #payButton { background-color: #5c3b99; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+    <img src="logo.png" class="logo">
+    <h1>Pi Auto Market 2026</h1>
+
+    <div class="car-grid">
+        <img src="hyundai-elantra.png" class="car-img">
+        <img src="lexus-lx.png" class="car-img">
+        <img src="toyota-camry.png" class="car-img">
+        <img src="toyota-hilux.png" class="car-img">
+    </div>
+
+    <button id="payButton">ادفع 10 Pi للاستفسار</button>
+
     <script>
-        // دالة التأكد من وجود Pi SDK قبل العمل
-        function initPi() {
-            if (window.Pi) {
-                window.Pi.init({ version: "2.0", sandbox: false });
-                console.log("تم تحميل Pi SDK بنجاح");
-            } else {
-                console.error("لم يتم العثور على Pi SDK");
-            }
-        }
+        const Pi = window.Pi;
+        Pi.init({ version: "2.0", sandbox: false });
 
-        // تشغيل التهيئة عند تحميل الصفحة
-        window.addEventListener('load', initPi);
-
-        const payButton = document.getElementById("payButton");
-        
-        payButton.addEventListener("click", async () => {
-            // التحقق من وجود window.Pi قبل محاولة الدفع
-            if (!window.Pi) {
-                alert("خطأ: لم يتم تحميل مكتبة Pi. يرجى التأكد من فتح التطبيق عبر متصفح Pi.");
-                return;
-            }
-
+        document.getElementById("payButton").addEventListener("click", function() {
             try {
-                // محاولة الدفع
-                window.Pi.createPayment({
+                Pi.createPayment({
                     amount: 10.0,
-                    memo: "رسوم استفسار سيارة - Pi Auto Market",
+                    memo: "استفسار سيارة",
                     recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
                 }, {
-                    onSuccess: () => alert("تم الدفع بنجاح!"),
-                    onCancel: () => alert("تم إلغاء الدفع"),
-                    onError: (err) => alert("خطأ: " + err.message)
+                    onSuccess: function(payment) { alert("تم الدفع بنجاح"); },
+                    onCancel: function(paymentId) { alert("تم الإلغاء"); },
+                    onError: function(error, payment) { alert("خطأ: " + error.message); }
                 });
             } catch (e) {
-                alert("حدث خطأ تقني.");
-                console.error(e);
+                alert("خطأ في التحميل: تأكد من فتح الرابط داخل Pi Browser");
             }
         });
     </script>
+</body>
+</html>
