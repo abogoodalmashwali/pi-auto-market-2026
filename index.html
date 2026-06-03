@@ -1,50 +1,25 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>Pi Auto Market 2026</title>
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        .logo { width: 150px; }
-        .car-img { width: 45%; margin: 5px; border-radius: 10px; }
-        #payBtn { background: #5c3b99; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; margin-top: 20px; }
-        footer { margin-top: 50px; font-size: 12px; color: #777; }
-    </style>
-</head>
-<body>
-    <img src="logo.png" class="logo" alt="شعار">
-    <h1>Pi Auto Market 2026</h1>
-    
-    <div>
-        <img src="hyundai-elantra.png" class="car-img">
-        <img src="lexus-lx.png" class="car-img">
-        <img src="toyota-camry.png" class="car-img">
-        <img src="toyota-hilux.png" class="car-img">
-    </div>
-
-    <button id="payBtn">ادفع 10 Pi للاستفسار</button>
-
-    <footer>
-        <p>سياسة الخصوصية وإخلاء المسؤولية:</p>
-        <p>تطبيق وسيط لعرض السيارات. لا نتحمل المسؤولية عن المعاملات خارج شبكة Pi.</p>
-    </footer>
-
     <script>
-        const Pi = window.Pi;
-        Pi.init({ version: "2.0", sandbox: true });
+        // دالة يتم استدعاؤها فور تحميل الصفحة
+        window.addEventListener('load', () => {
+            if (window.Pi) {
+                window.Pi.init({ version: "2.0", sandbox: true });
+                console.log("Pi SDK تم تهيئته");
+            }
+        });
 
         document.getElementById('payBtn').onclick = () => {
-            Pi.createPayment({
+            if (!window.Pi) {
+                alert("يجب فتح التطبيق داخل متصفح Pi");
+                return;
+            }
+            window.Pi.createPayment({
                 amount: 10.0,
-                memo: "استفسار عن سيارة",
+                memo: "استفسار سيارة",
                 recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
             }, {
-                onSuccess: () => alert("تم الدفع بنجاح!"),
-                onCancel: () => alert("تم إلغاء الدفع"),
-                onError: (err) => alert("خطأ: " + err.message)
+                onSuccess: (payment) => alert("تمت العملية بنجاح!"),
+                onCancel: (paymentId) => alert("تم إلغاء الدفع"),
+                onError: (error, payment) => alert("خطأ: " + error.message)
             });
         };
     </script>
-</body>
-</html>
