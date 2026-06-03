@@ -1,56 +1,59 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pi Auto Market 2026</title>
-<script src="https://sdk.minepi.com/pi-sdk.js"></script>
-<style>
-    body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; text-align: center; }
-    .header { background: #6a1b9a; color: white; padding: 20px; }
-    .btn-action { display: block; width: 90%; margin: 10px auto; padding: 15px; border: none; border-radius: 10px; font-size: 18px; cursor: pointer; color: white; }
-    .btn-pay { background: #6a1b9a; }
-    .btn-auth { background: #4a90e2; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Auto Market 2026</title>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; line-height: 1.6; }
+        .logo { width: 150px; margin-bottom: 20px; }
+        .car-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .car-img { width: 100%; border-radius: 10px; border: 1px solid #ddd; }
+        #payButton { background-color: #5c3b99; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; margin-top: 20px; }
+        footer { margin-top: 40px; font-size: 14px; color: #555; border-top: 1px solid #ccc; padding-top: 20px; }
+    </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>Pi Auto Market 2026</h1>
-</div>
+    <!-- الشعار -->
+    <img src="logo.png" alt="شعار المشروع" class="logo">
+    <h1>مرحباً بك في Pi Auto Market 2026</h1>
 
-<div style="padding: 20px;">
-    <button class="btn-action btn-auth" onclick="authenticateUser()">تسجيل الدخول بـ Pi</button>
-    <button class="btn-action btn-pay" id="payButton">ادفع 1 Pi للاستفسار</button>
-</div>
+    <!-- صور السيارات كما هي في ملفاتك -->
+    <div class="car-grid">
+        <img src="hyundai-elantra.png" class="car-img">
+        <img src="lexus-lx.png" class="car-img">
+        <img src="toyota-camry.png" class="car-img">
+        <img src="toyota-hilux.png" class="car-img">
+    </div>
 
-<script>
-    const Pi = window.Pi;
-    // تأكد من ضبط sandbox على false للتطبيق الحقيقي
-    Pi.init({ version: "2.0", sandbox: false });
+    <!-- زر الدفع -->
+    <button id="payButton">ادفع 10 Pi للاستفسار</button>
 
-    async function authenticateUser() {
-        try {
-            const auth = await Pi.authenticate(['username'], {});
-            alert("مرحباً بك يا " + auth.user.username);
-        } catch (err) {
-            alert("فشل تسجيل الدخول");
-        }
-    }
+    <!-- سياسة الخصوصية -->
+    <footer>
+        <p><strong>سياسة الخصوصية وإخلاء المسؤولية:</strong></p>
+        <p>تطبيق Pi Auto Market 2026 هو منصة وسيطة لعرض السيارات. لا يتحمل التطبيق أي مسؤولية عن المعاملات التي تتم خارج نطاق شبكة Pi.</p>
+    </footer>
 
-    // هذه هي الدالة المعدلة التي ستعمل في المتصفح الرسمي
-    document.getElementById("payButton").onclick = function() {
-        Pi.createPayment({
-            amount: 1.0,
-            memo: "استفسار Pi Auto Market 2026",
-            recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
-        }, {
-            onReadyForServerApproval: function(paymentId) { alert("جاهز للموافقة: " + paymentId); },
-            onReadyForServerCompletion: function(paymentId, txid) { alert("تمت العملية بنجاح!"); },
-            onCancel: function(paymentId) { alert("تم إلغاء الدفع."); },
-            onError: function(error, payment) { alert("خطأ: " + error.message); }
+    <script>
+        const Pi = window.Pi;
+        Pi.init({ version: "2.0", sandbox: false });
+
+        document.getElementById("payButton").addEventListener("click", async () => {
+            try {
+                Pi.createPayment({
+                    amount: 10.0,
+                    memo: "رسوم استفسار سيارة - Pi Auto Market",
+                    recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
+                }, {
+                    onSuccess: () => alert("تم الدفع بنجاح! شكراً لثقتكم."),
+                    onCancel: () => alert("تم إلغاء عملية الدفع."),
+                    onError: (err) => alert("حدث خطأ أثناء الدفع: " + err.message)
+                });
+            } catch (e) { console.error(e); }
         });
-    };
-</script>
+    </script>
 </body>
 </html>
