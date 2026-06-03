@@ -3,24 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Pi Auto Market 2026</title>
-    <!-- استدعاء المكتبة -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
         body { text-align: center; font-family: 'Arial', sans-serif; padding: 20px; background-color: #f9f9f9; }
         .logo { width: 150px; margin-bottom: 20px; }
         .car-image { width: 90%; max-width: 400px; margin: 10px; border-radius: 15px; border: 2px solid #ddd; }
         .pay-btn { background-color: #6a1b9a; color: white; padding: 20px 40px; font-size: 20px; border: none; border-radius: 10px; cursor: pointer; margin: 20px; }
-        .footer { margin-top: 30px; font-size: 14px; color: #555; }
     </style>
 </head>
 <body>
 
-    <!-- شعار المشروع -->
     <img src="logo.png" class="logo" alt="شعار المشروع">
     <h1>Pi Auto Market 2026</h1>
     <p>أول منصة وساطة يمنية</p>
 
-    <!-- صور السيارات -->
     <div>
         <img src="hyundai-elantra.png" class="car-image">
         <img src="lexus-lx.png" class="car-image">
@@ -28,35 +24,32 @@
         <img src="toyota-hilux.png" class="car-image">
     </div>
 
-    <!-- زر الدفع -->
     <button id="payBtn" class="pay-btn">ادفع 10 Pi للاستفسار</button>
-
-    <!-- روابط السياسة -->
-    <div class="footer">
-        <p><a href="policy.html">سياسة الخصوصية وإخلاء المسؤولية</a></p>
-        <p><small>تطبيق وسيط لعرض السيارات. لا نتحمل المسؤولية عن المعاملات خارج شبكة Pi.</small></p>
-    </div>
 
     <script>
         window.addEventListener('load', () => {
+            // سطر الفحص الخاص بـ alert
             if (window.Pi) {
                 window.Pi.init({ version: "2.0", sandbox: true });
+                alert("تم تحميل مكتبة Pi بنجاح!"); 
+            } else {
+                alert("فشل تحميل مكتبة Pi! تأكد من فتح التطبيق داخل متصفح Pi.");
             }
         });
 
         document.getElementById('payBtn').onclick = () => {
-            if (!window.Pi) {
-                alert("يرجى فتح الموقع داخل متصفح Pi");
+            if (typeof Pi === 'undefined') {
+                alert("المكتبة غير محملة، لا يمكن الدفع!");
                 return;
             }
             window.Pi.createPayment({
                 amount: 10.0,
-                memo: "استفسار سيارة من Pi Auto Market",
+                memo: "استفسار سيارة",
                 recipient: "GDKBQAC6EGRQLKR2CF3CTGFSTABR5CE246BS4PJ5S5CLCWBF34FHZXDD"
             }, {
                 onSuccess: (payment) => alert("تمت العملية بنجاح!"),
                 onCancel: (paymentId) => alert("تم إلغاء الدفع"),
-                onError: (error) => alert("خطأ: " + error.message)
+                onError: (error) => alert("خطأ في الدفع: " + error.message)
             });
         };
     </script>
