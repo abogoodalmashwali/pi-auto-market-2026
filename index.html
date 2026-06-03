@@ -1,25 +1,35 @@
-    <script>
-        // دالة يتم استدعاؤها فور تحميل الصفحة
-        window.addEventListener('load', () => {
-            if (window.Pi) {
-                window.Pi.init({ version: "2.0", sandbox: true });
-                console.log("Pi SDK تم تهيئته");
-            }
-        });
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Pi Auto Market 2026</title>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+</head>
+<body>
+    <h1>جاري تحميل Pi Auto Market...</h1>
 
-        document.getElementById('payBtn').onclick = () => {
-            if (!window.Pi) {
-                alert("يجب فتح التطبيق داخل متصفح Pi");
-                return;
+    <script>
+        // دالة التأكد من التحميل
+        window.onload = function() {
+            if (typeof Pi !== 'undefined') {
+                console.log("SDK Loaded");
+                Pi.init({ version: "2.0", sandbox: true });
+                document.body.innerHTML = "<h1>مرحباً بك في التطبيق</h1><button id='pay'>ادفع 10 Pi</button>";
+                
+                document.getElementById('pay').onclick = function() {
+                    Pi.createPayment({
+                        amount: 10.0,
+                        memo: "تجربة",
+                        recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
+                    }, {
+                        onSuccess: function() { alert("تم النجاح!"); },
+                        onError: function(err) { alert("خطأ: " + err.message); }
+                    });
+                };
+            } else {
+                document.body.innerHTML = "<h1>لم يتم تحميل مكتبة Pi، يرجى التأكد من الاتصال بمتصفح Pi.</h1>";
             }
-            window.Pi.createPayment({
-                amount: 10.0,
-                memo: "استفسار سيارة",
-                recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
-            }, {
-                onSuccess: (payment) => alert("تمت العملية بنجاح!"),
-                onCancel: (paymentId) => alert("تم إلغاء الدفع"),
-                onError: (error, payment) => alert("خطأ: " + error.message)
-            });
         };
     </script>
+</body>
+</html>
