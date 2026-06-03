@@ -4,41 +4,60 @@
     <meta charset="UTF-8">
     <title>Pi Auto Market 2026</title>
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <style>
+        body { font-family: 'Arial', sans-serif; background: #f4f4f9; text-align: center; margin: 0; padding: 0; }
+        .header { background: #6a1b9a; color: white; padding: 20px; }
+        .logo { width: 100px; height: 100px; border-radius: 50%; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
+        .card { background: white; padding: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 80px; object-fit: cover; border-radius: 5px; }
+        .btn { display: block; width: 90%; margin: 10px auto; padding: 15px; border: none; border-radius: 10px; cursor: pointer; color: white; font-size: 16px; }
+    </style>
 </head>
 <body>
+
+<div class="header">
+    <img src="https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/logo.png" class="logo" alt="Logo">
     <h1>Pi Auto Market 2026</h1>
-    <button id="authBtn">تسجيل الدخول بـ Pi</button>
-    <button id="payBtn">ادفع 1 Pi للاستفسار</button>
+</div>
 
-    <script>
-        // دالة بديلة للتأكد من تحميل الـ SDK
-        const initPi = () => {
-            if (window.Pi) {
-                window.Pi.init({ version: "2.0", sandbox: false });
-            }
-        };
-        initPi();
+<div class="grid">
+    <div class="card"><img src="https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/images/lexus-lx.png"><h3>Lexus LX</h3></div>
+    <div class="card"><img src="https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/images/toyota-camry.png"><h3>Toyota Camry</h3></div>
+</div>
 
-        document.getElementById('authBtn').onclick = async () => {
-            try {
-                const auth = await window.Pi.authenticate(['username'], {});
-                alert("أهلاً بك: " + auth.user.username);
-            } catch (e) { alert("خطأ في تسجيل الدخول"); }
-        };
+<button class="btn" style="background:#4a90e2;" onclick="authenticateUser()">تسجيل الدخول بـ Pi</button>
+<button class="btn" style="background:#6a1b9a;" id="payBtn">ادفع 1 Pi للاستفسار</button>
 
-        document.getElementById('payBtn').onclick = async () => {
-            try {
-                window.Pi.createPayment({
-                    amount: 1.0,
-                    memo: "استفسار Pi Auto Market 2026",
-                    recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
-                }, {
-                    onSuccess: (p) => alert("تم الدفع بنجاح!"),
-                    onCancel: (id) => alert("تم الإلغاء."),
-                    onError: (err) => alert("خطأ: " + err.message)
-                });
-            } catch (e) { alert("يجب تسجيل الدخول أولاً أو تأكد من المتصفح"); }
-        };
-    </script>
+<a href="policy.html" style="display:block; margin: 20px; color: #6a1b9a;">سياسة الخصوصية وإخلاء المسؤولية</a>
+
+<script>
+    const Pi = window.Pi;
+    Pi.init({ version: "2.0", sandbox: false });
+    let isAuth = false;
+
+    async function authenticateUser() {
+        try {
+            const auth = await Pi.authenticate(['username'], {});
+            alert("مرحباً: " + auth.user.username);
+            isAuth = true;
+        } catch (e) { alert("فشل التسجيل"); }
+    }
+
+    document.getElementById('payBtn').onclick = async () => {
+        if (!isAuth) { alert("يرجى تسجيل الدخول أولاً"); return; }
+        try {
+            Pi.createPayment({
+                amount: 1.0,
+                memo: "استفسار Pi Auto Market",
+                recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
+            }, {
+                onSuccess: () => alert("تم الدفع بنجاح!"),
+                onCancel: () => alert("تم الإلغاء."),
+                onError: (err) => alert("خطأ: " + err.message)
+            });
+        } catch (e) { alert("حدث خطأ في النظام"); }
+    };
+</script>
 </body>
 </html>
