@@ -1,71 +1,40 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pi Auto Market 2026</title>
-    <!-- استدعاء مكتبة Pi SDK -->
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; line-height: 1.6; }
-        .logo { width: 150px; margin-bottom: 20px; }
-        .car-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .car-img { width: 100%; border-radius: 10px; border: 1px solid #ddd; }
-        #payButton { background-color: #5c3b99; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; margin-top: 20px; width: 80%; }
-        footer { margin-top: 40px; font-size: 14px; color: #555; border-top: 1px solid #ccc; padding-top: 20px; }
-    </style>
-</head>
-<body>
-
-    <!-- الشعار -->
-    <img src="logo.png" alt="شعار المشروع" class="logo">
-    <h1>مرحباً بك في Pi Auto Market 2026</h1>
-
-    <!-- صور السيارات -->
-    <div class="car-grid">
-        <img src="hyundai-elantra.png" class="car-img" alt="سيارة">
-        <img src="lexus-lx.png" class="car-img" alt="سيارة">
-        <img src="toyota-camry.png" class="car-img" alt="سيارة">
-        <img src="toyota-hilux.png" class="car-img" alt="سيارة">
-    </div>
-
-    <!-- زر الدفع -->
-    <button id="payButton">ادفع 10 Pi للاستفسار</button>
-
-    <!-- سياسة الخصوصية -->
-    <footer>
-        <p><strong>سياسة الخصوصية وإخلاء المسؤولية:</strong></p>
-        <p>تطبيق Pi Auto Market 2026 هو منصة وسيطة لعرض السيارات. لا يتحمل التطبيق أي مسؤولية عن المعاملات التي تتم خارج نطاق شبكة Pi.</p>
-    </footer>
-
     <script>
-        const Pi = window.Pi;
-        Pi.init({ version: "2.0", sandbox: false });
+        // دالة التأكد من وجود Pi SDK قبل العمل
+        function initPi() {
+            if (window.Pi) {
+                window.Pi.init({ version: "2.0", sandbox: false });
+                console.log("تم تحميل Pi SDK بنجاح");
+            } else {
+                console.error("لم يتم العثور على Pi SDK");
+            }
+        }
+
+        // تشغيل التهيئة عند تحميل الصفحة
+        window.addEventListener('load', initPi);
 
         const payButton = document.getElementById("payButton");
         
         payButton.addEventListener("click", async () => {
-            try {
-                // محاولة التحقق من هوية المستخدم قبل الدفع
-                await Pi.authenticate(['username'], (authResult) => {
-                    console.log("تم التحقق من المستخدم: " + authResult.user.username);
-                });
+            // التحقق من وجود window.Pi قبل محاولة الدفع
+            if (!window.Pi) {
+                alert("خطأ: لم يتم تحميل مكتبة Pi. يرجى التأكد من فتح التطبيق عبر متصفح Pi.");
+                return;
+            }
 
-                // بدء عملية الدفع
-                Pi.createPayment({
+            try {
+                // محاولة الدفع
+                window.Pi.createPayment({
                     amount: 10.0,
                     memo: "رسوم استفسار سيارة - Pi Auto Market",
                     recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
                 }, {
-                    onSuccess: () => alert("تم الدفع بنجاح! شكراً لثقتكم."),
-                    onCancel: () => alert("تم إلغاء عملية الدفع."),
-                    onError: (err) => alert("حدث خطأ أثناء الدفع: " + err.message)
+                    onSuccess: () => alert("تم الدفع بنجاح!"),
+                    onCancel: () => alert("تم إلغاء الدفع"),
+                    onError: (err) => alert("خطأ: " + err.message)
                 });
             } catch (e) {
-                alert("خطأ: يرجى التأكد من أنك تفتح التطبيق داخل متصفح Pi.");
+                alert("حدث خطأ تقني.");
                 console.error(e);
             }
         });
     </script>
-</body>
-</html>
