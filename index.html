@@ -1,63 +1,63 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>Pi Auto Market 2026</title>
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <style>
-        body { font-family: 'Arial', sans-serif; background: #f4f4f9; text-align: center; margin: 0; padding: 0; }
-        .header { background: #6a1b9a; color: white; padding: 20px; }
-        .logo { width: 100px; height: 100px; border-radius: 50%; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
-        .card { background: white; padding: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 80px; object-fit: cover; border-radius: 5px; }
-        .btn { display: block; width: 90%; margin: 10px auto; padding: 15px; border: none; border-radius: 10px; cursor: pointer; color: white; font-size: 16px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pi Auto Market 2026</title>
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
+    .header { background: #6a1b9a; color: white; padding: 15px; text-align: center; }
+    .logo { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 10px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; padding: 15px; }
+    .card { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+    .footer { background: #ffffff; padding: 15px; border-top: 2px solid #6a1b9a; position: sticky; bottom: 0; text-align: center; }
+    .btn-action { display: block; width: 100%; margin-bottom: 10px; padding: 15px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+    .btn-pay { background: #6a1b9a; color: white; }
+    .btn-auth { background: #4a90e2; color: white; }
+</style>
 </head>
 <body>
 
 <div class="header">
-    <img src="https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/logo.png" class="logo" alt="Logo">
     <h1>Pi Auto Market 2026</h1>
 </div>
 
-<div class="grid">
-    <div class="card"><img src="https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/images/lexus-lx.png"><h3>Lexus LX</h3></div>
-    <div class="card"><img src="https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/images/toyota-camry.png"><h3>Toyota Camry</h3></div>
+<div class="footer">
+    <button type="button" class="btn-action btn-auth" onclick="authenticateUser()">تسجيل الدخول بـ Pi</button>
+    <button type="button" id="payButton" class="btn-action btn-pay">ادفع 1 Pi للاستفسار</button>
 </div>
-
-<button class="btn" style="background:#4a90e2;" onclick="authenticateUser()">تسجيل الدخول بـ Pi</button>
-<button class="btn" style="background:#6a1b9a;" id="payBtn">ادفع 1 Pi للاستفسار</button>
-
-<a href="policy.html" style="display:block; margin: 20px; color: #6a1b9a;">سياسة الخصوصية وإخلاء المسؤولية</a>
 
 <script>
     const Pi = window.Pi;
     Pi.init({ version: "2.0", sandbox: false });
-    let isAuth = false;
 
     async function authenticateUser() {
         try {
             const auth = await Pi.authenticate(['username'], {});
-            alert("مرحباً: " + auth.user.username);
-            isAuth = true;
-        } catch (e) { alert("فشل التسجيل"); }
+            alert("مرحباً بك يا " + auth.user.username);
+        } catch (err) {
+            alert("فشل تسجيل الدخول");
+        }
     }
 
-    document.getElementById('payBtn').onclick = async () => {
-        if (!isAuth) { alert("يرجى تسجيل الدخول أولاً"); return; }
+    async function requestPayment() {
         try {
-            Pi.createPayment({
+            await Pi.createPayment({
                 amount: 1.0,
-                memo: "استفسار Pi Auto Market",
+                memo: "استفسار Pi Auto Market 2026",
                 recipient: "GBBSWDK3LGGRVQFIWFH3BDQYWTZ0Y7Z7EJHJDUXXV3QKTRGEOJ50KWF"
             }, {
-                onSuccess: () => alert("تم الدفع بنجاح!"),
-                onCancel: () => alert("تم الإلغاء."),
-                onError: (err) => alert("خطأ: " + err.message)
+                onSuccess: function(payment) { alert("تمت العملية بنجاح!"); },
+                onCancel: function(paymentId) { alert("تم إلغاء الدفع."); },
+                onError: function(error, payment) { alert("خطأ: " + error.message); }
             });
-        } catch (e) { alert("حدث خطأ في النظام"); }
-    };
+        } catch (e) {
+            alert("خطأ: تأكد من فتح الرابط من داخل متصفح Pi");
+        }
+    }
+
+    document.getElementById("payButton").addEventListener("click", requestPayment);
 </script>
 </body>
 </html>
