@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
+    <!-- استدعاء مكتبة Pi SDK -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
         body { font-family: sans-serif; text-align: center; padding: 20px; line-height: 1.6; }
         .logo { width: 150px; margin-bottom: 20px; }
         .car-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
         .car-img { width: 100%; border-radius: 10px; border: 1px solid #ddd; }
-        #payButton { background-color: #5c3b99; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; margin-top: 20px; }
+        #payButton { background-color: #5c3b99; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; margin-top: 20px; width: 80%; }
         footer { margin-top: 40px; font-size: 14px; color: #555; border-top: 1px solid #ccc; padding-top: 20px; }
     </style>
 </head>
@@ -20,12 +21,12 @@
     <img src="logo.png" alt="شعار المشروع" class="logo">
     <h1>مرحباً بك في Pi Auto Market 2026</h1>
 
-    <!-- صور السيارات كما هي في ملفاتك -->
+    <!-- صور السيارات -->
     <div class="car-grid">
-        <img src="hyundai-elantra.png" class="car-img">
-        <img src="lexus-lx.png" class="car-img">
-        <img src="toyota-camry.png" class="car-img">
-        <img src="toyota-hilux.png" class="car-img">
+        <img src="hyundai-elantra.png" class="car-img" alt="سيارة">
+        <img src="lexus-lx.png" class="car-img" alt="سيارة">
+        <img src="toyota-camry.png" class="car-img" alt="سيارة">
+        <img src="toyota-hilux.png" class="car-img" alt="سيارة">
     </div>
 
     <!-- زر الدفع -->
@@ -41,8 +42,16 @@
         const Pi = window.Pi;
         Pi.init({ version: "2.0", sandbox: false });
 
-        document.getElementById("payButton").addEventListener("click", async () => {
+        const payButton = document.getElementById("payButton");
+        
+        payButton.addEventListener("click", async () => {
             try {
+                // محاولة التحقق من هوية المستخدم قبل الدفع
+                await Pi.authenticate(['username'], (authResult) => {
+                    console.log("تم التحقق من المستخدم: " + authResult.user.username);
+                });
+
+                // بدء عملية الدفع
                 Pi.createPayment({
                     amount: 10.0,
                     memo: "رسوم استفسار سيارة - Pi Auto Market",
@@ -52,7 +61,10 @@
                     onCancel: () => alert("تم إلغاء عملية الدفع."),
                     onError: (err) => alert("حدث خطأ أثناء الدفع: " + err.message)
                 });
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                alert("خطأ: يرجى التأكد من أنك تفتح التطبيق داخل متصفح Pi.");
+                console.error(e);
+            }
         });
     </script>
 </body>
