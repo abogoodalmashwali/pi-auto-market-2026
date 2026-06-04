@@ -2,24 +2,63 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>اختبار التحديث</title>
+    <title>Pi Auto Market 2026 | المنصة الرائدة</title>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
-        body { text-align: center; padding: 50px; font-family: sans-serif; }
-        #testBtn { padding: 20px; font-size: 20px; cursor: pointer; background-color: blue; color: white; border: none; }
+        :root { --gold: #c5a059; --dark: #1a1a1a; --white: #ffffff; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; text-align: center; }
+        
+        .header { padding: 40px 20px; background: linear-gradient(to bottom, #2c2c2c, #1a1a1a); border-bottom: 3px solid var(--gold); }
+        .welcome-text { font-size: 24px; color: var(--gold); margin-bottom: 10px; }
+        .owner-tag { font-size: 16px; font-style: italic; opacity: 0.8; }
+
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 30px; }
+        .car-card { background: #252525; padding: 15px; border-radius: 15px; transition: 0.4s; border: 1px solid #333; }
+        .car-card:hover { border-color: var(--gold); transform: translateY(-10px); }
+        .car-image { width: 100%; border-radius: 10px; height: 200px; object-fit: cover; }
+
+        .btn-pay { background: var(--gold); color: black; padding: 15px 40px; font-weight: bold; border-radius: 50px; border: none; cursor: pointer; font-size: 18px; margin-top: 20px; }
+        
+        /* النافذة المنبثقة */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; }
+        .modal-content { background: #222; margin: 20% auto; padding: 30px; width: 80%; border-radius: 20px; border: 1px solid var(--gold); }
+        
+        .footer { padding: 40px; font-size: 14px; border-top: 1px solid #333; margin-top: 40px; }
     </style>
 </head>
 <body>
 
-    <h1>صفحة الاختبار</h1>
-    <p>إذا ظهرت هذه الصفحة، فالموقع يعمل والربط مع GitHub سليم!</p>
-    
-    <button id="testBtn" onclick="changeColor()">اضغط لتغيير اللون</button>
+    <div class="header">
+        <h1 class="welcome-text">مرحباً بكم في منصة الوسيط الآمن</h1>
+        <p>أول منصة يمنية تسهل لكم التعامل مع الشركات والوكالات التي تقبل التعامل بعملة Pi</p>
+        <p class="owner-tag">تحت إشراف: أبو جود المشولي</p>
+    </div>
 
-    <script>
-        function changeColor() {
-            document.getElementById('testBtn').style.backgroundColor = 'red';
-            alert("تم التحديث بنجاح! الموقع يقرأ الكود الجديد.");
-        }
-    </script>
+    <div class="gallery">
+        <div class="car-card"><h3>لكزس LX 2026</h3><img src="lexus.jpg" class="car-image"></div>
+        <div class="car-card"><h3>فورد 2026</h3><img src="ford.jpg" class="car-image"></div>
+        <div class="car-card"><h3>بي إم دبليو 2026</h3><img src="bmw.jpg" class="car-image"></div>
+        <div class="car-card"><h3>تيسلا 2026</h3><img src="tesla.jpg" class="car-image"></div>
+        <div class="car-card"><h3>رانج روفر 2026</h3><img src="rover.jpg" class="car-image"></div>
+        <div class="car-card"><h3>شيفروليه 2026</h3><img src="chevy.jpg" class="car-image"></div>
+        <div class="car-card"><h3>تويوتا 2026</h3><img src="toyota.jpg" class="car-image"></div>
+    </div>
+
+    <button class="btn-pay" onclick="document.getElementById('modal').style.display='block'">احجز استشارتك الآن</button>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>تأكيد الطلب</h2>
+            <p>سيتم خصم 10 Pi لفتح ملف استفسار لسيارتك المختارة.</p>
+            <button class="btn-pay" onclick="alert('جاري المعالجة...')">تأكيد الدفع</button>
+            <p style="cursor:pointer; color:gray;" onclick="document.getElementById('modal').style.display='none'">إغلاق</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><a href="policy.html" style="color: var(--gold);">سياسة الخصوصية وإخلاء المسؤولية</a></p>
+        <p>© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
+    </div>
+
 </body>
 </html>
