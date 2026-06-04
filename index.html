@@ -3,74 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Pi Auto Market 2026</title>
-    <!-- استدعاء مكتبة Pi SDK -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
-        body { text-align: center; font-family: 'Arial', sans-serif; padding: 20px; background-color: #f9f9f9; }
-        .logo { width: 150px; margin-bottom: 20px; }
-        .car-image { width: 90%; max-width: 400px; margin: 10px; border-radius: 15px; border: 2px solid #ddd; }
-        .pay-btn { background-color: #6a1b9a; color: white; padding: 20px 40px; font-size: 20px; border: none; border-radius: 10px; cursor: pointer; margin: 20px; }
-        .footer { margin-top: 30px; font-size: 14px; color: #555; }
+        body { text-align: center; font-family: 'Segoe UI', sans-serif; padding: 20px; background-color: #f4f4f9; }
+        .logo { width: 150px; margin-bottom: 10px; }
+        .car-image { width: 90%; max-width: 400px; margin: 10px; border-radius: 15px; border: 2px solid #ddd; transition: transform 0.3s; }
+        .car-image:hover { transform: scale(1.02); }
+        .pay-btn { background-color: #552e85; color: white; padding: 18px 35px; font-size: 18px; border: none; border-radius: 50px; cursor: pointer; margin: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        
+        /* تصميم نافذة التأكيد */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal-content { background: #fff; margin: 30% auto; padding: 25px; width: 80%; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .btn-confirm { background: #552e85; color: white; padding: 10px 25px; border: none; border-radius: 10px; margin: 5px; cursor: pointer; }
+        .btn-cancel { background: #e0e0e0; padding: 10px 25px; border: none; border-radius: 10px; margin: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- شعار المشروع -->
     <img src="logo.png" class="logo" alt="شعار المشروع">
     <h1>Pi Auto Market 2026</h1>
-    <p>أول منصة وساطة يمنية</p>
+    <p>وسيطك الموثوق في عالم السيارات</p>
 
-    <!-- صور السيارات -->
     <div>
         <img src="hyundai-elantra.png" class="car-image">
         <img src="lexus-lx.png" class="car-image">
-        <img src="toyota-camry.png" class="car-image">
-        <img src="toyota-hilux.png" class="car-image">
     </div>
 
-    <!-- زر الدفع -->
-    <button id="payBtn" class="pay-btn">ادفع 10 Pi للاستفسار</button>
+    <button onclick="openModal()" class="pay-btn">ادفع 10 Pi للاستفسار</button>
 
-    <!-- روابط السياسة -->
-    <div class="footer">
-        <p><a href="policy.html">سياسة الخصوصية وإخلاء المسؤولية</a></p>
-        <p><small>تطبيق وسيط لعرض السيارات. لا نتحمل المسؤولية عن المعاملات خارج شبكة Pi.</small></p>
+    <!-- نافذة التأكيد -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <h3>تأكيد الاستفسار</h3>
+            <p>هل تود المتابعة بدفع 10 Pi للحصول على استشارة حول السيارة؟</p>
+            <button onclick="executePiPayment()" class="btn-confirm">تأكيد الدفع</button>
+            <button onclick="closeModal()" class="btn-cancel">إلغاء</button>
+        </div>
     </div>
 
     <script>
-        // تهيئة مكتبة Pi
         window.addEventListener('load', () => {
-            if (window.Pi) {
-                window.Pi.init({ version: "2.0", sandbox: true });
-                console.log("Pi SDK Initialized");
-            }
+            if (window.Pi) { window.Pi.init({ version: "2.0", sandbox: true }); }
         });
 
-        // تنفيذ عملية الدفع
-        document.getElementById('payBtn').onclick = () => {
-            if (typeof Pi === 'undefined') {
-                alert("المكتبة غير محملة، يرجى تحديث الصفحة داخل متصفح Pi");
-                return;
-            }
+        function openModal() { document.getElementById('confirmationModal').style.display = 'block'; }
+        function closeModal() { document.getElementById('confirmationModal').style.display = 'none'; }
+
+        function executePiPayment() {
+            closeModal();
             window.Pi.createPayment({
                 amount: 10.0,
                 memo: "استفسار سيارة من Pi Auto Market",
                 recipient: "GDKBQAC6EGRQLKR2CF3CTGFSTABR5CE246BS4PJ5S5CLCWBF34FHZXDD"
             }, {
-                onReadyForServerApproval: (paymentId) => {
-                    console.log("Payment ready for approval:", paymentId);
-                },
-                onSuccess: (payment) => {
-                    alert("تمت العملية بنجاح! شكراً لك.");
-                },
-                onCancel: (paymentId) => {
-                    alert("تم إلغاء الدفع.");
-                },
-                onError: (error) => {
-                    alert("حدث خطأ في الدفع: " + error.message);
-                }
+                onSuccess: (payment) => { alert("تمت العملية بنجاح! شكراً لك."); },
+                onCancel: (paymentId) => { alert("تم إلغاء الدفع."); },
+                onError: (error) => { alert("خطأ: " + error.message); }
             });
-        };
+        }
     </script>
 </body>
 </html>
