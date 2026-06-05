@@ -7,20 +7,22 @@
         :root { --gold: #c5a059; --dark: #121212; --white: #ffffff; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; text-align: center; }
         
-        .header { padding: 50px 20px; background: #000; border-bottom: 4px solid var(--gold); }
-        .logo { width: 200px; height: 200px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 20px; }
+        .header { padding: 40px 20px; background: #000; border-bottom: 4px solid var(--gold); }
+        .logo { width: 250px; height: 250px; border-radius: 50%; border: 4px solid var(--gold); margin-bottom: 20px; }
+        h1 { font-size: 32px; color: var(--gold); }
         
-        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; padding: 40px; }
-        .car-card { background: #1e1e1e; padding: 20px; border-radius: 20px; transition: transform 0.3s ease; border: 1px solid #333; }
-        .car-card:hover { transform: scale(1.05); border-color: var(--gold); }
-        .car-image { width: 100%; height: 250px; object-fit: cover; border-radius: 15px; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px; padding: 40px; }
+        .car-card { background: #1e1e1e; padding: 25px; border-radius: 25px; transition: transform 0.4s ease; border: 1px solid #333; }
+        .car-card:hover { transform: scale(1.03); border-color: var(--gold); }
+        .car-image { width: 100%; height: 300px; object-fit: cover; border-radius: 20px; }
 
-        .form-section { background: #1a1a1a; padding: 40px; margin: 40px auto; width: 80%; border-radius: 20px; border: 1px solid var(--gold); }
-        input, select { width: 90%; padding: 15px; margin: 10px 0; border-radius: 10px; border: none; background: #333; color: white; }
+        .form-section { background: #1a1a1a; padding: 50px; margin: 40px auto; width: 85%; border-radius: 25px; border: 2px solid var(--gold); }
+        input { width: 90%; padding: 20px; margin: 15px 0; border-radius: 12px; border: 1px solid var(--gold); background: #2a2a2a; color: #fff; font-size: 18px; }
+        input::placeholder { color: #aaa; }
         
-        .btn-submit { background: var(--gold); color: black; padding: 15px 50px; font-weight: bold; border-radius: 50px; border: none; cursor: pointer; font-size: 18px; margin-top: 20px; }
+        .btn-action { background: var(--gold); color: black; padding: 20px 60px; font-weight: bold; border-radius: 50px; border: none; cursor: pointer; font-size: 20px; margin: 10px; }
         
-        .footer { padding: 30px; border-top: 1px solid #333; }
+        .footer { padding: 40px; font-size: 16px; border-top: 2px solid #333; }
     </style>
 </head>
 <body>
@@ -28,14 +30,14 @@
     <div class="header">
         <img src="logo.png" class="logo" alt="شعار المنصة">
         <h1>منصة الوسيط الآمن</h1>
-        <p>أول منصة يمنية للتعاملات السيارات عبر عملة Pi</p>
+        <p style="font-size: 20px;">أول منصة يمنية للتعاملات السيارات عبر عملة Pi</p>
     </div>
 
     <div class="gallery">
-        <div class="car-card"><h3>هيونداي النترا 2026</h3><img src="hyundai-elantra.png" class="car-image"></div>
-        <div class="car-card"><h3>لكزس LX 2026</h3><img src="lexus-lx.png" class="car-image"></div>
-        <div class="car-card"><h3>تويوتا كامري 2026</h3><img src="toyota-camry.png" class="car-image"></div>
-        <div class="car-card"><h3>تويوتا هايلوكس 2026</h3><img src="toyota-hilux.png" class="car-image"></div>
+        <div class="car-card"><h2>هيونداي النترا 2026</h2><img src="hyundai-elantra.png" class="car-image"></div>
+        <div class="car-card"><h2>لكزس LX 2026</h2><img src="lexus-lx.png" class="car-image"></div>
+        <div class="car-card"><h2>تويوتا كامري 2026</h2><img src="toyota-camry.png" class="car-image"></div>
+        <div class="car-card"><h2>تويوتا هايلوكس 2026</h2><img src="toyota-hilux.png" class="car-image"></div>
     </div>
 
     <div class="form-section">
@@ -46,11 +48,12 @@
         <input type="text" placeholder="اللون المفضل">
         <input type="text" placeholder="المواصفات المطلوبة">
         <br>
-        <button class="btn-submit" onclick="alert('تم إرسال طلبك بنجاح للمشرف أبو جود المشولي')">تقديم الطلب</button>
+        <button class="btn-action" onclick="alert('يرجى الدفع أولاً لتأكيد الاستفسار')">ادفع 10 Pi للاستفسار</button>
+        <button class="btn-action" style="background: white;" onclick="alert('تم إرسال طلبك بنجاح!')">تقديم الطلب</button>
     </div>
 
     <div class="footer">
-        <a href="policy.html" style="color: var(--gold);">سياسة الخصوصية وإخلاء المسؤولية</a>
+        <a href="policy.html" style="color: var(--gold); font-size: 18px;">سياسة الخصوصية وإخلاء المسؤولية</a>
         <p>© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
     </div>
 
