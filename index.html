@@ -2,28 +2,33 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Pi Auto Market 2026 | المنصة الرائدة</title>
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <title>Pi Auto Market 2026 | المنصة الفاخرة</title>
     <style>
-        :root { --gold: #c5a059; --dark: #1a1a1a; --white: #ffffff; }
+        :root { --gold: #c5a059; --dark: #121212; --white: #ffffff; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; text-align: center; }
-        .header { padding: 30px 20px; background: linear-gradient(to bottom, #2c2c2c, #1a1a1a); border-bottom: 3px solid var(--gold); }
-        .logo { width: 120px; margin-bottom: 15px; border-radius: 50%; }
-        .welcome-text { font-size: 22px; color: var(--gold); margin: 10px 0; }
-        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
-        .car-card { background: #252525; padding: 15px; border-radius: 15px; border: 1px solid #333; }
-        .car-image { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; }
-        .btn-pay { background: var(--gold); color: black; padding: 15px 30px; font-weight: bold; border-radius: 50px; border: none; cursor: pointer; font-size: 16px; margin: 20px 0; }
-        .footer { padding: 30px; font-size: 14px; border-top: 1px solid #333; }
+        
+        .header { padding: 50px 20px; background: #000; border-bottom: 4px solid var(--gold); }
+        .logo { width: 200px; height: 200px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 20px; }
+        
+        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; padding: 40px; }
+        .car-card { background: #1e1e1e; padding: 20px; border-radius: 20px; transition: transform 0.3s ease; border: 1px solid #333; }
+        .car-card:hover { transform: scale(1.05); border-color: var(--gold); }
+        .car-image { width: 100%; height: 250px; object-fit: cover; border-radius: 15px; }
+
+        .form-section { background: #1a1a1a; padding: 40px; margin: 40px auto; width: 80%; border-radius: 20px; border: 1px solid var(--gold); }
+        input, select { width: 90%; padding: 15px; margin: 10px 0; border-radius: 10px; border: none; background: #333; color: white; }
+        
+        .btn-submit { background: var(--gold); color: black; padding: 15px 50px; font-weight: bold; border-radius: 50px; border: none; cursor: pointer; font-size: 18px; margin-top: 20px; }
+        
+        .footer { padding: 30px; border-top: 1px solid #333; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <img src="logo.png" class="logo" alt="شعار المنصة">
-        <h1 class="welcome-text">مرحباً بكم في منصة الوسيط الآمن</h1>
-        <p>أول منصة يمنية تسهل لكم التعامل مع الشركات والوكالات التي تقبل التعامل بعملة Pi</p>
-        <p style="font-style: italic; opacity: 0.8;">تحت إشراف: أبو جود المشولي</p>
+        <h1>منصة الوسيط الآمن</h1>
+        <p>أول منصة يمنية للتعاملات السيارات عبر عملة Pi</p>
     </div>
 
     <div class="gallery">
@@ -33,10 +38,19 @@
         <div class="car-card"><h3>تويوتا هايلوكس 2026</h3><img src="toyota-hilux.png" class="car-image"></div>
     </div>
 
-    <button class="btn-pay" onclick="alert('جاري ربط محفظة Pi...')">احجز استشارتك (10 Pi)</button>
+    <div class="form-section">
+        <h2>تقديم طلب شراء/استفسار</h2>
+        <input type="text" placeholder="اسم مقدم الطلب الكامل">
+        <input type="text" placeholder="نوع السيارة المطلوبة">
+        <input type="text" placeholder="الموديل (مثلاً 2026)">
+        <input type="text" placeholder="اللون المفضل">
+        <input type="text" placeholder="المواصفات المطلوبة">
+        <br>
+        <button class="btn-submit" onclick="alert('تم إرسال طلبك بنجاح للمشرف أبو جود المشولي')">تقديم الطلب</button>
+    </div>
 
     <div class="footer">
-        <a href="policy.html" style="color: var(--gold); text-decoration: none;">سياسة الخصوصية وإخلاء المسؤولية</a>
+        <a href="policy.html" style="color: var(--gold);">سياسة الخصوصية وإخلاء المسؤولية</a>
         <p>© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
     </div>
 
