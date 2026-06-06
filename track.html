@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>متابعة الطلب | Pi Auto Market 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-10 text-center">
+    <div class="max-w-md mx-auto bg-gray-800 p-8 rounded-2xl border border-yellow-600">
+        <h2 class="text-2xl font-bold mb-6 text-yellow-500">متابعة حالة طلبك</h2>
+        <input type="text" id="trackID" placeholder="أدخل رقم طلبك (مثلاً PI-1234)" class="w-full p-3 rounded-lg bg-gray-700 text-white mb-4 border border-yellow-600">
+        <button onclick="checkStatus()" class="w-full bg-yellow-600 py-3 rounded-lg font-bold hover:bg-yellow-700">استعلام</button>
+        <div id="statusResult" class="mt-6 font-bold text-lg"></div>
+        <div class="mt-8">
+            <a href="index.html" class="text-gray-400 underline">العودة للرئيسية</a>
+        </div>
+    </div>
+
+    <script>
+        function checkStatus() {
+            const id = document.getElementById('trackID').value;
+            const resultDiv = document.getElementById('statusResult');
+            
+            if(id.startsWith("PI-")) {
+                resultDiv.innerHTML = "حالة الطلب: <span class='text-green-500'>جاري البحث عن سيارتك في الأسواق العالمية...</span>";
+            } else {
+                resultDiv.innerHTML = "<span class='text-red-500'>عذراً، رقم الطلب غير صحيح.</span>";
+            }
+        }
+    </script>
+</body>
+</html>
+
