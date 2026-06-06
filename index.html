@@ -2,83 +2,300 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
+    <!-- استدعاء خط كايرو الفخم -->
+    <link href="https://googleapis.com" rel="stylesheet">
+    
     <style>
-        :root { --gold: #c5a059; --dark: #121212; --white: #ffffff; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; text-align: center; }
+        :root { 
+            --gold: #c5a059; 
+            --gold-gradient: linear-gradient(135deg, #d4af37, #aa7c11);
+            --dark-bg: #0b0c10; 
+            --card-bg: rgba(25, 27, 38, 0.65);
+            --white: #ffffff; 
+            --text-muted: #a0aec0;
+        }
         
-        .header { padding: 40px 20px; background: #000; border-bottom: 4px solid var(--gold); }
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: var(--dark-bg); 
+            background-image: radial-gradient(circle at top, #1f2330 0%, #0b0c10 70%);
+            color: var(--white); 
+            margin: 0; 
+            padding: 0;
+            text-align: center; 
+            -webkit-font-smoothing: antialiased;
+        }
         
-        /* تحسين حجم الشعار */
-        .logo { width: 100%; max-width: 500px; height: auto; margin-bottom: 25px; display: block; margin-left: auto; margin-right: auto; }
+        .header { 
+            padding: 50px 20px; 
+            background: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid var(--gold); 
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
         
-        h1 { font-size: 36px; color: var(--gold); margin-bottom: 10px; }
+        /* تحسين حجم الشعار وتوسيطه الدقيق */
+        .logo { 
+            width: 100%; 
+            max-width: 240px; 
+            height: auto; 
+            margin: 0 auto 20px auto; 
+            display: block; 
+            filter: drop-shadow(0px 4px 15px rgba(197, 160, 89, 0.3));
+        }
+        
+        h1 { 
+            font-size: 32px; 
+            font-weight: 900;
+            color: var(--white); 
+            margin: 10px 0; 
+        }
+
+        .header p {
+            font-size: 16px;
+            color: var(--gold);
+            font-weight: 700;
+            margin: 5px 0 0 0;
+        }
         
         /* تصميم المعرض: سيارتين بجانب بعض */
-        .gallery-two-cars { display: flex; justify-content: center; gap: 20px; padding: 40px; flex-wrap: wrap; }
+        .gallery-two-cars { 
+            display: flex; 
+            justify-content: center; 
+            gap: 25px; 
+            padding: 40px 20px; 
+            flex-wrap: wrap; 
+            max-width: 1000px;
+            margin: 0 auto;
+        }
         
         .car-card-side { 
-            background: rgba(30, 30, 30, 0.6); 
-            backdrop-filter: blur(10px); 
-            padding: 20px; 
+            background: var(--card-bg); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            padding: 15px; 
             border-radius: 20px; 
-            width: 350px; 
-            border: 1px solid rgba(197, 160, 89, 0.3);
-            transition: all 0.4s ease;
+            width: 100%;
+            max-width: 380px; 
+            border: 1px solid rgba(197, 160, 89, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-sizing: border-box;
         }
-        .car-card-side:hover { transform: translateY(-10px); border-color: var(--gold); background: rgba(40, 40, 40, 0.8); }
-        .car-image { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; }
+
+        .car-card-side:hover { 
+            transform: translateY(-8px); 
+            border-color: var(--gold); 
+            background: rgba(30, 34, 48, 0.85); 
+            box-shadow: 0 15px 35px rgba(197, 160, 89, 0.15);
+        }
+
+        /* حاوي الصورة لحل مشكلة الخلفيات البيضاء */
+        .image-container {
+            width: 100%;
+            height: 210px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .car-image { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            padding: 5px;
+        }
+
+        .car-card-side h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 15px 0 5px 0;
+            color: var(--white);
+        }
 
         /* تنسيق المربعات المطور */
-        .form-section { background: rgba(26, 26, 26, 0.7); backdrop-filter: blur(5px); padding: 50px; margin: 40px auto; width: 85%; border-radius: 25px; border: 1px solid var(--gold); }
-        input { 
-            width: 90%; padding: 20px; margin: 15px 0; border-radius: 12px; border: 1px solid var(--gold); 
-            background: #1a1a1a; color: #ffffff; font-size: 18px; font-weight: 500;
+        .form-section { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            padding: 40px 20px; 
+            margin: 40px auto; 
+            width: 90%; 
+            max-width: 600px;
+            border-radius: 24px; 
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            box-sizing: border-box;
         }
-        input::placeholder { color: #888888; font-size: 16px; }
+
+        .form-section h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 25px;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 16px 20px; 
+            margin: 10px 0; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            background: rgba(15, 16, 22, 0.8); 
+            color: #ffffff; 
+            font-size: 15px; 
+            font-family: 'Cairo', sans-serif;
+            font-weight: 500;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            text-align: right;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: #0f1016;
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
+        }
+
+        input::placeholder { 
+            color: #626973; 
+            font-size: 14px; 
+        }
         
-        .btn-action { background: var(--gold); color: black; padding: 20px 40px; font-weight: bold; border-radius: 50px; border: none; cursor: pointer; font-size: 18px; margin: 10px; transition: 0.3s; }
-        .btn-action:hover { opacity: 0.8; transform: scale(1.05); }
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-action { 
+            width: 100%;
+            background: var(--gold-gradient); 
+            color: #000000; 
+            padding: 16px 30px; 
+            font-weight: 700; 
+            font-family: 'Cairo', sans-serif;
+            border-radius: 12px; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 16px; 
+            transition: 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.2);
+        }
+
+        .btn-action:hover { 
+            opacity: 0.9; 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(197, 160, 89, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--white);
+            box-shadow: none;
+        }
         
-        .footer { padding: 50px 20px; border-top: 2px solid #333; }
-        .footer a { color: var(--gold); font-size: 24px; font-weight: bold; display: block; margin: 20px 0; text-decoration: none; }
-        .footer p { font-size: 18px; margin-top: 30px; color: #888; }
+        .footer { 
+            padding: 60px 20px; 
+            border-top: 1px solid rgba(255, 255, 255, 0.05); 
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .footer a { 
+            color: var(--text-muted); 
+            font-size: 15px; 
+            font-weight: 600; 
+            text-decoration: none; 
+            transition: color 0.3s;
+            display: inline-block;
+        }
+
+        .footer a:hover { 
+            color: var(--gold); 
+        }
+
+        .footer p { 
+            font-size: 13px; 
+            margin: 0; 
+            color: #525866; 
+        }
+
+        /* تحسينات الشاشات المتوسطة والأكبر (التابلت والكمبيوتر) */
+        @media(min-width: 480px) {
+            .button-group {
+                flex-direction: row;
+                justify-content: center;
+            }
+            .btn-action {
+                width: auto;
+            }
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
+        <!-- تأكد من وضع الشعار في نفس المجلد وتسميته logo.png -->
         <img src="logo.png" class="logo" alt="شعار منصة الوسيط الآمن">
         <h1>منصة الوسيط الآمن</h1>
-        <p style="font-size: 20px;">أول منصة يمنية للتعاملات السيارات عبر عملة Pi</p>
+        <p>أول منصة يمنية لتعاملات السيارات عبر عملة Pi</p>
     </div>
 
     <div class="gallery-two-cars">
         <div class="car-card-side">
-            <img src="lexus-lx.png" class="car-image">
-            <h2>لكزس LX 2026</h2>
+            <div class="image-container">
+                <img src="lexus-lx.png" class="car-image" alt="لكزس LX 2026">
+            </div>
+            <h2>لكزس LX 2026 👑</h2>
         </div>
         <div class="car-card-side">
-            <img src="toyota-camry.png" class="car-image">
-            <h2>تويوتا كامري 2026</h2>
+            <div class="image-container">
+                <img src="toyota-camry.png" class="car-image" alt="تويوتا كامري 2026">
+            </div>
+            <h2>تويوتا كامري 2026 🚗</h2>
         </div>
     </div>
 
     <div class="form-section">
-        <h2>تقديم طلب شراء/استفسار</h2>
+        <h2>📝 تقديم طلب شراء / استفسار</h2>
         <input type="text" id="custName" placeholder="اسم مقدم الطلب الكامل">
         <input type="text" id="carType" placeholder="نوع السيارة المطلوبة">
         <input type="text" id="modelYear" placeholder="الموديل (مثلاً 2026)">
         <input type="text" id="color" placeholder="اللون المفضل">
         <input type="text" id="specs" placeholder="المواصفات المطلوبة">
-        <br>
-        <button class="btn-action" onclick="simulatePayment()">ادفع 10 Pi للاستفسار</button>
-        <button class="btn-action" style="background: #fff;" onclick="submitDemoOrder()">تقديم الطلب</button>
+        
+        <div class="button-group">
+            <button class="btn-action" onclick="simulatePayment()">🪙 ادفع 10 Pi للاستفسار</button>
+            <button class="btn-action btn-secondary" onclick="submitDemoOrder()">إرسال البيانات</button>
+        </div>
     </div>
 
     <div class="footer">
-        <a href="track.html">متابعة حالة طلبي</a>
-        <a href="policy.html">سياسة الخصوصية وإخلاء المسؤولية</a>
+        <div class="footer-links">
+            <a href="track.html">🔍 متابعة حالة طلبي</a>
+            <a href="policy.html">⚖️ سياسة الخصوصية وإخلاء المسؤولية</a>
+        </div>
         <p>© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
     </div>
 
