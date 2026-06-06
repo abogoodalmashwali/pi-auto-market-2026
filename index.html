@@ -7,6 +7,9 @@
     <!-- استدعاء خط كايرو الفخم -->
     <link href="https://googleapis.com" rel="stylesheet">
     
+    <!-- 1. استدعاء مكتبة Pi Network الرسمية للربط بالمحفظة -->
+    <script src="https://minepi.com"></script>
+
     <style>
         :root { 
             --gold: #c5a059; 
@@ -36,7 +39,6 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
         
-        /* تحسين حجم الشعار وتوسيطه الدقيق */
         .logo { 
             width: 100%; 
             max-width: 240px; 
@@ -60,7 +62,6 @@
             margin: 5px 0 0 0;
         }
         
-        /* تصميم المعرض: سيارتين بجانب بعض */
         .gallery-two-cars { 
             display: flex; 
             justify-content: center; 
@@ -92,7 +93,6 @@
             box-shadow: 0 15px 35px rgba(197, 160, 89, 0.15);
         }
 
-        /* حاوي الصورة لحل مشكلة الخلفيات البيضاء */
         .image-container {
             width: 100%;
             height: 210px;
@@ -118,7 +118,6 @@
             color: var(--white);
         }
 
-        /* تنسيق المربعات المطور */
         .form-section { 
             background: var(--card-bg); 
             backdrop-filter: blur(12px); 
@@ -241,7 +240,6 @@
             color: #525866; 
         }
 
-        /* تحسينات الشاشات المتوسطة والأكبر (التابلت والكمبيوتر) */
         @media(min-width: 480px) {
             .button-group {
                 flex-direction: row;
@@ -256,7 +254,6 @@
 <body>
 
     <div class="header">
-        <!-- تأكد من وضع الشعار في نفس المجلد وتسميته logo.png -->
         <img src="logo.png" class="logo" alt="شعار منصة الوسيط الآمن">
         <h1>منصة الوسيط الآمن</h1>
         <p>أول منصة يمنية لتعاملات السيارات عبر عملة Pi</p>
@@ -269,6 +266,7 @@
             </div>
             <h2>لكزس LX 2026 👑</h2>
         </div>
+
         <div class="car-card-side">
             <div class="image-container">
                 <img src="toyota-camry.png" class="car-image" alt="تويوتا كامري 2026">
@@ -286,7 +284,8 @@
         <input type="text" id="specs" placeholder="المواصفات المطلوبة">
         
         <div class="button-group">
-            <button class="btn-action" onclick="simulatePayment()">🪙 ادفع 10 Pi للاستفسار</button>
+            <!-- استدعاء دالة الدفع الحقيقي عبر الـ SDK -->
+            <button class="btn-action" onclick="startPiPayment()">🪙 ادفع 10 Pi للاستفسار</button>
             <button class="btn-action btn-secondary" onclick="submitDemoOrder()">إرسال البيانات</button>
         </div>
     </div>
@@ -299,20 +298,27 @@
         <p>© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
     </div>
 
+    <!-- 2. سكريبت التهيئة والربط البرمجي الحقيقي بالمحفظة التجريبية -->
     <script>
-        function submitDemoOrder() {
+        // تهيئة الـ SDK الخاص بالشبكة واختيار الشبكة التجريبية (Testnet)
+        Pi.init({ version: "2.0", sandbox: true }); 
+
+        async function startPiPayment() {
             const name = document.getElementById('custName').value;
             const car = document.getElementById('carType').value;
+
             if(name === "" || car === "") {
-                alert("يرجى تعبئة الاسم ونوع السيارة على الأقل.");
-            } else {
-                const orderID = "PI-" + Math.floor(1000 + Math.random() * 9000);
-                alert("تم استلام طلبك يا " + name + " بنجاح!\nرقم طلبك هو: " + orderID);
+                alert("⚠️ يرجى تعبئة الاسم ونوع السيارة أولاً قبل بدء الدفع.");
+                return;
             }
-        }
-        function simulatePayment() {
-            alert("محاكاة: جاري الانتقال إلى بوابة دفع Pi Network...");
-        }
-    </script>
-</body>
-</html>
+
+            try {
+                // 1. طلب تصريح الدخول والموافقة من حساب المستخدم في Pi Browser
+                const scopes = ['username', 'payments'];
+                const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
+                console.log("تم تسجيل الدخول بنجاح للمستخدم:", auth.user.username);
+
+                // 2. إنشاء عملية دفع حقيقية بمقدار 10 Pi
+                const payment = await Pi.createPayment({
+                    amount: 10.00,
+
