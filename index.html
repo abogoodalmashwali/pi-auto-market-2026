@@ -8,36 +8,29 @@
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; text-align: center; }
         
         .header { padding: 40px 20px; background: #000; border-bottom: 4px solid var(--gold); }
-        
         .logo { width: 100%; max-width: 500px; height: auto; margin-bottom: 25px; display: block; margin-left: auto; margin-right: auto; }
-        
         h1 { font-size: 36px; color: var(--gold); margin-bottom: 10px; }
         
-        /* تعديل الحاوية لضمان بقاء السيارات بجانب بعضها */
+        /* حاوية السيارات بترتيب محدد */
         .gallery-container { 
             display: flex; 
             justify-content: center; 
-            gap: 15px; 
+            gap: 20px; 
             padding: 20px; 
-            flex-wrap: nowrap; /* منع النزول لسطر جديد */
         }
         
         .car-card { 
             background: rgba(30, 30, 30, 0.6); 
             padding: 15px; 
             border-radius: 20px; 
-            width: 45%; /* تخصيص مساحة لكل بطاقة */
+            width: 45%; 
             border: 1px solid var(--gold);
         }
         
         .car-image { width: 100%; height: auto; border-radius: 15px; }
 
         .form-section { background: rgba(26, 26, 26, 0.7); padding: 40px; margin: 20px auto; width: 90%; border-radius: 25px; border: 1px solid var(--gold); }
-        
-        input { 
-            width: 90%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--gold); 
-            background: #1a1a1a; color: #ffffff; font-size: 16px; 
-        }
+        input { width: 90%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--gold); background: #1a1a1a; color: #ffffff; font-size: 16px; }
         
         .btn-action { background: var(--gold); color: black; padding: 15px 30px; font-weight: bold; border-radius: 50px; border: none; cursor: pointer; margin: 10px; }
         
@@ -52,15 +45,15 @@
         <h1>منصة الوسيط الآمن</h1>
     </div>
 
-    <!-- السيارات الآن بجانب بعضها -->
+    <!-- ترتيب السيارات: كامري يميناً، لكزس يساراً -->
     <div class="gallery-container">
-        <div class="car-card">
-            <img src="lexus.png" class="car-image">
-            <h3>لكزس LX 2026</h3>
-        </div>
         <div class="car-card">
             <img src="camry.png" class="car-image">
             <h3>تويوتا كامري 2026</h3>
+        </div>
+        <div class="car-card">
+            <img src="lexus.png" class="car-image">
+            <h3>لكزس LX 2026</h3>
         </div>
     </div>
 
@@ -72,12 +65,13 @@
         <input type="text" placeholder="اللون المفضل">
         <input type="text" placeholder="المواصفات المطلوبة">
         <br>
-        <button class="btn-action">ادفع 10 Pi للاستفسار</button>
-        <button class="btn-action" style="background: #fff;">تقديم الطلب</button>
+        <button class="btn-action" onclick="alert('جاري الانتقال لصفحة الدفع')">ادفع 10 Pi للاستفسار</button>
+        <button class="btn-action" style="background: #fff;" onclick="alert('تم إرسال الطلب')">تقديم الطلب</button>
     </div>
 
     <div class="footer">
-        <a href="#">متابعة حالة طلبي</a>
+        <!-- روابط السياسة والإخلاء -->
+        <a href="policy.html">سياسة الخصوصية وإخلاء المسؤولية</a>
         <p>© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
     </div>
 
