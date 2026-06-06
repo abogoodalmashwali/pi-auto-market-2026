@@ -9,38 +9,24 @@
         
         .header { padding: 40px 20px; background: #000; border-bottom: 4px solid var(--gold); }
         .logo { width: 350px; height: auto; margin-bottom: 25px; display: block; margin-left: auto; margin-right: auto; }
-        
         h1 { font-size: 36px; color: var(--gold); margin-bottom: 10px; }
         
-        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px; padding: 40px; }
+        /* تصميم المعرض الجديد: سيارتين بجانب بعض */
+        .gallery-two-cars { display: flex; justify-content: center; gap: 20px; padding: 40px; flex-wrap: wrap; }
         
-        /* التنسيق الجديد: التأثير الزجاجي للبطاقات */
-        .car-card { 
+        .car-card-side { 
             background: rgba(30, 30, 30, 0.6); 
             backdrop-filter: blur(10px); 
-            padding: 25px; 
-            border-radius: 25px; 
-            transition: all 0.4s ease; 
-            border: 1px solid rgba(197, 160, 89, 0.3); 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8); 
+            padding: 20px; 
+            border-radius: 20px; 
+            width: 350px; 
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            transition: all 0.4s ease;
         }
-        .car-card:hover { 
-            transform: translateY(-10px); 
-            border-color: var(--gold); 
-            background: rgba(40, 40, 40, 0.8);
-        }
-        .car-image { width: 100%; height: 300px; object-fit: cover; border-radius: 20px; margin-top: 15px; }
+        .car-card-side:hover { transform: translateY(-10px); border-color: var(--gold); background: rgba(40, 40, 40, 0.8); }
+        .car-image { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; }
 
-        /* التنسيق الجديد: نموذج الطلب الزجاجي */
-        .form-section { 
-            background: rgba(26, 26, 26, 0.7); 
-            backdrop-filter: blur(5px);
-            padding: 50px; 
-            margin: 40px auto; 
-            width: 85%; 
-            border-radius: 25px; 
-            border: 1px solid var(--gold); 
-        }
+        .form-section { background: rgba(26, 26, 26, 0.7); backdrop-filter: blur(5px); padding: 50px; margin: 40px auto; width: 85%; border-radius: 25px; border: 1px solid var(--gold); }
         input { width: 90%; padding: 20px; margin: 15px 0; border-radius: 12px; border: 1px solid var(--gold); background: #2a2a2a; color: #fff; font-size: 18px; }
         
         .btn-action { background: var(--gold); color: black; padding: 20px 40px; font-weight: bold; border-radius: 50px; border: none; cursor: pointer; font-size: 18px; margin: 10px; transition: 0.3s; }
@@ -59,11 +45,16 @@
         <p style="font-size: 20px;">أول منصة يمنية للتعاملات السيارات عبر عملة Pi</p>
     </div>
 
-    <div class="gallery">
-        <div class="car-card"><h2>هيونداي النترا 2026</h2><img src="hyundai-elantra.png" class="car-image"></div>
-        <div class="car-card"><h2>لكزس LX 2026</h2><img src="lexus-lx.png" class="car-image"></div>
-        <div class="car-card"><h2>تويوتا كامري 2026</h2><img src="toyota-camry.png" class="car-image"></div>
-        <div class="car-card"><h2>تويوتا هايلوكس 2026</h2><img src="toyota-hilux.png" class="car-image"></div>
+    <!-- المعرض المحدث -->
+    <div class="gallery-two-cars">
+        <div class="car-card-side">
+            <img src="lexus-lx.png" class="car-image">
+            <h2>لكزس LX 2026</h2>
+        </div>
+        <div class="car-card-side">
+            <img src="toyota-camry.png" class="car-image">
+            <h2>تويوتا كامري 2026</h2>
+        </div>
     </div>
 
     <div class="form-section">
