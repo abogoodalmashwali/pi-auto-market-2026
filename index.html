@@ -53,6 +53,7 @@
     </div>
 
     <div class="footer">
+        <a href="track.html" style="color: var(--gold); font-size: 18px; display: block; margin-bottom: 10px;">متابعة حالة طلبي</a>
         <a href="policy.html" style="color: var(--gold); font-size: 18px;">سياسة الخصوصية وإخلاء المسؤولية</a>
         <p>© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
     </div>
@@ -65,12 +66,8 @@
             if(name === "" || car === "") {
                 alert("يرجى تعبئة الاسم ونوع السيارة على الأقل.");
             } else {
-                // توليد رقم طلب عشوائي
                 const orderID = "PI-" + Math.floor(1000 + Math.random() * 9000);
-                
-                // رسالة تأكيد للعميل برقم الطلب
                 alert("تم استلام طلبك يا " + name + " بنجاح!\nرقم طلبك هو: " + orderID + "\nيرجى الاحتفاظ بهذا الرقم لمتابعة الحالة.");
-                
                 console.log("طلب تجريبي مستلم برقم:", orderID, { name, car });
             }
         }
