@@ -6,41 +6,38 @@
     <style>
         :root { --gold: #c5a059; --dark: #121212; --white: #ffffff; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; text-align: center; }
+        .header { padding: 30px 20px; border-bottom: 2px solid var(--gold); }
+        .logo { width: 100%; max-width: 400px; margin-bottom: 15px; }
         
-        .header { padding: 40px 20px; background: #000; border-bottom: 4px solid var(--gold); }
-        .logo { width: 100%; max-width: 500px; margin-bottom: 25px; }
+        /* تنسيق عرض السيارات بجانب بعضها */
+        .gallery-container { display: flex; justify-content: center; gap: 10px; padding: 10px; }
+        .car-card { background: #1a1a1a; padding: 10px; border-radius: 15px; width: 45%; border: 1px solid var(--gold); }
+        .car-image { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; }
         
-        /* تنسيق عرض الصور بجانب بعض */
-        .gallery-container { display: flex; justify-content: center; gap: 10px; padding: 20px; }
-        .car-card { background: rgba(30, 30, 30, 0.6); padding: 10px; border-radius: 15px; width: 45%; border: 1px solid var(--gold); }
-        .car-image { width: 100%; height: auto; border-radius: 10px; }
-
-        .form-section { background: rgba(26, 26, 26, 0.7); padding: 30px; margin: 20px auto; width: 90%; border-radius: 20px; border: 1px solid var(--gold); }
-        input { width: 90%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--gold); background: #1a1a1a; color: #ffffff; }
+        .form-section { background: #1a1a1a; padding: 25px; margin: 20px auto; width: 90%; border-radius: 20px; border: 1px solid var(--gold); }
+        input { width: 85%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; }
+        .btn-action { background: var(--gold); color: black; padding: 12px 20px; font-weight: bold; border-radius: 25px; border: none; margin: 5px; cursor: pointer; }
         
-        .btn-action { background: var(--gold); color: black; padding: 15px 30px; font-weight: bold; border-radius: 50px; border: none; margin: 5px; }
-        
-        /* تفعيل روابط السياسة ومتابعة الطلب */
-        .footer { padding: 30px; border-top: 2px solid #333; }
-        .footer a { color: var(--gold); font-size: 18px; display: block; margin: 15px 0; text-decoration: underline; }
+        .footer { padding: 20px; }
+        .footer a { color: var(--gold); display: block; margin: 10px 0; font-size: 16px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <img src="logo.png" class="logo" alt="شعار المشروع">
+        <img src="https://i.imgur.com/your_logo_link.png" class="logo" alt="شعار">
         <h1>منصة الوسيط الآمن</h1>
     </div>
 
-    <!-- الصور كما طلبت بجانب بعضها -->
+    <!-- الصور تظهر الآن بجانب بعضها -->
     <div class="gallery-container">
         <div class="car-card">
-            <img src="lexus_image.jpg" class="car-image" alt="لكزس">
-            <h3>لكزس LX 2026</h3>
+            <img src="https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=300" class="car-image">
+            <p>لكزس LX 2026</p>
         </div>
         <div class="car-card">
-            <img src="camry_image.jpg" class="car-image" alt="كامري">
-            <h3>تويوتا كامري 2026</h3>
+            <img src="https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=300" class="car-image">
+            <p>تويوتا كامري 2026</p>
         </div>
     </div>
 
