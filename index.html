@@ -8,10 +8,13 @@
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark); color: var(--white); margin: 0; text-align: center; }
         
         .header { padding: 40px 20px; background: #000; border-bottom: 4px solid var(--gold); }
-        .logo { width: 350px; height: auto; margin-bottom: 25px; display: block; margin-left: auto; margin-right: auto; }
+        
+        /* تحسين حجم الشعار */
+        .logo { width: 100%; max-width: 500px; height: auto; margin-bottom: 25px; display: block; margin-left: auto; margin-right: auto; }
+        
         h1 { font-size: 36px; color: var(--gold); margin-bottom: 10px; }
         
-        /* تصميم المعرض الجديد: سيارتين بجانب بعض */
+        /* تصميم المعرض: سيارتين بجانب بعض */
         .gallery-two-cars { display: flex; justify-content: center; gap: 20px; padding: 40px; flex-wrap: wrap; }
         
         .car-card-side { 
@@ -26,8 +29,13 @@
         .car-card-side:hover { transform: translateY(-10px); border-color: var(--gold); background: rgba(40, 40, 40, 0.8); }
         .car-image { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; }
 
+        /* تنسيق المربعات المطور */
         .form-section { background: rgba(26, 26, 26, 0.7); backdrop-filter: blur(5px); padding: 50px; margin: 40px auto; width: 85%; border-radius: 25px; border: 1px solid var(--gold); }
-        input { width: 90%; padding: 20px; margin: 15px 0; border-radius: 12px; border: 1px solid var(--gold); background: #2a2a2a; color: #fff; font-size: 18px; }
+        input { 
+            width: 90%; padding: 20px; margin: 15px 0; border-radius: 12px; border: 1px solid var(--gold); 
+            background: #1a1a1a; color: #ffffff; font-size: 18px; font-weight: 500;
+        }
+        input::placeholder { color: #888888; font-size: 16px; }
         
         .btn-action { background: var(--gold); color: black; padding: 20px 40px; font-weight: bold; border-radius: 50px; border: none; cursor: pointer; font-size: 18px; margin: 10px; transition: 0.3s; }
         .btn-action:hover { opacity: 0.8; transform: scale(1.05); }
@@ -45,7 +53,6 @@
         <p style="font-size: 20px;">أول منصة يمنية للتعاملات السيارات عبر عملة Pi</p>
     </div>
 
-    <!-- المعرض المحدث -->
     <div class="gallery-two-cars">
         <div class="car-card-side">
             <img src="lexus-lx.png" class="car-image">
