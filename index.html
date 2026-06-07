@@ -56,20 +56,30 @@
             <select><option value="new">جديدة</option><option value="used">مستخدمة</option></select>
             <label style="color:var(--gold); display:block; margin-top:10px;">إرفاق صور السيارة:</label>
             <input type="file" multiple accept="image/*" style="border:none;">
-            <button class="btn-action" style="width:100%;" onclick="alert('تم استلام الطلب!'); document.getElementById('sellerModal').style.display='none';">إرسال الطلب للتدقيق</button>
+            <button class="btn-action" style="width:100%;" onclick="alert('تم استلام البيانات، سنتواصل معك للتدقيق.'); document.getElementById('sellerModal').style.display='none';">إرسال الطلب للتدقيق</button>
             <button class="btn-action" style="width:100%; background:#444;" onclick="document.getElementById('sellerModal').style.display='none'">إغلاق</button>
         </div>
     </div>
 
     <div class="form-section">
         <h2>تقديم طلب شراء / استفسار 📝</h2>
-        <input type="text" placeholder="اسم مقدم الطلب الكامل">
-        <input type="text" placeholder="نوع السيارة المطلوبة">
-        <input type="text" placeholder="الموديل (مثلاً 2026)">
-        <input type="text" placeholder="اللون المفضل">
+        <input type="text" id="custName" placeholder="اسم مقدم الطلب الكامل">
+        <input type="text" id="carType" placeholder="نوع السيارة المطلوبة">
+        <input type="text" id="modelYear" placeholder="الموديل (مثلاً 2026)">
+        <input type="text" id="color" placeholder="اللون المفضل">
+        <br>
         <button class="btn-action" style="background: var(--gold);" onclick="alert('جاري الانتقال للدفع...')">🪙 ادفع 10 Pi للاستفسار</button>
-        <button class="btn-action" style="background: #1a1a1a; border: 1px solid var(--gold); color: #fff;">إرسال البيانات</button>
+        <button class="btn-action" style="background: #1a1a1a; border: 1px solid var(--gold); color: #fff;" onclick="submitOrder()">إرسال البيانات</button>
     </div>
+
+    <script>
+        function submitOrder() {
+            const name = document.getElementById('custName').value;
+            const car = document.getElementById('carType').value;
+            if(name === "" || car === "") { alert("يرجى تعبئة الاسم ونوع السيارة على الأقل."); } 
+            else { const orderID = "PI-" + Math.floor(1000 + Math.random() * 9000); alert("تم استلام طلبك يا " + name + " بنجاح!\nرقم طلب المراجعة هو: " + orderID); }
+        }
+    </script>
 
     <div class="footer">
         <a href="track.html">متابعة حالة طلبي</a>
