@@ -9,12 +9,16 @@
         .header { padding: 30px 20px; border-bottom: 2px solid var(--gold); }
         .logo { width: 100%; max-width: 400px; display: block; margin: 0 auto; }
         h1 { color: var(--gold); margin-top: 10px; }
+        
         .gallery-container { display: flex; justify-content: center; gap: 15px; padding: 20px; flex-wrap: wrap; }
         .car-box { background: #1a1a1a; padding: 15px; border-radius: 15px; width: 45%; border: 1px solid #333; }
         .car-box img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; }
+        .car-box h3 { font-size: 16px; margin-top: 10px; }
+
         .form-section { background: #1a1a1a; padding: 25px; margin: 20px auto; width: 90%; max-width: 500px; border-radius: 20px; border: 1px solid var(--gold); }
         input, select { width: 90%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; box-sizing: border-box; }
         .btn-action { background: var(--gold); color: black; padding: 12px 25px; border-radius: 25px; border: none; margin: 10px; cursor: pointer; font-weight: bold; width: 90%; }
+        
         .footer { padding: 30px; border-top: 2px solid #333; margin-top: 20px; }
         .footer a { color: var(--gold); display: block; margin: 10px; text-decoration: none; font-weight: bold; }
     </style>
@@ -22,14 +26,45 @@
 <body>
 
     <div class="header">
+        <img src="logo.png" class="logo" alt="شعار المشروع">
         <h1>منصة الوسيط الآمن</h1>
         <p>أول منصة يمنية للتعاملات السيارات عبر عملة Pi</p>
     </div>
 
+    <div class="gallery-container">
+        <div class="car-box">
+            <img src="toyota-camry.png" alt="كامري">
+            <h3>تويوتا كامري 2026</h3>
+        </div>
+        <div class="car-box">
+            <img src="lexus-lx.png" alt="لكزس">
+            <h3>لكزس LX 2026</h3>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h3 style="color: var(--gold);">هل تملك سيارة وتريد عرضها للبيع؟</h3>
+        <button class="btn-action" onclick="document.getElementById('sellerModal').style.display='flex'" style="background:transparent; color:var(--gold); border: 1px solid var(--gold);">عرض سيارتي للبيع</button>
+    </div>
+
+    <!-- نافذة عرض السيارة -->
+    <div id="sellerModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; overflow-y:auto; padding: 20px;">
+        <div style="background:#1a1a1a; padding:30px; border-radius:20px; width:90%; max-width: 500px; border:1px solid #c5a059; margin: 50px auto; text-align: right;">
+            <h2 style="color:#c5a059; text-align: center;">بيانات السيارة المعروضة</h2>
+            <input type="text" placeholder="اسم البائع الكامل">
+            <input type="text" placeholder="نوع وموديل السيارة">
+            <input type="text" placeholder="اللون">
+            <select><option value="new">جديدة</option><option value="used">مستخدمة</option></select>
+            <button class="btn-action" style="width:100%;" onclick="alert('تم استلام البيانات، سنتواصل معك.'); document.getElementById('sellerModal').style.display='none';">إرسال الطلب للتدقيق</button>
+            <button class="btn-action" style="width:100%; background:#444;" onclick="document.getElementById('sellerModal').style.display='none'">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- نموذج تقديم طلب الشراء المربوط بالبريد -->
     <div class="form-section">
         <h2>تقديم طلب شراء / استفسار 📝</h2>
         <form action="https://formspree.io/f/meewgjzw" method="POST">
-            <input type="text" name="الاسم" placeholder="اسم مقدم الطلب الكامل" required>
+            <input type="text" name="الاسم_الكامل" placeholder="اسم مقدم الطلب الكامل" required>
             <input type="text" name="نوع_السيارة" placeholder="نوع السيارة المطلوبة" required>
             <input type="text" name="الموديل" placeholder="الموديل (مثلاً 2026)">
             <input type="text" name="اللون" placeholder="اللون المفضل">
