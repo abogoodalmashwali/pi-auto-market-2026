@@ -8,7 +8,6 @@
         
         body { 
             font-family: 'Segoe UI', sans-serif; 
-            /* دمج تدرج لوني مع صورة خلفية مموهة */
             background: linear-gradient(180deg, rgba(10, 10, 10, 0.85) 0%, rgba(0, 0, 0, 0.95) 100%), 
                         url('luxury-bg.jpg');
             background-size: cover;
@@ -67,6 +66,13 @@
         </div>
     </div>
 
+    <!-- قسم عرض سيارة للبيع -->
+    <div class="form-section">
+        <h2 style="color: var(--gold);">هل تملك سيارة وتريد عرضها للبيع؟</h2>
+        <p>انضم إلى قائمة البائعين المعتمدين لدينا وابدأ في جني أرباحك بالعملة الرقمية.</p>
+        <button class="btn-action" onclick="showSellerForm()" style="background: transparent; border: 2px solid var(--gold); color: var(--gold);">عرض سيارتي للبيع</button>
+    </div>
+
     <div class="form-section">
         <h2>تقديم طلب شراء/استفسار</h2>
         <input type="text" id="custName" placeholder="اسم مقدم الطلب الكامل">
@@ -86,6 +92,9 @@
     </div>
 
     <script>
+        function showSellerForm() {
+            alert("تم تفعيل طلب العرض! سيتم فتح نموذج إدخال بيانات السيارة للتدقيق الأمني.");
+        }
         function submitDemoOrder() {
             const name = document.getElementById('custName').value;
             const car = document.getElementById('carType').value;
@@ -96,3 +105,4 @@
     </script>
 </body>
 </html>
+
