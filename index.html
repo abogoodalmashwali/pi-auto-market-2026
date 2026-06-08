@@ -24,10 +24,13 @@
     </style>
 </head>
 <body>
-    
-    <!-- كود حصر الدخول لمستخدمي Pi Browser فقط -->
+
+    <!-- كود الحماية الذكي -->
     <script>
-        if (!navigator.userAgent.includes("PiBrowser")) {
+        // السماح بالدخول إذا كان المتصفح هو PiBrowser أو إذا كان الموقع يعمل داخل نطاق pinet.com
+        const isPiEnvironment = navigator.userAgent.includes("PiBrowser") || window.location.hostname.includes("pinet.com");
+        
+        if (!isPiEnvironment) {
             document.body.innerHTML = `
                 <div style="text-align:center; padding: 20%; font-family: sans-serif; background-color: #000; color: #d4af37; height: 100vh;">
                     <h1>⚠️ وصول محدود</h1>
