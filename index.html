@@ -24,6 +24,19 @@
     </style>
 </head>
 <body>
+    
+    <!-- كود حصر الدخول لمستخدمي Pi Browser فقط -->
+    <script>
+        if (!navigator.userAgent.includes("PiBrowser")) {
+            document.body.innerHTML = `
+                <div style="text-align:center; padding: 20%; font-family: sans-serif; background-color: #000; color: #d4af37; height: 100vh;">
+                    <h1>⚠️ وصول محدود</h1>
+                    <p>هذا المشروع مخصص حصراً لمجتمع Pi.</p>
+                    <p>يرجى فتح هذه المنصة من داخل متصفح <b>Pi Browser</b> للتمكن من الاستخدام.</p>
+                </div>
+            `;
+        }
+    </script>
 
     <div class="header">
         <img src="logo.png" class="logo" alt="شعار المشروع">
