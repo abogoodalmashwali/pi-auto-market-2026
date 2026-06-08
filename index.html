@@ -49,7 +49,7 @@
         <button class="btn-action" onclick="document.getElementById('sellerModal').style.display='flex'" style="background:transparent; color:var(--gold); border: 1px solid var(--gold);">عرض سيارتي للبيع</button>
     </div>
 
-    <!-- نافذة عرض السيارة للبيع (مع خيار الصور) -->
+    <!-- نافذة عرض السيارة للبيع -->
     <div id="sellerModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; overflow-y:auto; padding: 20px;">
         <div style="background:#1a1a1a; padding:30px; border-radius:20px; width:90%; max-width: 500px; border:1px solid #c5a059; margin: 50px auto; text-align: right;">
             <h2 style="color:#c5a059; text-align: center;">بيانات السيارة المعروضة</h2>
@@ -67,7 +67,7 @@
         </div>
     </div>
 
-    <!-- نموذج الطلب المربوط بالبريد -->
+    <!-- نموذج الطلب المربوط بالبريد + زر الدفع -->
     <div class="form-section">
         <h2>تقديم طلب شراء / استفسار 📝</h2>
         <form action="https://formspree.io/f/meewgjzw" method="POST">
@@ -75,7 +75,12 @@
             <input type="text" name="نوع_السيارة" placeholder="نوع السيارة المطلوبة" required>
             <input type="text" name="الموديل" placeholder="الموديل (مثلاً 2026)">
             <input type="text" name="اللون" placeholder="اللون المفضل">
-            <button type="submit" class="btn-action" style="background: var(--gold);">إرسال البيانات للوسيط</button>
+            
+            <!-- زر الدفع -->
+            <button type="button" class="btn-action" style="background: var(--gold); color: black;" onclick="alert('يرجى تحويل 10 Pi إلى محفظة الوسيط لإتمام عملية الاستفسار.')">🪙 ادفع 10 Pi للاستفسار</button>
+            
+            <!-- زر الإرسال -->
+            <button type="submit" class="btn-action" style="background: #1a1a1a; border: 1px solid var(--gold); color: #fff;">إرسال البيانات للوسيط</button>
         </form>
     </div>
 
