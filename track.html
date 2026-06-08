@@ -2,32 +2,29 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>متابعة الطلب | Pi Auto Market 2026</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>متابعة الطلب - Pi Auto Market 2026</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; padding: 20px; text-align: center; margin: 0; }
+        .container { max-width: 500px; margin: 50px auto; padding: 30px; border: 1px solid #c5a059; border-radius: 20px; background: #1a1a1a; }
+        h1 { color: #c5a059; }
+        .status-box { background: #000; padding: 20px; border-radius: 15px; margin-top: 20px; border: 1px solid #333; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #c5a059; background: #000; color: #fff; text-align: center; box-sizing: border-box; }
+        .btn-check { background: #c5a059; color: #000; padding: 12px 25px; border-radius: 25px; border: none; cursor: pointer; font-weight: bold; width: 90%; margin-top: 10px; }
+    </style>
 </head>
-<body class="bg-gray-900 text-white p-10 text-center">
-    <div class="max-w-md mx-auto bg-gray-800 p-8 rounded-2xl border border-yellow-600">
-        <h2 class="text-2xl font-bold mb-6 text-yellow-500">متابعة حالة طلبك</h2>
-        <input type="text" id="trackID" placeholder="أدخل رقم طلبك (مثلاً PI-1234)" class="w-full p-3 rounded-lg bg-gray-700 text-white mb-4 border border-yellow-600">
-        <button onclick="checkStatus()" class="w-full bg-yellow-600 py-3 rounded-lg font-bold hover:bg-yellow-700">استعلام</button>
-        <div id="statusResult" class="mt-6 font-bold text-lg"></div>
-        <div class="mt-8">
-            <a href="index.html" class="text-gray-400 underline">العودة للرئيسية</a>
+<body>
+    <div class="container">
+        <h1>متابعة حالة الطلب</h1>
+        <p>أدخل رقم الطلب المرسل إلى بريدك الإلكتروني لمعرفة الحالة:</p>
+        <input type="text" placeholder="رقم الطلب (مثال: #123)">
+        <button class="btn-check" onclick="alert('جاري التحقق من رقم الطلب... سيتم الرد عليك عبر البريد المسجل.');">استعلام</button>
+        
+        <div class="status-box">
+            <p>حالة الطلب: <strong>بانتظار رقم الطلب</strong></p>
         </div>
+        
+        <br>
+        <a href="index.html" style="color: #c5a059; text-decoration: none; font-weight: bold;">العودة للرئيسية</a>
     </div>
-
-    <script>
-        function checkStatus() {
-            const id = document.getElementById('trackID').value;
-            const resultDiv = document.getElementById('statusResult');
-            
-            if(id.startsWith("PI-")) {
-                resultDiv.innerHTML = "حالة الطلب: <span class='text-green-500'>جاري البحث عن سيارتك في الأسواق العالمية...</span>";
-            } else {
-                resultDiv.innerHTML = "<span class='text-red-500'>عذراً، رقم الطلب غير صحيح.</span>";
-            }
-        }
-    </script>
 </body>
 </html>
-
