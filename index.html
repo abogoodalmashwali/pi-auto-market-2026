@@ -25,16 +25,12 @@
 </head>
 <body>
 
-      
-    </script>
-
     <div class="header">
         <img src="logo.png" class="logo" alt="شعار المشروع">
         <h1>منصة الوسيط الآمن</h1>
         <p>أول منصة يمنية للتعاملات السيارات عبر عملة Pi</p>
     </div>
 
-    <!-- معرض السيارات -->
     <div class="gallery-container">
         <div class="car-box">
             <img src="toyota-camry.png" alt="كامري">
@@ -46,13 +42,11 @@
         </div>
     </div>
 
-    <!-- زر عرض سيارتي -->
     <div class="form-section">
         <h3 style="color: var(--gold);">هل تملك سيارة وتريد عرضها للبيع؟</h3>
         <button class="btn-action" onclick="document.getElementById('sellerModal').style.display='flex'" style="background:transparent; color:var(--gold); border: 1px solid var(--gold);">عرض سيارتي للبيع</button>
     </div>
 
-    <!-- نافذة عرض السيارة للبيع -->
     <div id="sellerModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; overflow-y:auto; padding: 20px;">
         <div style="background:#1a1a1a; padding:30px; border-radius:20px; width:90%; max-width: 500px; border:1px solid #c5a059; margin: 50px auto; text-align: right;">
             <h2 style="color:#c5a059; text-align: center;">بيانات السيارة المعروضة</h2>
@@ -70,7 +64,6 @@
         </div>
     </div>
 
-    <!-- نموذج الطلب المربوط بالبريد -->
     <div class="form-section">
         <h2>تقديم طلب شراء / استفسار 📝</h2>
         <form action="https://formspree.io/f/meewgjzw" method="POST">
@@ -79,7 +72,6 @@
             <input type="text" name="الموديل" placeholder="الموديل (مثلاً 2026)">
             <input type="text" name="اللون" placeholder="اللون المفضل">
             
-            <!-- زر الإرسال -->
             <button type="submit" class="btn-action" style="background: var(--gold); border: 1px solid var(--gold); color: #000; font-weight: bold;">إرسال البيانات للوسيط</button>
         </form>
     </div>
