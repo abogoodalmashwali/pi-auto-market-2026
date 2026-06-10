@@ -8,6 +8,7 @@
     <!-- 1. استدعاء مكتبة الـ SDK الرسمية لـ Pi Network (إجباري لتشغيل المحفظة) -->
     <script src="https://minepi.com"></script>
 
+
     <style>
         :root { --gold: #c5a059; --white: #ffffff; }
         body { font-family: 'Segoe UI', sans-serif; background: #000; color: var(--white); margin: 0; text-align: center; }
