@@ -6,7 +6,8 @@
     <title>Pi Auto Market 2026</title>
     
     <!-- استدعاء مكتبة الـ SDK الرسمية الصحيحة لـ Pi Network -->
-    <script src="https://minepi.com"></script>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
 
     <style>
         :root { --gold: #c5a059; --white: #ffffff; }
@@ -133,8 +134,8 @@
 
             updateStatus("جاري تفعيل توكن المصادقة وقراءة الحساب...");
 
-            try {
-                const scopes = ['username'];
+            try {const scopes = ['username', 'payments'];
+
                 window.Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
                     
                     updateStatus("تمت المصادقة بنجاح! جاري استدعاء نافذة محفظة الفحص...");
