@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
     
-    <!-- 1. استدعاء مكتبة الـ SDK الرسمية لـ Pi Network (إجباري لتشغيل المحفظة) -->
+    <!-- استدعاء مكتبة الـ SDK الرسمية الصحيحة لـ Pi Network -->
     <script src="https://minepi.com"></script>
 
     <style>
@@ -24,7 +24,7 @@
         input, select { width: 90%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; box-sizing: border-box; }
         .btn-action { background: var(--gold); color: black; padding: 12px 25px; border-radius: 25px; border: none; margin: 10px; cursor: pointer; font-weight: bold; width: 90%; }
         
-        /* تصميم مخصص ومتطور لزر الفحص والتنبيهات للخطوة العاشرة */
+        /* تصميم زر الفحص والتنبيهات المطور */
         .btn-test-payment { background: #e0b034 !important; color: #000 !important; font-size: 18px; box-shadow: 0 0 15px #e0b034; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
         
@@ -41,12 +41,10 @@
         <p>أول منصة يمنية للتعاملات السيارات عبر عملة Pi</p>
     </div>
 
-    <!-- قسم فحص المعاملة للخطوة العاشرة (تم دمجه وتأمينه بالمصادقة) -->
-    <div class="form-section" style="border: 2px solid #e0b034;">
-        <h2 style="color: #e0b034; margin-top: 0;">الخطوة العاشرة: فحص نظام الدفع ⚙️</h2>
-        <p style="font-size: 14px; color: #ccc;">اضغط على الزر أدناه لتسجيل الدخول وتفعيل محفظة الفحص بقيمة 1 Test-Pi لتجاوز خطوة المطورين الأخيرة بنجاح.</p>
+    <!-- مربع الخطوة العاشرة المحدث (تم حذف النصوص السابقة وإبقاء زر الدفع والحالة فقط) -->
+    <div class="form-section" style="border: 2px solid #e0b034; padding: 35px 20px;">
         <button class="btn-action btn-test-payment" onclick="runPiTestPayment()">إرسال 1 Test-Pi وتأكيد التطبيق</button>
-        <p id="statusMessage" style="color: #e0b034; font-weight: bold; margin-top: 10px; font-size: 15px;"></p>
+        <p id="statusMessage" style="color: #e0b034; font-weight: bold; margin-top: 15px; font-size: 15px; margin-bottom: 0;"></p>
     </div>
 
     <!-- الرسالة الترحيبية الجديدة -->
@@ -112,13 +110,12 @@
         <p style="color: #666; font-size: 14px;">© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
     </div>
 
-    <!-- 2. سكريبت المعالجة والمصادقة المطور لتخطي حظر متصفح باي الوهمي -->
+    <!-- سكريبت المعالجة والمصادقة الرسمي من Pi Network -->
     <script>
-        // تهيئة الـ SDK بمجرد فتح الصفحة لتجهيز الربط
         try {
             if (window.Pi) {
                 window.Pi.init({ version: "2.0", sandbox: true });
-                console.log("تمت تهيئة Pi SDK بنجاح في وضع الفحص المسبق");
+                console.log("تمت تهيئة Pi SDK بنجاح");
             }
         } catch (e) {
             console.error("خطأ في التهيئة التلقائية المبدئية:", e);
@@ -128,7 +125,6 @@
             document.getElementById('statusMessage').innerText = text;
         }
 
-        // الدالة التنفيذية للزر الأصفر
         async function runPiTestPayment() {
             if (!window.Pi) {
                 alert("تنبيه أمني: لم يتم العثور على محرك Pi الذكي. يجب فتح الرابط التجريبي pinet.com حصرياً من داخل تطبيق Pi Browser!");
@@ -138,13 +134,11 @@
             updateStatus("جاري تفعيل توكن المصادقة وقراءة الحساب...");
 
             try {
-                // خطوة إجبارية: ربط المتصفح بالـ SDK وتأكيد هوية المطور أولاً لتجاوز رسائل الخطأ القديمة
                 const scopes = ['username'];
                 window.Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
                     
-                    updateStatus("تمت المصادقة بنجاح! جاري استدعاء نافذة محفظة الفحص (Sandbox)...");
+                    updateStatus("تمت المصادقة بنجاح! جاري استدعاء نافذة محفظة الفحص...");
                     
-                    // تأخير قصير جداً للسماح للـ SDK بفتح المحفظة بسلاسة وبدون تعليق
                     setTimeout(() => {
                         executePaymentProcess();
                     }, 600);
@@ -159,7 +153,6 @@
             }
         }
 
-        // دالة إنشاء المعاملة والخصم الحية
         function executePaymentProcess() {
             window.Pi.createPayment({
                 amount: 1, // القيمة المطلوبة تجريبياً (1 Test-Pi)
@@ -168,7 +161,6 @@
             }, {
                 onReadyForServerApproval: function(paymentId) {
                     updateStatus("تم إنشاء الطلب بنجاح! معرف الدفع: " + paymentId);
-                    console.log("Payment ID ready for server approval:", paymentId);
                     alert("تم توليد المعاملة! يرجى الموافقة والخصم من نافذة المحفظة المنبثقة الآن.");
                 },
                 onReadyForServerCompletion: function(paymentId, txid) {
@@ -177,3 +169,16 @@
                 },
                 onCancel: function(paymentId) {
                     updateStatus("تم إلغاء المعاملة بناءً على رغبتك.");
+                },
+                onError: function(error, payment) {
+                    updateStatus("حالة الشبكة: " + error.message);
+                }
+            });
+        }
+
+        function onIncompletePaymentFound(payment) {
+            console.log("معاملة سابقة غير مكتملة:", payment);
+        }
+    </script>
+</body>
+</html>
