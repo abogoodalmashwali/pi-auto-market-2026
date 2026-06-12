@@ -1,9 +1,8 @@
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { paymentId } = req.body;
-    // تأكد من وضع مفتاح API الحقيقي الخاص بك هنا بدلاً من النص الموجود
-    const API_KEY = "const API_KEY = process.env.PI_API_KEY;
-"; 
+    // يتم سحب المفتاح من إعدادات Vercel بشكل آمن
+    const API_KEY = process.env.PI_API_KEY;
 
     try {
       const response = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/approve`, {
@@ -23,4 +22,3 @@ export default async function handler(req, res) {
     res.status(405).json({ message: "Method not allowed" });
   }
 }
-
