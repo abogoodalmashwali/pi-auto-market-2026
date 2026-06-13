@@ -127,10 +127,16 @@
         }
 
         async function runPiTestPayment() {
-            if (!window.Pi) {
-                alert("تنبيه أمني: لم يتم العثور على محرك Pi الذكي. يجب فتح الرابط التجريبي pinet.com حصرياً من داخل تطبيق Pi Browser!");
-                return;
-            }
+            // استبدل الأسطر من 130 إلى 133 بهذا الكود:
+async function runPiTestPayment() {
+    // التأكد من تحميل المكتبة أولاً
+    if (typeof Pi === 'undefined') {
+        alert("تنبيه: مكتبة Pi لم يتم تحميلها بعد، يرجى الانتظار ثانية ثم المحاولة مجدداً.");
+        return;
+    }
+    
+    updateStatus("جاري تفعيل توكن المصادقة...");
+    // ... باقي الكود كما هو
 
             updateStatus("جاري تفعيل توكن المصادقة وقراءة الحساب...");
 
