@@ -154,38 +154,26 @@
             }
         }
 
-                function executePaymentProcess() {
+        function executePaymentProcess() {
             window.Pi.createPayment({
-                amount: 1, 
-                memo: "Auto Market Pi 2026 Payment",
-                metadata: { type: "verification" },
+                amount: 1, // القيمة المطلوبة تجريبياً (1 Test-Pi)
+                memo: "تأكيد فحص المعاملة الحية للخطوة 10 لمشروع Pi Auto Market",
+                metadata: { type: "verification_step_10" },
             }, {
                 onReadyForServerApproval: function(paymentId) {
-                    updateStatus("جاري التواصل مع الخادم للموافقة...");
-                    fetch('/api/approve', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ paymentId: paymentId })
-                    }).then(res => res.json())
-                      .then(data => {
-                          updateStatus("تمت الموافقة من الخادم بنجاح!");
-                      }).catch(err => {
-                          updateStatus("خطأ في الاتصال بالخادم: " + err.message);
-                      });
+                    updateStatus("تم إنشاء الطلب بنجاح! معرف الدفع: " + paymentId);
+                    alert("تم توليد المعاملة! يرجى الموافقة والخصم من نافذة المحفظة المنبثقة الآن.");
                 },
                 onReadyForServerCompletion: function(paymentId, txid) {
-                    updateStatus("تمت المعاملة بنجاح على البلوكشين!");
-                    alert("اكتملت المعاملة: " + txid);
+                    updateStatus("ممتاز! تمت المعاملة بنجاح على البلوكشين وتم تسجيل الهاش: " + txid);
+                    alert("تهانينا! اكتملت المعاملة بنجاح وتخطيت الخطوة العاشرة. تفقد لوحة المطورين الآن.");
                 },
                 onCancel: function(paymentId) {
-                    updateStatus("تم إلغاء المعاملة.");
+                    updateStatus("تم إلغاء المعاملة بناءً على رغبتك.");
                 },
                 onError: function(error, payment) {
-                    updateStatus("خطأ: " + error.message);
+                    updateStatus("حالة الشبكة: " + error.message);
                 }
-            });
-        }
-
             });
         }
 
