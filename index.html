@@ -127,25 +127,27 @@
         }
 
         async function runPiTestPayment() {
-            async function runPiTestPayment() {
-    updateStatus("جاري الاتصال بالمحفظة...");
+            if (!window.Pi) {
+                alert("تنبيه أمني: لم يتم العثور على محرك Pi الذكي. يجب فتح الرابط التجريبي pinet.com حصرياً من داخل تطبيق Pi Browser!");
+                return;
+            }
 
-    try {
-        // المصادقة التلقائية لطلب الدفع
-        window.Pi.authenticate(['payments'], onIncompletePaymentFound).then(function(auth) {
-            
-            // بمجرد المصادقة، ننتقل فوراً لطلب الدفع
-            executePaymentProcess();
+            updateStatus("جاري تفعيل توكن المصادقة وقراءة الحساب...");
 
-        }).catch(function(error) {
-            updateStatus("فشلت المصادقة: " + error.message);
-        });
+            try {const scopes = ['username', 'payments'];
 
-    } catch (err) {
-        alert("خطأ في الاتصال: " + err.message);
-    }
-}
+                window.Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
+                    
+                    updateStatus("تمت المصادقة بنجاح! جاري استدعاء نافذة محفظة الفحص...");
+                    
+                    setTimeout(() => {
+                        executePaymentProcess();
+                    }, 600);
 
+                }).catch(function(error) {
+                    updateStatus("فشلت المصادقة: " + error.message);
+                    alert("تأكد من تسجيل دخولك في حساب Pi الخاص بك وإعادة المحاولة.");
+                });
 
             } catch (err) {
                 alert("حدث خطأ غير متوقع في النظام: " + err.message);
