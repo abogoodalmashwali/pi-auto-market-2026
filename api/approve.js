@@ -1,9 +1,8 @@
 export default async function handler(req, res) {
-  const { paymentId } = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+  if (req.method !== 'POST') return res.status(405).end();
   
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000); // مهلة 10 ثوانٍ
-
+  const { paymentId } = req.body;
+  
   try {
     const response = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/approve`, {
       method: 'POST',
@@ -11,15 +10,17 @@ export default async function handler(req, res) {
         'Authorization': `Key ${process.env.PI_API_KEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({}),
-      signal: controller.signal
+      body: JSON.stringify({
+        // أضفنا هذا للتأكيد للخادم أننا نطلب موافقة فورية
+        "action": "approve" 
+      })
     });
 
     const data = await response.json();
-    clearTimeout(timeout);
+    console.log("رد خادم Pi:", data); // هذه ستظهر في الـ Logs
     return res.status(200).json(data);
+    
   } catch (error) {
-    clearTimeout(timeout);
-    return res.status(500).json({ error: "Connection Timeout - Check Server Connectivity" });
+    return res.status(500).json({ error: error.message });
   }
 }
