@@ -162,6 +162,24 @@
                 serverURL: "https://pi-auto-market-2026.vercel.app", 
                 
                 onReadyForServerApproval: function(paymentId) {
+    updateStatus("جاري انتظار تسجيل الدفعة في خادم Pi...");
+    
+    setTimeout(async () => {
+        updateStatus("جاري إرسال طلب الموافقة...");
+        try {
+            const response = await fetch('https://pi-auto-market-2026.vercel.app/api/approve', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paymentId: paymentId })
+            });
+            const data = await response.json();
+            updateStatus("رد الخادم: " + JSON.stringify(data));
+        } catch (err) {
+            updateStatus("خطأ في الاتصال بالخادم: " + err.message);
+        }
+    }, 5000); 
+},
+ {
                     updateStatus("تم إنشاء الطلب بنجاح! جاري طلب الموافقة من الخادم...");
                     // إرسال طلب الموافقة للمسار المخصص في خادمك
                     fetch("https://pi-auto-market-2026.vercel.app/api/approve", {
