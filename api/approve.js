@@ -1,18 +1,25 @@
-async function runPiTestPayment() {
-    updateStatus("جاري الاتصال بالمحفظة...");
+export default async function handler(req, res) {
+  if (req.method !== 'POST') return res.status(405).end();
+  
+  const { paymentId } = req.body;
+  const API_KEY = process.env.PI_API_KEY;
 
-    try {
-        // المصادقة التلقائية لطلب الدفع
-        window.Pi.authenticate(['payments'], onIncompletePaymentFound).then(function(auth) {
-            
-            // بمجرد المصادقة، ننتقل فوراً لطلب الدفع
-            executePaymentProcess();
+  try {
+    const response = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/approve`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Key ${API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ "action": "approve" })
+    });
 
-        }).catch(function(error) {
-            updateStatus("فشلت المصادقة: " + error.message);
-        });
-
-    } catch (err) {
-        alert("خطأ في الاتصال: " + err.message);
-    }
+    const data = await response.json();
+    
+    // إرسال الرد فوراً للمتصفح ليتمكن من إكمال العملية
+    return res.status(200).json(data);
+    
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 }
