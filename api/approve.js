@@ -1,24 +1,12 @@
-export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { paymentId } = req.body;
-    const API_KEY = process.env.PI_API_KEY; // تأكد أن هذا المتغير مضبوط في Vercel
-
-    try {
-      const response = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/approve`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Key ${API_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await response.json();
-      // إرجاع النتيجة للتأكد
-      res.status(200).json(data);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  } else {
-    res.status(405).json({ message: "Method not allowed" });
-  }
+onReadyForServerApproval: function(paymentId) {
+    console.log("محاولة إرسال طلب لـ /api/approve معرف:", paymentId); // تتبع في المتصفح
+    updateStatus("جاري التواصل مع الخادم...");
+    fetch("/api/approve", { // جرب المسار النسبي بدلاً من الكامل
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentId: paymentId })
+    })
+    .then(res => res.json())
+    .then(data => console.log("رد الخادم:", data))
+    .catch(err => console.error("خطأ الاتصال:", err));
 }
