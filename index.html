@@ -45,8 +45,11 @@
     <!-- مربع الخطوة العاشرة المحدث (تم حذف النصوص السابقة وإبقاء زر الدفع والحالة فقط) -->
     <div class="form-section" style="border: 2px solid #e0b034; padding: 35px 20px;">
         <button class="btn-action btn-test-payment" onclick="runPiTestPayment()">إرسال 1 Test-Pi وتأكيد التطبيق</button>
-        <p id="statusMessage" style="color: #e0b034; font-weight: bold; margin-top: 15px; font-size: 15px; margin-bottom: 0;"></p>
-    </div>
+        <button class="btn-action" id="payButton" style="background: var(--gold); border: none; padding: 15px 30px; cursor: pointer;">
+    إرسال Test-Pi 1 وتأكيد التطبيق
+</button>
+<div id="statusMessage" style="margin-top: 15px; color: #e0b034; font-weight: bold;"></div>
+
 
     <!-- الرسالة الترحيبية الجديدة -->
     <div style="background: #1a1a1a; padding: 20px; border-radius: 15px; margin: 20px auto; width: 90%; max-width: 500px; border: 1px solid #c5a059; box-sizing: border-box;">
@@ -205,6 +208,13 @@
         }
 
         }
+document.getElementById('payButton').addEventListener('click', function() {
+    if (typeof runPiTestPayment === 'function') {
+        runPiTestPayment();
+    } else {
+        alert("خطأ: دالة الدفع غير معرفة، تأكد من تحميل السكريبت.");
+    }
+});
 
         function onIncompletePaymentFound(payment) {
             console.log("معاملة سابقة غير مكتملة:", payment);
