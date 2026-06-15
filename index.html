@@ -168,9 +168,14 @@
             });
         }
 
-        function onIncompletePaymentFound(payment) {
-            console.log("معاملة معلقة:", payment);
+                function onIncompletePaymentFound(payment) {
+            updateStatus("تم اكتشاف معاملة معلقة، جاري معالجتها...");
+            window.Pi.approvePayment(payment.identifier, function(paymentId) {
+                updateStatus("تمت المعالجة بنجاح! جاري إعادة التحميل...");
+                setTimeout(() => { location.reload(); }, 2000);
+            });
         }
+
     </script>
 </body>
 </html>
