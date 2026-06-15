@@ -128,57 +128,48 @@
 
         async function runPiTestPayment() {
             if (!window.Pi) {
-                alert("تنبيه أمني: لم يتم العثور على محرك Pi الذكي. يجب فتح الرابط التجريبي pinet.com حصرياً من داخل تطبيق Pi Browser!");
+                updateStatus("تنبيه: يجب فتح الرابط من داخل تطبيق Pi Browser!");
                 return;
             }
 
-            updateStatus("جاري تفعيل توكن المصادقة وقراءة الحساب...");
+            updateStatus("جاري تفعيل توكن المصادقة...");
 
-            try {const scopes = ['username', 'payments'];
-
+            try {
+                const scopes = ['username', 'payments'];
                 window.Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
-                    
-                    updateStatus("تمت المصادقة بنجاح! جاري استدعاء نافذة محفظة الفحص...");
-                    
-                    setTimeout(() => {
-                        executePaymentProcess();
-                    }, 600);
-
+                    updateStatus("تمت المصادقة! جاري فتح نافذة الدفع...");
+                    executePaymentProcess();
                 }).catch(function(error) {
                     updateStatus("فشلت المصادقة: " + error.message);
-                    alert("تأكد من تسجيل دخولك في حساب Pi الخاص بك وإعادة المحاولة.");
                 });
-
             } catch (err) {
-                alert("حدث خطأ غير متوقع في النظام: " + err.message);
+                updateStatus("خطأ: " + err.message);
             }
         }
 
         function executePaymentProcess() {
             window.Pi.createPayment({
-                amount: 1, // القيمة المطلوبة تجريبياً (1 Test-Pi)
-                memo: "تأكيد فحص المعاملة الحية للخطوة 10 لمشروع Pi Auto Market",
+                amount: 1, 
+                memo: "تأكيد فحص المعاملة للخطوة 10",
                 metadata: { type: "verification_step_10" },
             }, {
                 onReadyForServerApproval: function(paymentId) {
-                    updateStatus("تم إنشاء الطلب بنجاح! معرف الدفع: " + paymentId);
-                    alert("تم توليد المعاملة! يرجى الموافقة والخصم من نافذة المحفظة المنبثقة الآن.");
+                    updateStatus("تم إنشاء الطلب! جاري المعالجة...");
                 },
                 onReadyForServerCompletion: function(paymentId, txid) {
-                    updateStatus("ممتاز! تمت المعاملة بنجاح على البلوكشين وتم تسجيل الهاش: " + txid);
-                    alert("تهانينا! اكتملت المعاملة بنجاح وتخطيت الخطوة العاشرة. تفقد لوحة المطورين الآن.");
+                    updateStatus("نجاح! تم إتمام المعاملة بنجاح.");
                 },
                 onCancel: function(paymentId) {
-                    updateStatus("تم إلغاء المعاملة بناءً على رغبتك.");
+                    updateStatus("تم إلغاء المعاملة.");
                 },
                 onError: function(error, payment) {
-                    updateStatus("حالة الشبكة: " + error.message);
+                    updateStatus("خطأ الشبكة: " + error.message);
                 }
             });
         }
 
         function onIncompletePaymentFound(payment) {
-            console.log("معاملة سابقة غير مكتملة:", payment);
+            console.log("معاملة معلقة:", payment);
         }
     </script>
 </body>
