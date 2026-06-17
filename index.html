@@ -154,7 +154,7 @@
             }
         }
 
-                function executePaymentProcess() {
+                        function executePaymentProcess() {
             window.Pi.createPayment({
                 amount: 1, 
                 memo: "Auto Market Pi 2026 Payment",
@@ -183,9 +183,6 @@
                 onError: function(error, payment) {
                     updateStatus("خطأ: " + error.message);
                 }
-            });
-        }
-
             });
         }
 
