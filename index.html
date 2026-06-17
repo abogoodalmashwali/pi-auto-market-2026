@@ -152,40 +152,41 @@
             } catch (err) {
                 alert("حدث خطأ غير متوقع في النظام: " + err.message);
             }
+        }
+
                 function executePaymentProcess() {
             window.Pi.createPayment({
                 amount: 1, 
-                memo: "تأكيد فحص المعاملة الحية للخطوة 10 لمشروع Pi Auto Market",
-                metadata: { type: "verification_step_10" },
+                memo: "Auto Market Pi 2026 Payment",
+                metadata: { type: "verification" },
             }, {
-                // هذا هو رابط الخادم الذي سيتلقى طلب الموافقة
-                serverURL: "https://pi-auto-market-2026.vercel.app", 
-                
                 onReadyForServerApproval: function(paymentId) {
-                    updateStatus("تم إنشاء الطلب بنجاح! جاري طلب الموافقة من الخادم...");
-                    // إرسال طلب الموافقة للمسار المخصص في خادمك
-                    fetch("https://pi-auto-market-2026.vercel.app/api/approve", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
+                    updateStatus("جاري التواصل مع الخادم للموافقة...");
+                    fetch('/api/approve', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ paymentId: paymentId })
-                    })
-                    .then(response => response.json())
-                    .then(data => updateStatus("الخادم استلم الطلب: " + JSON.stringify(data)))
-                    .catch(err => updateStatus("خطأ في الاتصال بالخادم: " + err.message));
+                    }).then(res => res.json())
+                      .then(data => {
+                          updateStatus("تمت الموافقة من الخادم بنجاح!");
+                      }).catch(err => {
+                          updateStatus("خطأ في الاتصال بالخادم: " + err.message);
+                      });
                 },
                 onReadyForServerCompletion: function(paymentId, txid) {
-                    updateStatus("ممتاز! تمت المعاملة بنجاح على البلوكشين وتخطيت الخطوة 10.");
-                    alert("تهانينا! اكتملت المعاملة بنجاح.");
+                    updateStatus("تمت المعاملة بنجاح على البلوكشين!");
+                    alert("اكتملت المعاملة: " + txid);
                 },
                 onCancel: function(paymentId) {
                     updateStatus("تم إلغاء المعاملة.");
                 },
                 onError: function(error, payment) {
-                    updateStatus("حالة الشبكة: " + error.message);
+                    updateStatus("خطأ: " + error.message);
                 }
             });
         }
 
+            });
         }
 
         function onIncompletePaymentFound(payment) {
