@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const API_KEY = process.env.PI_API_KEY;
 
   if (!API_KEY) {
-    return res.status(500).json({ error: "API Key is missing in server config" });
+    return res.status(500).json({ error: "API Key مفقود في إعدادات الخادم" });
   }
 
   try {
@@ -20,8 +20,17 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    res.status(200).json(data);
+    
+    // إضافة فحص لحالة الرد من Pi Network
+    if (response.ok) {
+      return res.status(200).json(data);
+    } else {
+      console.error("خطأ من خادم Pi:", data);
+      return res.status(response.status).json({ error: "فشل في الموافقة من خادم Pi", details: data });
+    }
+    
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("خطأ في الاتصال:", error);
+    return res.status(500).json({ error: "خطأ داخلي في الخادم: " + error.message });
   }
 }
