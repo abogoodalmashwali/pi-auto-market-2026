@@ -124,10 +124,14 @@
             updateStatus("جاري تفعيل توكن المصادقة...");
             try {
                 const scopes = ['username', 'payments'];
-                window.Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
-                    updateStatus("تمت المصادقة! جاري استدعاء المحفظة...");
-                    executePaymentProcess();
-                }).catch(function(error) {
+                // تعديل الربط ليعمل فوراً عند التحقق من الهوية
+window.Pi.authenticate(scopes, 
+    function(auth) { // عند نجاح المصادقة
+        console.log("تمت المصادقة بنجاح");
+    }, 
+    onIncompletePaymentFound // ربط مباشر للدالة التي تعالج المعاملات العالقة
+);
+
                     updateStatus("فشلت المصادقة: " + error.message);
                 });
             } catch (err) { alert("خطأ: " + err.message); }
