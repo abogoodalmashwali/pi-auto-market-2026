@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
+    
+    <!-- استدعاء مكتبة الـ SDK الرسمية الصحيحة لـ Pi Network -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
     <style>
@@ -12,14 +14,19 @@
         .header { padding: 30px 20px; border-bottom: 2px solid var(--gold); }
         .logo { width: 100%; max-width: 400px; display: block; margin: 0 auto; }
         h1 { color: var(--gold); margin-top: 10px; }
+        
         .gallery-container { display: flex; justify-content: center; gap: 15px; padding: 20px; flex-wrap: wrap; }
         .car-box { background: #1a1a1a; padding: 15px; border-radius: 15px; width: 45%; border: 1px solid #333; box-sizing: border-box; }
         .car-box img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; }
+        .car-box h3 { font-size: 16px; margin-top: 10px; }
+
         .form-section { background: #1a1a1a; padding: 25px; margin: 20px auto; width: 90%; max-width: 500px; border-radius: 20px; border: 1px solid var(--gold); box-sizing: border-box; }
         input, select { width: 90%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; box-sizing: border-box; }
         .btn-action { background: var(--gold); color: black; padding: 12px 25px; border-radius: 25px; border: none; margin: 10px; cursor: pointer; font-weight: bold; width: 90%; }
+        
         .btn-test-payment { background: #e0b034 !important; color: #000 !important; font-size: 18px; box-shadow: 0 0 15px #e0b034; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        
         .footer { padding: 30px; border-top: 2px solid #333; margin-top: 20px; }
         .footer a { color: var(--gold); display: block; margin: 10px; text-decoration: none; font-weight: bold; }
     </style>
@@ -34,12 +41,24 @@
 
     <div class="form-section" style="border: 2px solid #e0b034; padding: 35px 20px;">
         <button class="btn-action btn-test-payment" onclick="runPiTestPayment()">إرسال 1 Test-Pi وتأكيد التطبيق</button>
-        <p id="statusMessage" style="color: #e0b034; font-weight: bold; margin-top: 15px; font-size: 15px;"></p>
+        <p id="statusMessage" style="color: #e0b034; font-weight: bold; margin-top: 15px; font-size: 15px; margin-bottom: 0;"></p>
+    </div>
+
+    <div style="background: #1a1a1a; padding: 20px; border-radius: 15px; margin: 20px auto; width: 90%; max-width: 500px; border: 1px solid #c5a059; box-sizing: border-box;">
+        <p style="color: #ffffff; font-size: 16px; line-height: 1.6; margin: 0;">
+            نرحب بك في مستقبل تداول السيارات! في 'Pi Auto Market 2026'، نجمع بين جودة السيارات وقوة عملة Pi. هدفنا هو بناء مجتمع يمني آمن ومزدهر. شكراً لكونك جزءاً من رحلتنا!
+        </p>
     </div>
 
     <div class="gallery-container">
-        <div class="car-box"><img src="toyota-camry.png" alt="كامري"><h3>تويوتا كامري 2026</h3></div>
-        <div class="car-box"><img src="lexus-lx.png" alt="لكزس"><h3>لكزس LX 2026</h3></div>
+        <div class="car-box">
+            <img src="toyota-camry.png" alt="كامري">
+            <h3>تويوتا كامري 2026</h3>
+        </div>
+        <div class="car-box">
+            <img src="lexus-lx.png" alt="لكزس">
+            <h3>لكزس LX 2026</h3>
+        </div>
     </div>
 
     <div class="form-section">
@@ -47,53 +66,114 @@
         <button class="btn-action" onclick="document.getElementById('sellerModal').style.display='flex'" style="background:transparent; color:var(--gold); border: 1px solid var(--gold);">عرض سيارتي للبيع</button>
     </div>
 
-    <div id="sellerModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; padding: 20px; box-sizing: border-box;">
-        <div style="background:#1a1a1a; padding:30px; border-radius:20px; width:90%; max-width: 500px; border:1px solid #c5a059; margin: 50px auto;">
-            <h2 style="color:#c5a059;">بيانات السيارة المعروضة</h2>
+    <div id="sellerModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; overflow-y:auto; padding: 20px; box-sizing: border-box;">
+        <div style="background:#1a1a1a; padding:30px; border-radius:20px; width:90%; max-width: 500px; border:1px solid #c5a059; margin: 50px auto; text-align: right; box-sizing: border-box;">
+            <h2 style="color:#c5a059; text-align: center;">بيانات السيارة المعروضة</h2>
             <input type="text" placeholder="اسم البائع الكامل">
             <input type="text" placeholder="نوع وموديل السيارة">
-            <button class="btn-action" style="width:100%" onclick="alert('تم الاستلام'); document.getElementById('sellerModal').style.display='none';">إرسال الطلب</button>
+            <input type="text" placeholder="اللون">
+            <select style="width:90%; padding:12px; background:#000; color:#fff; border:1px solid #c5a059; margin-bottom:10px;">
+                <option value="new">جديدة</option>
+                <option value="used">مستخدمة</option>
+            </select>
+            <label style="color:var(--gold); display:block; margin-bottom:5px;">إرفاق صور السيارة:</label>
+            <input type="file" multiple accept="image/*" style="border:none; width:90%;">
+            <button class="btn-action" style="width:100%; margin-top:20px;" onclick="alert('تم استلام البيانات، سنتواصل معك للتدقيق.'); document.getElementById('sellerModal').style.display='none';">إرسال الطلب للتدقيق</button>
+            <button class="btn-action" style="width:100%; background:#444; margin-top:5px;" onclick="document.getElementById('sellerModal').style.display='none'">إغلاق</button>
         </div>
+    </div>
+
+    <div class="form-section">
+        <h2>تقديم طلب شراء / استفسار 📝</h2>
+        <form action="https://formspree.io" method="POST">
+            <input type="text" name="الاسم_الكامل" placeholder="اسم مقدم الطلب الكامل" required>
+            <input type="text" name="نوع_السيارة" placeholder="نوع السيارة المطلوبة" required>
+            <input type="text" name="الموديل" placeholder="الموديل (مثلاً 2026)">
+            <input type="text" name="اللون" placeholder="اللون المفضل">
+            <button type="submit" class="btn-action" style="background: var(--gold); border: 1px solid var(--gold); color: #000; font-weight: bold;">إرسال البيانات للوسيط</button>
+        </form>
     </div>
 
     <div class="footer">
         <a href="track.html">متابعة حالة طلبي</a>
         <a href="policy.html">سياسة الخصوصية وإخلاء المسؤولية</a>
+        <p style="color: #666; font-size: 14px;">© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
     </div>
 
     <script>
         const API_URL = '/api/approve';
-        try { if (window.Pi) { window.Pi.init({ version: "2.0", sandbox: true }); } } catch (e) { console.error(e); }
 
-        function updateStatus(text) { document.getElementById('statusMessage').innerText = text; }
+        try {
+            if (window.Pi) {
+                window.Pi.init({ version: "2.0", sandbox: true });
+                console.log("تمت تهيئة Pi SDK بنجاح");
+            }
+        } catch (e) {
+            console.error("خطأ في التهيئة التلقائية المبدئية:", e);
+        }
+
+        function updateStatus(text) {
+            document.getElementById('statusMessage').innerText = text;
+        }
 
         async function runPiTestPayment() {
-            if (!window.Pi) { alert("يجب فتح الرابط من داخل تطبيق Pi Browser!"); return; }
-            updateStatus("جاري المصادقة...");
+            if (!window.Pi) {
+                alert("تنبيه أمني: يجب فتح الرابط من داخل تطبيق Pi Browser!");
+                return;
+            }
+            updateStatus("جاري تفعيل توكن المصادقة...");
             try {
-                window.Pi.authenticate(['username', 'payments'], onIncompletePaymentFound)
-                .then(() => executePaymentProcess())
-                .catch(err => updateStatus("خطأ: " + err.message));
+                const scopes = ['username', 'payments'];
+                window.Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
+                    updateStatus("تمت المصادقة! جاري استدعاء المحفظة...");
+                    executePaymentProcess();
+                }).catch(function(error) {
+                    updateStatus("فشلت المصادقة: " + error.message);
+                });
             } catch (err) { alert("خطأ: " + err.message); }
         }
 
         function executePaymentProcess() {
-            window.Pi.createPayment({ amount: 1, memo: "Auto Market 2026", metadata: { type: "verification" } }, {
+            window.Pi.createPayment({
+                amount: 1, 
+                memo: "Auto Market Pi 2026 Payment",
+                metadata: { type: "verification" },
+            }, {
                 onReadyForServerApproval: function(paymentId) {
-                    updateStatus("جاري التواصل مع الخادم...");
-                    fetch(API_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ paymentId }) })
-                    .then(res => res.json()).then(data => updateStatus("تمت الموافقة من الخادم!")).catch(err => updateStatus("خطأ خادم"));
+                    updateStatus("جاري التواصل مع الخادم للموافقة...");
+                    fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ paymentId: paymentId })
+                    }).then(res => res.json())
+                      .then(data => updateStatus("تمت الموافقة بنجاح!"))
+                      .catch(err => updateStatus("خطأ بالخادم: " + err.message));
                 },
-                onReadyForServerCompletion: function(id, tx) { updateStatus("نجحت المعاملة!"); },
-                onCancel: function(id) { updateStatus("تم الإلغاء."); },
-                onError: function(err, pay) { updateStatus("خطأ: " + err.message); }
+                onReadyForServerCompletion: function(paymentId, txid) {
+                    updateStatus("اكتملت المعاملة بنجاح!");
+                    alert("تمت العملية بنجاح: " + txid);
+                },
+                onCancel: function(paymentId) { updateStatus("تم الإلغاء."); },
+                onError: function(error, payment) { updateStatus("خطأ: " + error.message); }
             });
         }
 
-        function onIncompletePaymentFound(payment) {
-            updateStatus("معاملة عالقة، جاري المعالجة...");
-            fetch(API_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ paymentId: payment.identifier }) })
-            .then(res => res.json()).then(data => updateStatus("تم تنظيف المعاملة العالقة!")).catch(err => updateStatus("خطأ تنظيف"));
+function onIncompletePaymentFound(payment) {
+    console.log("معاملة عالقة، جاري إلغاؤها لتنظيف النظام:", payment);
+    // بدلاً من محاولة إرسالها للسيرفر، نطلب من Pi إلغاءها
+    // ملاحظة: لا يوجد دالة cancelPayment في SDK مباشرة، 
+    // لذا سنكتفي بتجاهلها أو إخطار المستخدم بضغط زر الإلغاء في المتصفح.
+    updateStatus("يوجد معاملة عالقة، يرجى الضغط على 'توقيف' في نافذة الدفع.");
+}
+ onIncompletePaymentFound(payment) {
+            console.log("معاملة عالقة، جاري المعالجة:", payment);
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paymentId: payment.identifier })
+            }).then(res => res.json())
+              .then(data => updateStatus("تمت معالجة المعاملة العالقة!"))
+              .catch(err => updateStatus("خطأ: " + err.message));
         }
     </script>
 </body>
