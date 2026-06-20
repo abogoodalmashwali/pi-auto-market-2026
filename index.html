@@ -158,7 +158,14 @@
             });
         }
 
-        function onIncompletePaymentFound(payment) {
+function onIncompletePaymentFound(payment) {
+    console.log("معاملة عالقة، جاري إلغاؤها لتنظيف النظام:", payment);
+    // بدلاً من محاولة إرسالها للسيرفر، نطلب من Pi إلغاءها
+    // ملاحظة: لا يوجد دالة cancelPayment في SDK مباشرة، 
+    // لذا سنكتفي بتجاهلها أو إخطار المستخدم بضغط زر الإلغاء في المتصفح.
+    updateStatus("يوجد معاملة عالقة، يرجى الضغط على 'توقيف' في نافذة الدفع.");
+}
+ onIncompletePaymentFound(payment) {
             console.log("معاملة عالقة، جاري المعالجة:", payment);
             fetch(API_URL, {
                 method: 'POST',
