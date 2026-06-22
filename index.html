@@ -142,40 +142,35 @@
                     metadata: { type: "verification_step_10" },
                 }, {
                     serverURL: "https://pi-auto-market-2026.vercel.app", 
-                    onReadyForServerApproval: function(paymentId) {
-                        fetch("/api/approve", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ paymentId: paymentId }),
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error("فشلت استجابة السيرفر الخارجي");
-    }
-    return response.json();
-})
-.then(data => {
-    updateStatus("- تم الموافقة البرمجية! جاري توجيهك للمحفظة...");
-    console.log("بيانات الموافقة المرسلة للـ SDK:", data);
-    
-    // 🔥 هذا السطر الحرج الذي ينقص كودك لفتح المحفظة فوراً
-    return data; 
-})
-.catch(err => {
-    updateStatus("- خطأ في الاتصال بالخادم: " + err.message);
-});
+                            onReadyForServerApproval: function(paymentId) {
+            fetch("/api/approve", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId: paymentId }),
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("فشلت استجابة السيرفر الخارجي");
+                return response.json();
+            })
+            .then(data => {
+                updateStatus("- تم الموافقة البرمجية! جاري توجيهك للمحفظة...");
+                return data; 
+            })
+            .catch(err => {
+                updateStatus("- خطأ في الاتصال بالخادم: " + err.message);
+            });
+        },
+        onReadyForServerCompletion: function(paymentId, txid) {
+            updateStatus("- تمت المعاملة بنجاح على البلوكشين وتخطيت الخطوة 10");
+            alert("تهانينا! اكتملت المعاملة بنجاح");
+        },
+        onCancel: function(paymentId) {
+            updateStatus("- تم إلغاء المعاملة من قبل المستخدم");
+        },
+        onError: function(error, payment) {
+            updateStatus("- حالة الشبكة: " + error.message);
+        }
 
-                    onReadyForServerCompletion: function(paymentId, txid) {
-                        updateStatus("ممتاز! تمت المعاملة بنجاح على البلوكشين وتخطيت الخطوة 10.");
-                        alert("تهانينا! اكتملت المعاملة بنجاح.");
-                    },
-                    onCancel: function(paymentId) {
-                        updateStatus("تم إلغاء المعاملة.");
-                    },
-                    onError: function(error, payment) {
-                        updateStatus("حالة الشبكة: " + error.message);
-                    }
-                });
             }
         }
 
