@@ -161,24 +161,26 @@
                     onCancel: function(paymentId) {
                         updateStatus("تم إلغاء المعاملة.");
                     },
-                    onError: function(error, payment) {
-                        updateStatus("حالة الشبكة: " + error.message);
-                    }
-                });
-            }
-        }
+                    onError: onReadyForServerApproval: function(paymentId) {
+    updateStatus("تم إنشاء الطلب! جاري إرساله للموافقة...");
+    
+    // استخدام مسار نسبي لضمان التوافق مع Vercel
+    fetch("/api/approve", { 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentId: paymentId })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("سيرفر الموافقة لم يستجب بنجاح");
+        return response.json();
+    })
+    .then(data => updateStatus("الخادم استلم الطلب: " + JSON.stringify(data)))
+    .catch(err => {
+        updateStatus("خطأ: " + err.message);
+        console.error("تفاصيل الخطأ:", err);
+    });
+},
 
-        async function onIncompletePaymentFound(payment) {
-            console.log("تم العثور على معاملة معلقة، جاري معالجتها...", payment);
-            try {
-                await payment.complete(); 
-                alert("تم تنظيف المعاملة العالقة بنجاح. حاول الضغط على زر الدفع مرة أخرى الآن.");
-                window.location.reload();
-            } catch (error) {
-                console.error("خطأ أثناء تنظيف المعاملة العالقة:", error);
-                await payment.cancel();
-            }
-        }
     </script>
 </body>
 </html>
