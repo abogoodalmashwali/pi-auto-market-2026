@@ -143,16 +143,28 @@
                 }, {
                     serverURL: "https://pi-auto-market-2026.vercel.app", 
                     onReadyForServerApproval: function(paymentId) {
-                        updateStatus("تم إنشاء الطلب بنجاح! جاري طلب الموافقة من الخادم...");
                         fetch("/api/approve", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ paymentId: paymentId })
-                        })
-                        .then(response => response.json())
-                        .then(data => updateStatus("الخادم استلم الطلب: " + JSON.stringify(data)))
-                        .catch(err => updateStatus("خطأ في الاتصال بالخادم: " + err.message));
-                    },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ paymentId: paymentId }),
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error("فشلت استجابة السيرفر الخارجي");
+    }
+    return response.json();
+})
+.then(data => {
+    updateStatus("- تم الموافقة البرمجية! جاري توجيهك للمحفظة...");
+    console.log("بيانات الموافقة المرسلة للـ SDK:", data);
+    
+    // 🔥 هذا السطر الحرج الذي ينقص كودك لفتح المحفظة فوراً
+    return data; 
+})
+.catch(err => {
+    updateStatus("- خطأ في الاتصال بالخادم: " + err.message);
+});
+
                     onReadyForServerCompletion: function(paymentId, txid) {
                         updateStatus("ممتاز! تمت المعاملة بنجاح على البلوكشين وتخطيت الخطوة 10.");
                         alert("تهانينا! اكتملت المعاملة بنجاح.");
