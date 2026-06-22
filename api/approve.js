@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // تفعيل السماح بعبور البيانات (CORS) لتفادي حظر المتصفح
+  // إعدادات الـ CORS للسماح بالاتصال من تطبيق pinet.com
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -18,28 +18,40 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log("جاري التوثيق للمعاملة المعلقة:", paymentId);
+    console.log("جاري إرسال طلب الموافقة لشبكة Pi برابطها البديل المباشر:", paymentId);
 
-    // الطلب الصحيح للموافقة على الدفع في خوادم Pi البيئية
-    const response = await fetch(`https://minepi.com{paymentId}/approve`, {
+    // استخدام الرابط المباشر للموافقة مع تجنب الأخطاء الداخلية لـ node-fetch
+    const piUrl = `https://minepi.com{paymentId}/approve`;
+    
+    const response = await fetch(piUrl, {
       method: 'POST',
       headers: {
         'Authorization': `Key ${process.env.PI_API_KEY}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0' // إضافة تمنع حظر الاتصال من خوادم Pi
       },
-      body: JSON.stringify({ action: 'approve' }) 
+      body: JSON.stringify({ action: 'approve' })
     });
 
-    const data = await response.json();
-    console.log("استجابة الشبكة الرسمية:", data);
+    // مراجعة نص الاستجابة الخام لتفادي انهيار fetch في حال كان الرد ليس JSON
+    const responseText = await response.text();
+    console.log("الرد الخام من خادم Pi:", responseText);
+
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      data = { rawResponse: responseText };
+    }
 
     if (response.ok) {
       return res.status(200).json(data);
     } else {
-      return res.status(response.status).json({ error: 'Validation failed', details: data });
+      return res.status(response.status).json({ error: 'Pi API rejected approval', details: data });
     }
+
   } catch (error) {
-    console.error("خطأ سيرفر داخلي:", error);
-    return res.status(500).json({ error: error.message });
+    console.error("تفاصيل الخطأ الداخلي بالسيرفر:", error.message);
+    return res.status(500).json({ error: 'Internal Server Fetch Failed', message: error.message });
   }
 }
