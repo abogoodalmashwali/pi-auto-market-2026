@@ -158,8 +158,7 @@
             })
             .catch(err => {
                 updateStatus("- خطأ في الاتصال بالخادم: " + err.message);
-            });
-        },
+            });        },
         onReadyForServerCompletion: function(paymentId, txid) {
             updateStatus("- تمت المعاملة بنجاح على البلوكشين وتخطيت الخطوة 10");
             alert("تهانينا! اكتملت المعاملة بنجاح");
@@ -170,9 +169,8 @@
         onError: function(error, payment) {
             updateStatus("- حالة الشبكة: " + error.message);
         }
-
-            }
-        }
+    }); // هذا القوس الحرج لإغلاق الـ createPayment بشكل صحيح
+} // هذا القوس لإغلاق دالة executePaymentProcess
 
         async function onIncompletePaymentFound(payment) {
             console.log("تم العثور على معاملة معلقة، جاري معالجتها...", payment);
