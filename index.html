@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
     
-    <!-- استدعاء مكتبة الـ SDK الرسمية -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
     <style>
@@ -145,7 +144,7 @@
                     serverURL: "https://pi-auto-market-2026.vercel.app", 
                     onReadyForServerApproval: function(paymentId) {
                         updateStatus("تم إنشاء الطلب بنجاح! جاري طلب الموافقة من الخادم...");
-                        fetch("https://pi-auto-market-2026.vercel.app/api/approve", {
+                        fetch("/api/approve", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ paymentId: paymentId })
@@ -161,26 +160,24 @@
                     onCancel: function(paymentId) {
                         updateStatus("تم إلغاء المعاملة.");
                     },
-                    onError: onReadyForServerApproval: function(paymentId) {
-    updateStatus("تم إنشاء الطلب! جاري إرساله للموافقة...");
-    
-    // استخدام مسار نسبي لضمان التوافق مع Vercel
-    fetch("/api/approve", { 
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paymentId: paymentId })
-    })
-    .then(response => {
-        if (!response.ok) throw new Error("سيرفر الموافقة لم يستجب بنجاح");
-        return response.json();
-    })
-    .then(data => updateStatus("الخادم استلم الطلب: " + JSON.stringify(data)))
-    .catch(err => {
-        updateStatus("خطأ: " + err.message);
-        console.error("تفاصيل الخطأ:", err);
-    });
-},
+                    onError: function(error, payment) {
+                        updateStatus("حالة الشبكة: " + error.message);
+                    }
+                });
+            }
+        }
 
+        async function onIncompletePaymentFound(payment) {
+            console.log("تم العثور على معاملة معلقة، جاري معالجتها...", payment);
+            try {
+                await payment.complete(); 
+                alert("تم تنظيف المعاملة العالقة بنجاح. حاول الضغط على زر الدفع مرة أخرى الآن.");
+                window.location.reload();
+            } catch (error) {
+                console.error("خطأ أثناء تنظيف المعاملة العالقة:", error);
+                await payment.cancel();
+            }
+        }
     </script>
 </body>
 </html>
