@@ -30,11 +30,57 @@
         <h1>منصة الوسيط الآمن</h1>
         <p>أول منصة يمنية للتعاملات السيارات عبر عملة Pi</p>
     </div>
+
     <div class="form-section" style="border: 2px solid #e0b034; padding: 35px 20px;">
         <button class="btn-action btn-test-payment" onclick="confirmAndPay()">إرسال 5 Pi وتأكيد التطبيق</button>
         <p id="statusMessage" style="color: #e0b034; font-weight: bold; margin-top: 15px; font-size: 15px; margin-bottom: 0;"></p>
     </div>
-    
+
+    <div style="background: #1a1a1a; padding: 20px; border-radius: 15px; margin: 20px auto; width: 90%; max-width: 500px; border: 1px solid #c5a059; box-sizing: border-box;">
+        <p style="color: #ffffff; font-size: 16px; line-height: 1.6; margin: 0;">
+            نرحب بك في مستقبل تداول السيارات! في 'Pi Auto Market 2026'، نجمع بين جودة السيارات وقوة عملة Pi. هدفنا هو بناء مجتمع يمني آمن ومزدهر. شكراً لكونك جزءاً من رحلتنا!
+        </p>
+    </div>
+
+    <div class="gallery-container">
+        <div class="car-box"><img src="toyota-camry.png" alt="كامري"><h3>تويوتا كامري 2026</h3></div>
+        <div class="car-box"><img src="lexus-lx.png" alt="لكزس"><h3>لكزس LX 2026</h3></div>
+    </div>
+
+    <div class="form-section">
+        <h3 style="color: var(--gold);">هل تملك سيارة وتريد عرضها للبيع؟</h3>
+        <button class="btn-action" onclick="document.getElementById('sellerModal').style.display='flex'" style="background:transparent; color:var(--gold); border: 1px solid var(--gold);">عرض سيارتي للبيع</button>
+    </div>
+
+    <div id="sellerModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; overflow-y:auto; padding: 20px; box-sizing: border-box;">
+        <div style="background:#1a1a1a; padding:30px; border-radius:20px; width:90%; max-width: 500px; border:1px solid #c5a059; margin: 50px auto; text-align: right; box-sizing: border-box;">
+            <h2 style="color:#c5a059; text-align: center;">بيانات السيارة المعروضة</h2>
+            <input type="text" placeholder="اسم البائع الكامل">
+            <input type="text" placeholder="نوع وموديل السيارة">
+            <input type="text" placeholder="اللون">
+            <select style="width:90%; padding:12px; background:#000; color:#fff; border:1px solid #c5a059; margin-bottom:10px;">
+                <option value="new">جديدة</option>
+                <option value="used">مستخدمة</option>
+            </select>
+            <button class="btn-action" style="width:100%; margin-top:20px;" onclick="alert('تم استلام البيانات، سنتواصل معك للتدقيق.'); document.getElementById('sellerModal').style.display='none';">إرسال الطلب</button>
+            <button class="btn-action" style="width:100%; background:#444; margin-top:5px;" onclick="document.getElementById('sellerModal').style.display='none'">إغلاق</button>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h2>تقديم طلب شراء / استفسار 📝</h2>
+        <form action="https://formspree.io" method="POST">
+            <input type="text" name="الاسم_الكامل" placeholder="اسم مقدم الطلب الكامل" required>
+            <input type="text" name="نوع_السيارة" placeholder="نوع السيارة المطلوبة" required>
+            <button type="submit" class="btn-action">إرسال البيانات للوسيط</button>
+        </form>
+    </div>
+
+    <div class="footer">
+        <a href="track.html">متابعة حالة طلبي</a>
+        <a href="policy.html">سياسة الخصوصية وإخلاء المسؤولية</a>
+    </div>
+
     <script>
         try { if (window.Pi) { window.Pi.init({ version: "2.0", sandbox: true }); } } catch (e) { console.error(e); }
 
@@ -48,12 +94,11 @@
 
         async function runPiTestPayment() {
             if (!window.Pi) { alert("يجب فتح التطبيق داخل متصفح Pi!"); return; }
-            updateStatus("جاري تهيئة الاتصال...");
             try {
                 window.Pi.authenticate(['payments'], onIncompletePaymentFound).then(function(auth) {
                     window.Pi.createPayment({
                         amount: 5.0, 
-                        memo: "تأكيد فحص المعاملة الحية للخطوة 10 لمشروع Pi Auto Market",
+                        memo: "تأكيد فحص المعاملة للخطوة 10 لمشروع Pi Auto Market",
                         metadata: { type: "verification_step_10" },
                     }, {
                         serverURL: "https://pi-auto-market-2026.vercel.app",
@@ -63,11 +108,10 @@
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({ paymentId: paymentId })
-                            }).catch(err => updateStatus("خطأ في الاتصال بالخادم"));
+                            }).catch(err => updateStatus("خطأ في السيرفر"));
                         },
                         onReadyForServerCompletion: function(paymentId, txid) {
-                            updateStatus("تمت العملية بنجاح!");
-                            alert("تهانينا! تمت العملية بنجاح وتخطيت الخطوة 10.");
+                            alert("تهانينا! تمت المعاملة بنجاح.");
                         },
                         onCancel: function(paymentId) { updateStatus("تم إلغاء الدفع."); },
                         onError: function(error, payment) { updateStatus("خطأ: " + error.message); }
@@ -77,11 +121,8 @@
         }
 
         async function onIncompletePaymentFound(payment) {
-            console.log("تنظيف المعاملة العالقة...");
-            try {
-                await payment.cancel();
-                window.location.reload();
-            } catch (error) { await payment.cancel(); }
+            console.log("إلغاء المعاملة العالقة...");
+            try { await payment.cancel(); } catch (error) { console.error(error); }
         }
     </script>
 </body>
