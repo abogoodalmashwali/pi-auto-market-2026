@@ -5,70 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <!-- كود الحماية: لا يفتح إلا داخل Pi Browser -->
-    <script>
-        window.onload = function() {
-            if (typeof window.Pi === 'undefined') {
-                document.body.innerHTML = 
-                    "<div style='text-align:center; padding-top:100px; font-family:sans-serif; color:white;'>" +
-                    "<h1>مرحباً بك في Pi Auto Market 2026</h1>" +
-                    "<p>هذا المشروع مخصص حصراً لمجتمع Pi.</p>" +
-                    "<p>يرجى فتح التطبيق من داخل <b>Pi Browser</b> للمتابعة.</p>" +
-                    "</div>";
-                document.body.style.backgroundColor = "black";
-            }
-        };
-    </script>
     <style>
-        :root { --gold: #c5a059; --bg-black: #000000; --card-bg: #111111; --white: #ffffff; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-black); color: var(--white); margin: 0; text-align: center; }
-        .header { padding: 40px 20px; border-bottom: 2px solid var(--gold); }
-        .form-section { background: var(--card-bg); padding: 25px; margin: 20px auto; width: 90%; max-width: 500px; border-radius: 20px; border: 1px solid var(--gold); }
-        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; box-sizing: border-box; }
-        .btn-action { background: var(--gold); color: black; padding: 12px 25px; border-radius: 25px; border: none; margin: 10px; cursor: pointer; font-weight: bold; width: 90%; }
+        :root { --gold: #c5a059; --white: #ffffff; }
+        body { font-family: 'Segoe UI', sans-serif; background: #000; color: var(--white); margin: 0; text-align: center; }
+        .header { padding: 30px 20px; border-bottom: 2px solid var(--gold); }
+        .logo { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--gold); }
         .gallery-container { display: flex; justify-content: center; gap: 15px; padding: 20px; flex-wrap: wrap; }
-        .car-box { background: var(--card-bg); padding: 15px; border-radius: 15px; width: 45%; border: 1px solid #333; }
+        .car-box { background: #1a1a1a; padding: 15px; border-radius: 15px; width: 45%; border: 1px solid #333; }
         .car-box img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; }
+        .form-section { background: #1a1a1a; padding: 25px; margin: 20px auto; width: 90%; max-width: 500px; border-radius: 20px; border: 1px solid var(--gold); }
+        input { width: 90%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; }
+        .btn-action { background: var(--gold); color: black; padding: 12px 25px; border-radius: 25px; border: none; margin: 10px; cursor: pointer; font-weight: bold; width: 90%; }
         .footer { padding: 30px; border-top: 2px solid #333; }
-        .footer a { color: var(--gold); display: block; margin: 10px; text-decoration: none; font-weight: bold; }
+        .footer a { color: var(--gold); display: block; margin: 10px; text-decoration: none; }
     </style>
 </head>
 <body>
 
     <div class="header">
+        <img src="logo.png" class="logo" alt="شعار">
         <h1>منصة الوسيط الآمن</h1>
-        <p>Pi Auto Market 2026</p>
     </div>
 
-    <div class="form-section">
-        <h3>تأكيد الاتصال بالشبكة</h3>
-        <button class="btn-action" style="background: #e0b034;" onclick="runPiTestPayment()">إرسال 1 Test-Pi وتأكيد التطبيق</button>
-        <p id="statusMessage" style="color: var(--gold); font-weight: bold;"></p>
+    <!-- قسم الدفع -->
+    <div class="form-section" style="border: 2px solid #e0b034;">
+        <button class="btn-action" style="background:#e0b034" onclick="runPiTestPayment()">إرسال 1 Pi وتأكيد التطبيق</button>
+        <p id="statusMessage" style="color: #e0b034;"></p>
     </div>
 
+    <!-- قسم عرض السيارات -->
     <div class="gallery-container">
         <div class="car-box"><img src="toyota-camry.png" alt="كامري"><h3>تويوتا كامري 2026</h3></div>
         <div class="car-box"><img src="lexus-lx.png" alt="لكزس"><h3>لكزس LX 2026</h3></div>
     </div>
 
+    <!-- هل تمتلك سيارة للبيع؟ -->
     <div class="form-section">
-        <h2>هل تمتلك سيارة للبيع؟ 💰</h2>
+        <h3>هل تملك سيارة وتريد عرضها للبيع؟</h3>
         <form action="https://formspree.io/f/meewgjzw" method="POST">
             <input type="text" name="الاسم" placeholder="اسمك الكامل" required>
             <input type="text" name="نوع_السيارة" placeholder="نوع وموديل السيارة" required>
-            <input type="text" name="السعر" placeholder="السعر بـ Pi" required>
-            <button type="submit" class="btn-action" style="background: transparent; color: var(--gold); border: 1px solid var(--gold);">تقديم طلب عرض</button>
+            <button type="submit" class="btn-action" style="background:transparent; color:var(--gold); border:1px solid var(--gold);">عرض سيارتي للبيع</button>
         </form>
     </div>
 
+    <!-- طلب شراء -->
     <div class="form-section">
         <h2>تقديم طلب شراء / استفسار 📝</h2>
         <form action="https://formspree.io/f/meewgjzw" method="POST">
-            <input type="text" name="اسم_المشتري" placeholder="اسم مقدم الطلب" required>
-            <input type="text" name="نوع_السيارة" placeholder="السيارة المطلوبة" required>
-            <input type="text" name="الموديل" placeholder="الموديل">
-            <input type="text" name="اللون" placeholder="اللون المفضل">
-            <button type="submit" class="btn-action">إرسال البيانات للوسيط</button>
+            <input type="text" name="الاسم" placeholder="اسم مقدم الطلب" required>
+            <input type="text" name="السيارة" placeholder="نوع السيارة المطلوبة" required>
+            <button type="submit" class="btn-action">إرسال الطلب للوسيط</button>
         </form>
     </div>
 
@@ -78,29 +65,21 @@
     </div>
 
     <script>
-        // تذكر: ضع رابط سيرفرك (Render) هنا لتفعيل الدفع
-        const API_URL = 'https://pi-backend-name.onrender.com'; 
-
+        const SERVER_URL = "https://pi-auto-market-2026.vercel.app";
         try { window.Pi.init({ version: "2.0", sandbox: true }); } catch (e) {}
 
         function updateStatus(text) { document.getElementById('statusMessage').innerText = text; }
 
         async function runPiTestPayment() {
-            window.Pi.authenticate(['username', 'payments'], function(auth) { 
-                executePaymentProcess(); 
-            }, function(err) { updateStatus("خطأ في المصادقة"); });
-        }
-
-        function executePaymentProcess() {
-            window.Pi.createPayment({amount: 1, memo: "Pi Auto Market Payment"}, {
-                onReadyForServerApproval: function(id) {
-                    fetch(`${API_URL}/approve-payment`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({paymentId:id})});
-                    updateStatus("تمت الموافقة!");
-                },
-                onReadyForServerCompletion: function(id, txid) {
-                    fetch(`${API_URL}/complete-payment`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({paymentId:id, txid:txid})});
-                    alert("نجاح العملية!");
-                }
+            window.Pi.authenticate(['payments'], function(auth) {
+                window.Pi.createPayment({amount: 1, memo: "Pi Auto Market Payment"}, {
+                    serverURL: SERVER_URL,
+                    onReadyForServerApproval: function(id) {
+                        fetch(`/api/approve`, { method: "POST", body: JSON.stringify({ paymentId: id }) });
+                        updateStatus("تم إرسال الطلب للمعالجة");
+                    },
+                    onReadyForServerCompletion: function(id, txid) { updateStatus("نجاح العملية!"); }
+                });
             });
         }
     </script>
