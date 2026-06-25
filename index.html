@@ -145,7 +145,8 @@
                     serverURL: "https://pi-auto-market-2026.vercel.app", 
                     onReadyForServerApproval: function(paymentId) {
                         updateStatus("تم إنشاء الطلب بنجاح! جاري طلب الموافقة من الخادم...");
-                        fetch("https://pi-auto-market-2026.vercel.app/api/approve", {
+                        fetch("/api/approve", {
+
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ paymentId: paymentId })
