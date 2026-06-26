@@ -10,25 +10,24 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
 
   const { paymentId } = req.body;
-  const PI_API_KEY = process.env.PI_API_KEY; // يتم قراءته تلقائياً من إعدادات Vercel
+  const PI_API_KEY = process.env.PI_API_KEY; 
 
   if (!paymentId) {
     return res.status(400).json({ error: 'Missing paymentId' });
   }
 
   try {
-    console.log("جاري إرسال أمر الموافقة عبر الاتصال المباشر للمعرف:", paymentId);
+    console.log("جاري إرسال أمر الموافقة الرسمي للمعرف:", paymentId);
 
-    // استخدام الاتصال المباشر بالخادم لتخطي خطأ getaddrinfo وحل مشكلة جاري التحضير
+    // استخدام النطاق الرسمي لشبكة Pi لحل مشكلة التوجيه getaddrinfo
     const piResponse = await axios.post(
-      `https://18.154.141{paymentId}/approve`,
+      `https://minepi.com{paymentId}/approve`,
       {},
       {
         headers: {
           'Authorization': `Key ${PI_API_KEY}`,
           'Content-Type': 'application/json'
-        },
-        timeout: 15000 // مهلة استجابة 15 ثانية لمنع تعليق خادم Vercel
+        }
       }
     );
 
@@ -37,7 +36,7 @@ export default async function handler(req, res) {
     return res.status(200).json(piResponse.data);
 
   } catch (error) {
-    console.error("خطأ أثناء الاتصال المباشر بخوادم Pi:", error.response?.data || error.message);
+    console.error("خطأ أثناء الاتصال بخوادم Pi:", error.response?.data || error.message);
     const statusCode = error.response?.status || 500;
     const errorMessage = error.response?.data?.message || error.message;
     
