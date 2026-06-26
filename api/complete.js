@@ -16,9 +16,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log("توثيق معاملة التيس نت بمعرف الحركة:", txid);
+    console.log("توثيق معاملة الدفع بمعرف الحركة:", txid);
 
-    // الرابط الصحيح لإكمال الدفع في شبكة الفحص (Testnet)
+    // الرابط الرسمي والموحد لإكمال الدفع
     const piResponse = await axios.post(
       `https://minepi.com{paymentId}/complete`,
       { txid },
@@ -30,11 +30,11 @@ export default async function handler(req, res) {
       }
     );
 
-    console.log("تم تأكيد وإكمال الدفع التجريبي بنجاح.");
+    console.log("تم تأكيد وإكمال الدفع بنجاح.");
     return res.status(200).json(piResponse.data);
 
   } catch (error) {
-    console.error("خطأ إكمال دفع التيس نت:", error.response?.data || error.message);
+    console.error("خطأ إكمال الدفع من السيرفر:", error.response?.data || error.message);
     const statusCode = error.response?.status || 500;
     const errorMessage = error.response?.data?.message || error.message;
     return res.status(statusCode).json({ error: errorMessage });
