@@ -16,9 +16,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log("إرسال أمر الموافقة لشبكة التجربة Testnet للمعرف:", paymentId);
+    console.log("تفعيل أمر الموافقة الرسمي للمعرف:", paymentId);
 
-    // الرابط الصحيح لشبكة الفحص والتجارب (Testnet)
+    // الرابط الرسمي والموحد لجميع شبكات Pi
     const piResponse = await axios.post(
       `https://minepi.com{paymentId}/approve`,
       {},
@@ -30,11 +30,11 @@ export default async function handler(req, res) {
       }
     );
 
-    console.log("تمت الموافقة التجريبية بنجاح.");
+    console.log("تمت الموافقة الرسمية بنجاح.");
     return res.status(200).json(piResponse.data);
 
   } catch (error) {
-    console.error("خطأ الاتصال بخادم التيس نت:", error.response?.data || error.message);
+    console.error("خطأ الاتصال بخادم Pi الحالي:", error.response?.data || error.message);
     const statusCode = error.response?.status || 500;
     const errorMessage = error.response?.data?.message || error.message;
     return res.status(statusCode).json({ error: errorMessage });
