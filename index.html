@@ -135,39 +135,58 @@
             }
 
             function executePaymentProcess() {
-                window.Pi.createPayment({
-                    amount: 1, 
-                    memo: "تأكيد فحص المعاملة لـ Pi Auto Market",
-                    metadata: { type: "verification_step_10" },
-                }, {
-                    serverURL: "https://pi-auto-market-2026.vercel.app", 
-                    onReadyForServerApproval: function(paymentId) {
-                        updateStatus("تم إنشاء الطلب! جاري إرساله للموافقة...");
-                        
-                        // استخدام مسار نسبي لسرعة الاستجابة
-                        fetch("/api/approve", { 
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ paymentId: paymentId })
-                        })
-                        .then(response => {
-                            if (!response.ok) throw new Error("سيرفر الموافقة لم يستجب");
-                            return response.json();
-                        })
-                        .then(data => updateStatus("تم استلام الطلب من الخادم بنجاح!"))
-                        .catch(err => updateStatus("جاري الانتظار..."));
-                    },
-                    onReadyForServerCompletion: function(paymentId, txid) {
-                        updateStatus("تمت المعاملة بنجاح!");
-                        alert("تهانينا! اكتملت المعاملة.");
-                    },
-                    onCancel: function(paymentId) {
-                        updateStatus("تم إلغاء المعاملة.");
-                    },
-                    onError: function(error, payment) {
-                        updateStatus("خطأ في الشبكة: " + error.message);
-                    }
-                });
+    window.Pi.createPayment({
+        amount: 1,
+        memo: "تأكيد فحص المعاملة لـ Pi Auto Market",
+        metadata: { type: "verification_step_10" },
+    }, {
+        onReadyForServerApproval: function(paymentId) {
+            updateStatus("جاري إرسال الطلب للموافقة...");
+            
+            // استخدام رابط Vercel المباشر لضمان وصول طلب الموافقة للسيرفر دون فقدان
+            fetch("https://vercel.app", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId: paymentId })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("سيرفر الموافقة لم يستجب");
+                return response.json();
+            })
+            .then(data => updateStatus("تم استلام الطلب من الخادم بنجاح وموافقة المعاملة."))
+            .catch(err => updateStatus("خطأ في الموافقة: " + err.message));
+        },
+        
+        onReadyForServerCompletion: function(paymentId, txid) {
+            updateStatus("جاري توثيق وإكمال الدفع على السيرفر...");
+            
+            // إضافة كود الـ fetch المفقود لإرسال تفاصيل النجاح إلى complete.js
+            fetch("https://vercel.app", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId: paymentId, txid: txid })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("سيرفر الإكمال لم يستجب");
+                return response.json();
+            })
+            .then(data => {
+                updateStatus("اكتملت المعاملة بنجاح وتأكيد الشراء!");
+                alert("تهانينا! اكتملت المعاملة وتوثيقها في البلوكتشين بنجاح.");
+            })
+            .catch(err => updateStatus("خطأ في إكمال الدفع: " + err.message));
+        },
+        
+        onCancel: function(paymentId) {
+            updateStatus("تم إلغاء المعاملة من قبل المستخدم.");
+        },
+        
+        onError: function(error, payment) {
+            updateStatus("خطأ في الشبكة: " + error.message);
+        }
+    }, true); // تفعيل وضع الـ Sandbox لشبكة الفحص التجريبية Testnet
+}
+
             }
         }
 
