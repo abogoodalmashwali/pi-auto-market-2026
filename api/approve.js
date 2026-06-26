@@ -1,7 +1,8 @@
-import axios from 'axios';
+// تأكد من تثبيت مكتبة axios إذا لم تكن موجودة في package.json
+const axios = require('axios');
 
 export default async function handler(req, res) {
-  // إعدادات الـ CORS للسماح بالاتصال من متصفح Pi
+  // إعدادات CORS للسماح لمتصفح Pi بالاتصال بالسيرفر
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -10,9 +11,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
 
   const { paymentId } = req.body;
-
-  // تأكد من إضافة الـ API Key الخاص بك في إعدادات البيئة (Environment Variables) على Vercel باسم PI_API_KEY
-  const piApiKey = process.env.PI_API_KEY; 
+  const PI_API_KEY = process.env.PI_API_KEY; // سيتم قراءته من إعدادات Vercel
 
   if (!paymentId) {
     return res.status(400).json({ error: 'Missing paymentId' });
@@ -21,13 +20,13 @@ export default async function handler(req, res) {
   try {
     console.log("جاري إرسال أمر الموافقة الرسمي لخوادم Pi للمعرف:", paymentId);
 
-    // 1. الاتصال الرسمي بخوادم Pi لإبلاغهم بالموافقة على الدفع (Approve)
+    // 1. الاتصال الرسمي بخوادم Pi لإبلاغهم بالموافقة على الدفع
     const piResponse = await axios.post(
       `https://minepi.com{paymentId}/approve`,
-      {}, // جسم الطلب فارغ حسب وثائق Pi
+      {},
       {
         headers: {
-          'Authorization': `Key ${piApiKey}`,
+          'Authorization': `Key ${PI_API_KEY}`,
           'Content-Type': 'application/json'
         }
       }
@@ -35,13 +34,11 @@ export default async function handler(req, res) {
 
     console.log("تمت الموافقة الرسمية من خوادم Pi بنجاح.");
 
-    // 2. إرجاع البيانات الرسمية والقادمة مباشرة من خوادم Pi (والتي تحتوي على التوقيع المشفر لفتح المحفظة)
+    // 2. إرجاع البيانات الرسمية مباشرة دون تغليفها لكي تفتح المحفظة فوراً
     return res.status(200).json(piResponse.data);
 
   } catch (error) {
     console.error("خطأ أثناء الاتصال بخوادم Pi:", error.response?.data || error.message);
-    
-    // إرجاع تفاصيل الخطأ القادم من خادم Pi لمعرفة المشكلة بدقة
     const statusCode = error.response?.status || 500;
     const errorMessage = error.response?.data?.message || error.message;
     
