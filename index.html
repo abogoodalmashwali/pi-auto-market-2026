@@ -101,96 +101,81 @@
         <p style="color: #666; font-size: 14px;">© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
     </div>
 
-    <script>
+    <<script>
+    // 1. تهيئة SDK
+    try {
+        if (window.Pi) {
+            window.Pi.init({ version: "2.0", sandbox: true });
+        }
+    } catch (e) {
+        console.error("خطأ في التهيئة:", e);
+    }
+
+    // 2. دالة تحديث الحالة
+    function updateStatus(text) {
+        document.getElementById('statusMessage').innerText = text;
+    }
+
+    // 3. دالة الدفع الرئيسية
+    async function runPiTestPayment() {
+        if (!window.Pi) {
+            alert("تنبيه: يجب فتح التطبيق داخل متصفح Pi.");
+            return;
+        }
+
+        updateStatus("جاري تهيئة الدفع...");
         try {
-            if (window.Pi) {
-                window.Pi.init({ version: "2.0", sandbox: true });
-                console.log("تمت تهيئة Pi SDK بنجاح");
-            }
-        } catch (e) {
-            console.error("خطأ في التهيئة التلقائية المبدئية:", e);
+            const scopes = ['username', 'payments'];
+            window.Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
+                updateStatus("تمت المصادقة، جاري استدعاء المحفظة...");
+                executePaymentProcess();
+            }).catch(function(error) {
+                updateStatus("فشلت المصادقة: " + error.message);
+            });
+        } catch (err) {
+            updateStatus("حدث خطأ: " + err.message);
         }
+    }
 
-        function updateStatus(text) {
-            document.getElementById('statusMessage').innerText = text;
-        }
-
-        async function runPiTestPayment() {
-            if (!window.Pi) {
-                alert("تنبيه أمني: لم يتم العثور على محرك Pi الذكي. يجب فتح الرابط التجريبي pinet.com حصرياً من داخل تطبيق Pi Browser!");
-                return;
-            }
-
-            updateStatus("جاري تفعيل توكن المصادقة وقراءة الحساب...");
-
-            try {
-                const scopes = ['username', 'payments'];
-                window.Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
-                    updateStatus("تمت المصادقة بنجاح! جاري استدعاء نافذة محفظة الفحص...");
-                    setTimeout(() => { executePaymentProcess(); }, 600);
-                }).catch(function(error) {
-                    updateStatus("فشلت المصادقة: " + error.message);
-                    alert("تأكد من تسجيل دخولك في حساب Pi الخاص بك وإعادة المحاولة.");
+    // 4. تنفيذ الدفع
+    function executePaymentProcess() {
+        window.Pi.createPayment({
+            amount: 1,
+            memo: "تأكيد الدفع لمشروع Pi Auto Market 2026",
+            metadata: { type: "verification_step_10" },
+        }, {
+            serverURL: "https://apppiautomarketb8675.pinet.com", // الرابط المعتمد
+            onReadyForServerApproval: function(paymentId) {
+                updateStatus("جاري طلب الموافقة من الخادم...");
+                fetch("https://apppiautomarketb8675.pinet.com/api/approve", { // الرابط المعتمد
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentId: paymentId })
                 });
-            } catch (err) {
-                alert("حدث خطأ غير متوقع في النظام: " + err.message);
-            }
-
-            function executePaymentProcess() {
-                    window.Pi.createPayment({
-        amount: 1,
-        memo: "تأكيد فحص المعاملة الحية للخطوة 10 لمشروع Pi Auto Market",
-        metadata: { type: "verification_step_10" },
-    }, {
-        serverURL: "https://pi-auto-market-2026.vercel.app",
-        onReadyForServerApproval: function(paymentId) {
-            updateStatus("جاري طلب الموافقة من الخادم...");
-            fetch("https://pi-auto-market-2026.vercel.app/api/approve", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentId: paymentId })
-            })
-            .then(response => response.json())
-            .then(data => updateStatus("تم إرسال طلب الموافقة: " + JSON.stringify(data)))
-            .catch(err => updateStatus("خطأ في الاتصال بالخادم: " + err.message));
-        },
-        onReadyForServerCompletion: function(paymentId, txid) {
-            updateStatus("جاري إكمال المعاملة على البلوكشين...");
-            fetch("https://pi-auto-market-2026.vercel.app/api/complete", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentId: paymentId, txid: txid })
-            })
-            .then(response => response.json())
-            .then(data => {
-                updateStatus("تمت المعاملة بنجاح!");
-                alert("تهانينا! اكتملت المعاملة بنجاح.");
-            })
-            .catch(err => updateStatus("خطأ في الإكمال: " + err.message));
-        },
-        
-
-                    onCancel: function(paymentId) {
-                        updateStatus("تم إلغاء المعاملة.");
-                    },
-                    onError: function(error, payment) {
-                        updateStatus("حالة الشبكة: " + error.message);
-                    }
+            },
+            onReadyForServerCompletion: function(paymentId, txid) {
+                updateStatus("جاري إكمال المعاملة...");
+                fetch("https://apppiautomarketb8675.pinet.com/api/complete", { // الرابط المعتمد
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentId: paymentId, txid: txid })
+                }).then(res => res.json()).then(data => {
+                    updateStatus("تمت المعاملة بنجاح!");
+                    alert("تهانينا! اكتملت المعاملة.");
                 });
-            }
-        }
+            },
+            onCancel: function(paymentId) { updateStatus("تم إلغاء المعاملة."); },
+            onError: function(error, payment) { updateStatus("خطأ الشبكة: " + error.message); }
+        });
+    }
 
-        async function onIncompletePaymentFound(payment) {
-            console.log("تم العثور على معاملة معلقة، جاري معالجتها...", payment);
-            try {
-                await payment.complete(); 
-                alert("تم تنظيف المعاملة العالقة بنجاح. حاول الضغط على زر الدفع مرة أخرى الآن.");
-                window.location.reload();
-            } catch (error) {
-                console.error("خطأ أثناء تنظيف المعاملة العالقة:", error);
-                await payment.cancel();
-            }
+    // 5. معالجة العمليات غير المكتملة
+    async function onIncompletePaymentFound(payment) {
+        try {
+            await payment.complete();
+            window.location.reload();
+        } catch (error) {
+            await payment.cancel();
         }
-    </script>
-</body>
-</html>
+    }
+</script>
