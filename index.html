@@ -168,9 +168,7 @@
             })
             .catch(err => updateStatus("خطأ في الإكمال: " + err.message));
         },
-        onCancel: function(paymentId) { updateStatus("تم إلغاء المعاملة"); },
-        onError: function(error, payment) { updateStatus("خطأ: " + error.message); }
-    });
+        
 
                     onCancel: function(paymentId) {
                         updateStatus("تم إلغاء المعاملة.");
