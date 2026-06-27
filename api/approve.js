@@ -8,13 +8,17 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).send('Method not allowed');
 
     const { paymentId } = req.body;
-    const PI_API_KEY = process.env.PI_API_KEY; // تأكد من وجود هذا المفتاح في إعدادات Vercel
+    const PI_API_KEY = process.env.PI_API_KEY;
+
+    if (!paymentId) {
+        return res.status(400).json({ error: 'paymentId is missing' });
+    }
 
     try {
-        console.log("جاري طلب الموافقة من Pi لـ:", paymentId);
+        console.log("جاري محاولة الموافقة على paymentId في Sandbox:", paymentId);
 
-        // الرابط الرسمي للموافقة على الدفعة في Pi Network
-        const response = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/approve`, {
+        // الرابط المحدث لبيئة الـ Sandbox
+        const response = await fetch(`https://api.minepi.com/v2/sandbox/payments/${paymentId}/approve`, {
             method: 'POST',
             headers: {
                 'Authorization': `Key ${PI_API_KEY}`,
@@ -26,10 +30,10 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (response.ok) {
-            console.log("تمت الموافقة بنجاح:", data);
+            console.log("تمت الموافقة بنجاح في Sandbox:", data);
             return res.status(200).json(data);
         } else {
-            console.error("خطأ من سيرفر Pi:", data);
+            console.error("خطأ من سيرفر Pi (Sandbox):", data);
             return res.status(response.status).json(data);
         }
     } catch (error) {
