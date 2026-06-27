@@ -2,51 +2,43 @@
 const axios = require('axios');
 
 module.exports = async (req, res) => {
-    // 1. إعدادات الـ CORS لتفادي مشاكل الحظر بين الواجهة والسيرفر
+    // إعدادات الـ CORS للسماح بالطلبات من أي مكان وتجنب الحظر
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    // التعامل مع طلبات الـ OPTIONS المبدئية من المتصفح
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
 
-    // منع أي طريقة طلب أخرى غير POST
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    // 2. قراءة وتحليل الـ body لضمان استخراج البيانات بأمان في بيئة Vercel
+    // 🔴 معالجة ذكية لضمان قراءة الـ body سواء وصل كـ Object أو كـ String
     let body = req.body;
     if (typeof body === 'string') {
         try {
             body = JSON.parse(body);
         } catch (e) {
-            console.error("فشل في تحويل النص المستلم إلى JSON:", e);
+            console.error("فشل في تحليل النص كـ JSON:", e);
         }
     }
 
-    // استخراج معرف الدفع الفعلي
     const paymentId = body ? body.paymentId : null;
 
-    // طباعة المعرف في الـ Logs للتأكد من وصوله
-    console.log("المعرف المستلم في خادم Vercel هو:", paymentId);
+    // طباعة للمراقبة في الـ Logs لتتأكد بنفسك أن الرقم ليس فارغاً
+    console.log("المعرف المستلم في السيرفر هو الفعلي:", paymentId);
 
     if (!paymentId) {
-        return res.status(400).json({ error: 'معرف الدفع مفقود أو فارغ (paymentId is missing)' });
+        return res.status(400).json({ error: 'المعرف الممرر فارغ تماماً paymentId is missing' });
     }
 
     try {
-        // 3. جلب مفتاح الـ API سرياً من إعدادات Vercel (Environment Variables)
-        const apiKey = process.env.PI_API_KEY;
+        // تأكد من وضع الـ Sandbox API Key الخاص بك هنا
+        const apiKey = process.env.PI_API_KEY || "ضع_مفتاح_الـ_API_الخاص_بك_هنا";
 
-        if (!apiKey) {
-            console.error("تنبيه أمني: لم يتم العثور على متغير PI_API_KEY في إعدادات Vercel!");
-            return res.status(500).json({ error: "خطأ في إعدادات الخادم الأمنية" });
-        }
-
-        // 4. إرسال طلب الموافقة الرسمي إلى سيرفرات Pi Network بالخلفية
+        // الاتصال المباشر بخوادم Pi للموافقة
         const response = await axios.post(
             `https://api.minepi.com/v2/payments/${paymentId}/approve`,
             {},
@@ -58,20 +50,14 @@ module.exports = async (req, res) => {
             }
         );
 
-        // 5. إرجاع رد النجاح إلى تطبيق المستخدم لفتح المحفظة فوراً
-        return res.status(200).json({ 
-            success: true, 
-            message: "تمت الموافقة من السيرفر بنجاح", 
-            data: response.data 
-        });
+        // إرجاع النتيجة بنجاح للمحفظة لتفتح فوراً
+        return res.status(200).json({ success: true, message: "تمت الموافقة من السيرفر بنجاح" });
 
     } catch (error) {
-        // إدارة الأخطاء وطباعة تفاصيل رد سيرفر Pi في الـ Logs
         const errorData = error.response ? error.response.data : error.message;
-        console.error("خطأ مستلم من سيرفر Pi الرسمي:", errorData);
-        
+        console.error("خطأ قادم من سيرفر Pi الرسمي:", errorData);
         return res.status(500).json({ 
-            error: "فشلت عملية التوثيق والموافقة مع شبكة Pi", 
+            error: "فشل التوثيق مع سيرفر Pi", 
             details: errorData 
         });
     }
