@@ -137,27 +137,41 @@
             }
 
             function executePaymentProcess() {
-                window.Pi.createPayment({
-                    amount: 1, 
-                    memo: "تأكيد فحص المعاملة الحية للخطوة 10 لمشروع Pi Auto Market",
-                    metadata: { type: "verification_step_10" },
-                }, {
-                    serverURL: "https://pi-auto-market-2026.vercel.app", 
-                    onReadyForServerApproval: function(paymentId) {
-                        updateStatus("تم إنشاء الطلب بنجاح! جاري طلب الموافقة من الخادم...");
-                        fetch("https://pi-auto-market-2026.vercel.app/api/approve", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ paymentId: paymentId })
-                        })
-                        .then(response => response.json())
-                        .then(data => updateStatus("الخادم استلم الطلب: " + JSON.stringify(data)))
-                        .catch(err => updateStatus("خطأ في الاتصال بالخادم: " + err.message));
-                    },
-                    onReadyForServerCompletion: function(paymentId, txid) {
-                        updateStatus("ممتاز! تمت المعاملة بنجاح على البلوكشين وتخطيت الخطوة 10.");
-                        alert("تهانينا! اكتملت المعاملة بنجاح.");
-                    },
+                    window.Pi.createPayment({
+        amount: 1,
+        memo: "تأكيد فحص المعاملة الحية للخطوة 10 لمشروع Pi Auto Market",
+        metadata: { type: "verification_step_10" },
+    }, {
+        serverURL: "https://pi-auto-market-2026.vercel.app",
+        onReadyForServerApproval: function(paymentId) {
+            updateStatus("جاري طلب الموافقة من الخادم...");
+            fetch("https://pi-auto-market-2026.vercel.app/api/approve", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId: paymentId })
+            })
+            .then(response => response.json())
+            .then(data => updateStatus("تم إرسال طلب الموافقة: " + JSON.stringify(data)))
+            .catch(err => updateStatus("خطأ في الاتصال بالخادم: " + err.message));
+        },
+        onReadyForServerCompletion: function(paymentId, txid) {
+            updateStatus("جاري إكمال المعاملة على البلوكشين...");
+            fetch("https://pi-auto-market-2026.vercel.app/api/complete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId: paymentId, txid: txid })
+            })
+            .then(response => response.json())
+            .then(data => {
+                updateStatus("تمت المعاملة بنجاح!");
+                alert("تهانينا! اكتملت المعاملة بنجاح.");
+            })
+            .catch(err => updateStatus("خطأ في الإكمال: " + err.message));
+        },
+        onCancel: function(paymentId) { updateStatus("تم إلغاء المعاملة"); },
+        onError: function(error, payment) { updateStatus("خطأ: " + error.message); }
+    });
+
                     onCancel: function(paymentId) {
                         updateStatus("تم إلغاء المعاملة.");
                     },
