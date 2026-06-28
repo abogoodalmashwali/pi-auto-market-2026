@@ -40,7 +40,7 @@
     </div>
 
     <div class="form-section" style="border: 2px solid #e0b034; padding: 35px 20px;">
-        <button class="btn-action btn-test-payment" onclick="runPiTestPayment()">إرسال 1 Test-Pi وتأكيد التطبيق</button>
+        <button class="btn-action btn-test-payment" id="paymentBtn" onclick="runPiTestPayment()">إرسال 1 Test-Pi وتأكيد التطبيق</button>
         <p id="statusMessage" style="color: #e0b034; font-weight: bold; margin-top: 15px; font-size: 15px; margin-bottom: 0;"></p>
     </div>
 
@@ -62,7 +62,7 @@
     </div>
 
     <div class="form-section">
-        <h3 style="color: var(--gold);">هل تملك سيارة وتريد عرضها للبيع؟</h3>
+        <h3 style="color: var(--gold);">هل تملك سيارة وتريد عرضها للبيع?</h3>
         <button class="btn-action" onclick="document.getElementById('sellerModal').style.display='flex'" style="background:transparent; color:var(--gold); border: 1px solid var(--gold);">عرض سيارتي للبيع</button>
     </div>
 
@@ -101,7 +101,7 @@
         <p style="color: #666; font-size: 14px;">© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
     </div>
 
-    <<script>
+    <script>
     try {
         if (window.Pi) {
             window.Pi.init({ version: "2.0", sandbox: true });
@@ -124,70 +124,101 @@
             return;
         }
 
+        const btn = document.getElementById('paymentBtn');
+        btn.disabled = true;
         updateStatus("...جاري تفعيل توكن المصادقة وقراءة الحساب");
 
         try {
             const scopes = ['username', 'payments'];
             window.Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
                 updateStatus("...تمت المصادقة بنجاح! جاري استدعاء نافذة محفظة الفحص");
-                setTimeout(() => { executePaymentProcess(); }, 6000);
+                executePaymentProcess();
             }).catch(function(error) {
                 updateStatus("فشلت المصادقة: " + error.message);
-                alert("تأكد من تسجيل دخولك في حسابك والمحاولة مرة أخرى.");
+                btn.disabled = false;
+                alert("تأكت من منح صلاحية الوصول وحاول مرة أخرى.");
             });
         } catch (err) {
+            btn.disabled = false;
             alert("حدث خطأ غير متوقع في النظام: " + err.message);
         }
     }
 
     function executePaymentProcess() {
+        const btn = document.getElementById('paymentBtn');
         window.Pi.createPayment({
-            amount: 1,
-            memo: "تأكيد فحص المعاملة الحية للخطوة 10 لمشروع Pi Auto Market",
-            metadata: { type: "verification_step_10" },
+            amount: 1.0,
+            memo: "تأكيد فحص المعاملة للخطوة 10 لمشروع Pi Auto Market 2026",
+            metadata: { orderId: "step-10-verification" },
         }, {
             onReadyForServerApproval: function(paymentId) {
                 updateStatus("...تم إنشاء الطلب بنجاح! جاري طلب الموافقة من الخادم");
                 
-                return fetch("https://pi-auto-market-2026.vercel.app/api/approve", {
+                return fetch("/api/approve", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ paymentId: paymentId })
                 })
                 .then(response => {
-                    if (!response.ok) throw new Error("استجابة الخادم غير سليمة");
+                    if (!response.ok) throw new Error("استجابة موافقة الخادم غير سليمة");
                     return response.json();
                 })
                 .then(data => {
-                    updateStatus("الخادم استلم الطلب ووافق عليه بنجاح");
+                    updateStatus("...الخادم وافق على الطلب بنجاح، يرجى تأكيد العملية في محفظتك");
                     return data; 
                 })
                 .catch(err => {
-                    updateStatus("خطأ في الاتصال بالخادم: " + err.message);
+                    updateStatus("خطأ في موافقة الخادم: " + err.message);
+                    btn.disabled = false;
                 });
             },
             onReadyForServerCompletion: function(paymentId, txid) {
-                updateStatus("ممتاز! تمت المعاملة بنجاح على البلوكشين وتخطيت الخطوة 10");
-                alert("تهانينا! اكتملت المعاملة بنجاح");
+                updateStatus("...جاري تأكيد إنهاء المعاملة على خادم التطبيق");
+                
+                return fetch("/api/complete", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentId: paymentId, txid: txid })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("استجابة إنهاء الخادم غير سليمة");
+                    return response.json();
+                })
+                .then(data => {
+                    updateStatus("ممتاز! تمت المعاملة بنجاح وتخطيت الخطوة 10 🎉");
+                    alert("تهانينا! اكتملت المعاملة بنجاح واجتزت الفحص النهائي للتطبيق.");
+                    btn.innerText = "تم تفعيل واجتياز المعاملة";
+                    btn.style.backgroundColor = "#4caf50";
+                    return data;
+                })
+                .catch(err => {
+                    updateStatus("خطأ في إنهاء المعاملة على السيرفر: " + err.message);
+                    btn.disabled = false;
+                });
             },
             onCancel: function(paymentId) {
-                updateStatus("تم إلغاء المعاملة");
+                updateStatus("تم إلغاء المعاملة من قبل المستخدم");
+                btn.disabled = false;
             },
             onError: function(error, payment) {
-                updateStatus("حالة الشبكة: " + error.message);
+                updateStatus("خطأ في الشبكة: " + error.message);
+                btn.disabled = false;
             }
         });
     }
 
     async function onIncompletePaymentFound(payment) {
-        console.log("تم العثور على معاملة معلقة، جاري معالجتها...", payment);
+        console.log("تم العثور على معاملة معلقة، جاري إلغاؤها لتنظيف الحساب...", payment);
         try {
-            await payment.complete();
-            alert("تم تنظيف المعاملة العالقة بنجاح، حاول الضغط على زر الدفع مرة أخرى الآن.");
+            // نقوم بإرسال طلب الإلغاء للسيرفر حتى لا تظل عالقة في حسابك كمعاملة غير مكتملة
+            await fetch("/api/complete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId: payment.identifier, txid: payment.transaction.txid })
+            });
             window.location.reload();
         } catch (error) {
-            console.error("خطأ أثناء تنظيف المعاملة العالقة:", error);
-            await payment.cancel();
+            console.error("خطأ أثناء معالجة المعاملة المعلقة المعثور عليها:", error);
         }
     }
 </script>
