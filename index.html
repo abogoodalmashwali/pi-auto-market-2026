@@ -104,6 +104,9 @@
     <script>
     try {
         if (window.Pi) {
+            <script>
+    try {
+        if (window.Pi) {
             window.Pi.init({ version: "2.0", sandbox: true });
             console.log("نجاح تم تهيئة Pi SDK");
         }
@@ -136,7 +139,7 @@
             }).catch(function(error) {
                 updateStatus("فشلت المصادقة: " + error.message);
                 btn.disabled = false;
-                alert("تأكت من منح صلاحية الوصول وحاول مرة أخرى.");
+                alert("تأكد من منح صلاحية الوصول وحاول مرة أخرى.");
             });
         } catch (err) {
             btn.disabled = false;
@@ -154,7 +157,7 @@
             onReadyForServerApproval: function(paymentId) {
                 updateStatus("...تم إنشاء الطلب بنجاح! جاري طلب الموافقة من الخادم");
                 
-                return fetch("/api/approve", {
+                return fetch("https://pi-backend-kappa.vercel.app/api/approve", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ paymentId: paymentId })
@@ -175,7 +178,7 @@
             onReadyForServerCompletion: function(paymentId, txid) {
                 updateStatus("...جاري تأكيد إنهاء المعاملة على خادم التطبيق");
                 
-                return fetch("/api/complete", {
+                return fetch("https://pi-backend-kappa.vercel.app/api/complete", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ paymentId: paymentId, txid: txid })
@@ -197,6 +200,31 @@
                 });
             },
             onCancel: function(paymentId) {
+                updateStatus("تم إلغاء المعاملة من قبل المستخدم");
+                btn.disabled = false;
+            },
+            onError: function(error, payment) {
+                updateStatus("خطأ في الشبكة: " + error.message);
+                btn.disabled = false;
+            }
+        });
+    }
+
+    async function onIncompletePaymentFound(payment) {
+        console.log("تم العثور على معاملة معلقة، جاري إلغاؤها لتنظيف الحساب...", payment);
+        try {
+            await fetch("https://pi-backend-kappa.vercel.app/api/complete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId: payment.identifier, txid: payment.transaction.txid })
+            });
+            window.location.reload();
+        } catch (error) {
+            console.error("خطأ أثناء معالجة المعاملة المعلقة المعثور عليها:", error);
+        }
+    }
+</script>
+
                 updateStatus("تم إلغاء المعاملة من قبل المستخدم");
                 btn.disabled = false;
             },
