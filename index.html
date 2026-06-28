@@ -101,6 +101,8 @@
     </div>
 
     <script>
+        <!-- كود الجافا سكريبت التلقائي والربط المباشر مع نفس السيرفر -->
+    <script>
     try {
         if (window.Pi) {
             window.Pi.init({ version: "2.0", sandbox: true });
@@ -153,7 +155,8 @@
             onReadyForServerApproval: function(paymentId) {
                 updateStatus("...تم إنشاء الطلب بنجاح! جاري طلب الموافقة من الخادم");
                 
-                return fetch("https://pi-backend-kappa.vercel.app/api/approve", {
+                // تم تعديل الرابط ليكون نسبياً ومباشراً لنفس السيرفر الحقيقي للمشروع
+                return fetch("/api/approve", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ paymentId: paymentId })
@@ -174,7 +177,8 @@
             onReadyForServerCompletion: function(paymentId, txid) {
                 updateStatus("...جاري تأكيد إنهاء المعاملة على خادم التطبيق");
                 
-                return fetch("https://pi-backend-kappa.vercel.app/api/complete", {
+                // تم تعديله هنا أيضاً ليعمل على نفس السيرفر
+                return fetch("/api/complete", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ paymentId: paymentId, txid: txid })
@@ -209,7 +213,7 @@
     async function onIncompletePaymentFound(payment) {
         console.log("تم العثور على معاملة معلقة، جاري إلغاؤها لتنظيف الحساب...", payment);
         try {
-            await fetch("https://pi-backend-kappa.vercel.app/api/complete", {
+            await fetch("/api/complete", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ paymentId: payment.identifier, txid: payment.transaction.txid })
@@ -220,5 +224,3 @@
         }
     }
 </script>
-</body>
-</html>
