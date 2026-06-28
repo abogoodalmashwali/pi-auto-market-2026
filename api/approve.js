@@ -1,43 +1,72 @@
-export default async function handler(req, res) {
-  // 1. التأكد من أن الطلب القادم هو من نوع POST فقط لحماية الرابط
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+// دالة بدء عملية الدفع والتحقق عبر السيرفر الخاص بك
+async function startPayment() {
+    try {
+        console.log("جاري بدء عملية الدفع التجريبية...");
 
-  // 2. استقبال معرف عملية الدفع القادم من الواجهة الأمامية
-  const { paymentId } = req.body;
-  
-  if (!paymentId) {
-    return res.status(400).json({ error: 'Missing paymentId in request body' });
-  }
+        // 1. إنشاء الدفعة باستخدام مكتبة Pi Network الرسمية (الواجهة الأمامية)
+        const payment = await Pi.createPayment({
+            amount: 1, // المبلغ التجريبي بالـ Pi
+            memo: "شراء سيارة تجريبية - Pi Auto Market 2026",
+            metadata: { orderId: "order_12345" },
+        }, {
+            // يتم استدعاء هذه الدالة فوراً عند إنشاء الدفعة على الشبكة لتوثيقها في السيرفر الخاص بك
+            onReadyForServerApproval: async (paymentId) => {
+                console.log("تم إنشاء الدفعة بنجاح، معرف الدفعة:", paymentId);
+                
+                // إرسال معرف الدفعة إلى سيرفر الـ Backend الخاص بك للموافقة والتوقيع بالمفتاح السري
+                const response = await fetch('https://pi-backend-kappa.vercel.app/api/approve', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ paymentId: paymentId })
+                });
 
-  // 3. جلب مفتاح المطورين السري من متغيرات البيئة الآمنة في Vercel
-  const PI_API_KEY = process.env.PI_API_KEY;
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    console.log("تمت الموافقة على الدفعة من السيرفر بنجاح!");
+                } else {
+                    throw new Error(result.error || "فشلت عملية الموافقة من السيرفر");
+                }
+            },
+            
+            // يتم استدعاء هذه الدالة بعد أن يقوم المستخدم بإدخال كلمة سر محفظته وتأكيد النقل بنجاح
+            onReadyForServerCompletion: async (paymentId, txid) => {
+                console.log("قام المستخدم بتأكيد الدفع. معرف المعاملة (TXID):", txid);
+                
+                // إرسال البيانات النهائية للسيرفر لإكمال عملية الدفع وإغلاقها على شبكة Pi
+                const response = await fetch('https://pi-backend-kappa.vercel.app/api/complete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ paymentId: paymentId, txid: txid })
+                });
 
-  if (!PI_API_KEY) {
-    return res.status(500).json({ error: 'Server configuration error: PI_API_KEY is not defined' });
-  }
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    console.log("تم إكمال الدفعة وإغلاقها بنجاح التام!");
+                    alert("تهانينا! تم الدفع بنجاح وأصبحت المعاملة موثقة.");
+                } else {
+                    throw new Error(result.error || "فشل إكمال الدفعة على السيرفر");
+                }
+            },
+            
+            // في حال ألغى المستخدم العملية أو أغلق المحفظة
+            onCancel: (paymentId) => {
+                console.log("تم إلغاء عملية الدفع بواسطة المستخدم. معرف الدفعة:", paymentId);
+                alert("تم إلغاء عملية الدفع.");
+            },
+            
+            // في حال حدوث أي خطأ مفاجئ أثناء الدفع
+            onError: (error, payment) => {
+                console.error("حدث خطأ أثناء معالجة الدفع:", error);
+                alert("خطأ في الدفع: " + error.message);
+            }
+        });
 
-  try {
-    // 4. إرسال طلب الموافقة الرسمي إلى خوادم شبكة Pi Network
-    const response = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/approve`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Key ${PI_API_KEY}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    // إذا رفضت شبكة Pi الموافقة، قم بإرجاع السبب للواجهة الأمامية للمساعدة في اكتشاف المشكلة
-    if (!response.ok) {
-      const errText = await response.text();
-      return res.status(response.status).json({ error: errText });
+    } catch (error) {
+        console.error("خطأ عام في تشغيل الدفع:", error);
+        alert("تعذر بدء عملية الدفع، يرجى المحاولة مرة أخرى.");
     }
-
-    // 5. إذا تمت الموافقة بنجاح، نرد على التطبيق بالقبول
-    return res.status(200).json({ success: true });
-  } catch (error) {
-    // معالجة أي أخطاء غير متوقعة في الاتصال بالشبكة
-    return res.status(500).json({ error: error.message });
-  }
 }
