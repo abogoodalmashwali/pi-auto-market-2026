@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
     
+    <!-- استدعاء مكتبة الـ SDK الرسمية -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
     <style>
@@ -61,7 +62,7 @@
     </div>
 
     <div class="form-section">
-        <h3 style="color: var(--gold);">هل تملك سيارة وتريد عرضها للبيع؟</h3>
+        <h3 style="color: var(--gold);">هل تملك سيارة وتريد عرضها للبيع?</h3>
         <button class="btn-action" onclick="document.getElementById('sellerModal').style.display='flex'" style="background:transparent; color:var(--gold); border: 1px solid var(--gold);">عرض سيارتي للبيع</button>
     </div>
 
@@ -101,8 +102,6 @@
     </div>
 
     <script>
-        <!-- كود الجافا سكريبت التلقائي والربط المباشر مع نفس السيرفر -->
-    <script>
     try {
         if (window.Pi) {
             window.Pi.init({ version: "2.0", sandbox: true });
@@ -137,7 +136,7 @@
             }).catch(function(error) {
                 updateStatus("فشلت المصادقة: " + error.message);
                 btn.disabled = false;
-                alert("تأكد من منح صلاحية الوصول وحاول مرة أخرى.");
+                alert("تأكت من منح صلاحية الوصول وحاول مرة أخرى.");
             });
         } catch (err) {
             btn.disabled = false;
@@ -155,7 +154,6 @@
             onReadyForServerApproval: function(paymentId) {
                 updateStatus("...تم إنشاء الطلب بنجاح! جاري طلب الموافقة من الخادم");
                 
-                // تم تعديل الرابط ليكون نسبياً ومباشراً لنفس السيرفر الحقيقي للمشروع
                 return fetch("/api/approve", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -177,7 +175,6 @@
             onReadyForServerCompletion: function(paymentId, txid) {
                 updateStatus("...جاري تأكيد إنهاء المعاملة على خادم التطبيق");
                 
-                // تم تعديله هنا أيضاً ليعمل على نفس السيرفر
                 return fetch("/api/complete", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -213,6 +210,7 @@
     async function onIncompletePaymentFound(payment) {
         console.log("تم العثور على معاملة معلقة، جاري إلغاؤها لتنظيف الحساب...", payment);
         try {
+            // نقوم بإرسال طلب الإلغاء للسيرفر حتى لا تظل عالقة في حسابك كمعاملة غير مكتملة
             await fetch("/api/complete", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -224,3 +222,5 @@
         }
     }
 </script>
+</body>
+</html>
