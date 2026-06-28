@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
     
-    <!-- استدعاء مكتبة الـ SDK الرسمية -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
     <style>
@@ -62,7 +61,7 @@
     </div>
 
     <div class="form-section">
-        <h3 style="color: var(--gold);">هل تملك سيارة وتريد عرضها للبيع?</h3>
+        <h3 style="color: var(--gold);">هل تملك سيارة وتريد عرضها للبيع؟</h3>
         <button class="btn-action" onclick="document.getElementById('sellerModal').style.display='flex'" style="background:transparent; color:var(--gold); border: 1px solid var(--gold);">عرض سيارتي للبيع</button>
     </div>
 
@@ -102,9 +101,6 @@
     </div>
 
     <script>
-    try {
-        if (window.Pi) {
-            <script>
     try {
         if (window.Pi) {
             window.Pi.init({ version: "2.0", sandbox: true });
@@ -214,32 +210,6 @@
         console.log("تم العثور على معاملة معلقة، جاري إلغاؤها لتنظيف الحساب...", payment);
         try {
             await fetch("https://pi-backend-kappa.vercel.app/api/complete", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentId: payment.identifier, txid: payment.transaction.txid })
-            });
-            window.location.reload();
-        } catch (error) {
-            console.error("خطأ أثناء معالجة المعاملة المعلقة المعثور عليها:", error);
-        }
-    }
-</script>
-
-                updateStatus("تم إلغاء المعاملة من قبل المستخدم");
-                btn.disabled = false;
-            },
-            onError: function(error, payment) {
-                updateStatus("خطأ في الشبكة: " + error.message);
-                btn.disabled = false;
-            }
-        });
-    }
-
-    async function onIncompletePaymentFound(payment) {
-        console.log("تم العثور على معاملة معلقة، جاري إلغاؤها لتنظيف الحساب...", payment);
-        try {
-            // نقوم بإرسال طلب الإلغاء للسيرفر حتى لا تظل عالقة في حسابك كمعاملة غير مكتملة
-            await fetch("/api/complete", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ paymentId: payment.identifier, txid: payment.transaction.txid })
