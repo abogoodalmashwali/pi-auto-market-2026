@@ -1,46 +1,24 @@
-const axios = require('axios');
+// /api/approve.js
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
 
-module.exports = async (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  try {
+    const { paymentId } = req.body;
+    
+    const response = await fetch(`https://api.minepi.com/v2/payments/${paymentId}/approve`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Key ${process.env.PI_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({})
+    });
 
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-
-    if (req.method === 'POST') {
-        try {
-            const { paymentId } = req.body;
-
-            if (!paymentId) {
-                return res.status(400).json({ success: false, error: 'Missing paymentId' });
-            }
-
-            console.log(`جاري إرسال طلب الموافقة لـ Payment ID: ${paymentId}`);
-
-            const response = await axios.post(
-                `https://api.minepi.com/v2/payments/${paymentId}/approve`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Key ${process.env.PI_API_KEY}`
-                    }
-                }
-            );
-
-            console.log("تمت الموافقة من سيرفرات Pi بنجاح!");
-            return res.status(200).json({ success: true, data: response.data });
-
-        } catch (error) {
-            // صيانة طريقة قراءة الخطأ لمنع الانهيار وتوضيح السبب الحقيقي
-            console.error("حدث خطأ أثناء الاتصال بسيرفر Pi:");
-            const errorMsg = error.response?.data?.message || error.response?.data || error.message;
-            console.error(`تفاصيل الخطأ: ${errorMsg}`);
-            
-            return res.status(500).json({ success: false, error: errorMsg });
-        }
-    }
-
-    res.status(405).json({ error: 'Method Not Allowed' });
-};
+    const data = await response.json();
+    return res.status(response.status).json(data);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
