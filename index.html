@@ -8,7 +8,7 @@
     <!-- استدعاء مكتبة الـ SDK الرسمية -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
-    <!-- مكتبات Firebase -->
+    <!-- استدعاء مكتبات Firebase للربط المباشر -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
@@ -26,6 +26,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // دالة حفظ الطلب في قاعدة البيانات
         window.saveOrderToFirebase = async (orderData) => {
             await addDoc(collection(db, "orders"), {
                 ...orderData,
@@ -33,6 +34,7 @@
             });
         };
 
+        // دالة جلب وعرض الطلبات بشكل حي وفوري للجميع
         window.listenForOrders = (callback) => {
             const q = query(collection(db, "orders"), orderBy("timestamp", "desc"));
             onSnapshot(q, (snapshot) => {
@@ -61,6 +63,7 @@
             padding-bottom: 40px;
         }
 
+        /* شريط التنبيه القانوني لمتطلبات مراجعة Pi */
         .policy-banner {
             background: #e0b034;
             color: #000;
@@ -84,7 +87,9 @@
             margin: 0 auto;
             transition: transform 0.3s ease;
         }
-        .logo:hover { transform: scale(1.03); }
+        .logo:hover {
+            transform: scale(1.03);
+        }
         
         h1 { 
             color: var(--gold); 
@@ -105,8 +110,17 @@
             box-shadow: 0 5px 15px rgba(197, 160, 89, 0.1);
         }
 
-        .showroom-title { color: var(--gold); margin: 40px 0 10px 0; font-size: 22px; }
-        .showroom-subtitle { color: #888; font-size: 14px; margin-bottom: 25px; }
+        /* قسم معرض السيارات الاحترافي */
+        .showroom-title {
+            color: var(--gold);
+            margin: 40px 0 10px 0;
+            font-size: 22px;
+        }
+        .showroom-subtitle {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
         
         .gallery-container { 
             display: flex; 
@@ -137,12 +151,33 @@
             box-shadow: 0 12px 25px rgba(197, 160, 89, 0.2);
         }
         
-        .car-image-wrapper { width: 100%; height: 160px; background: #252525; position: relative; }
-        .car-box img { width: 100%; height: 100%; object-fit: cover; }
+        .car-image-wrapper {
+            width: 100%;
+            height: 160px;
+            background: #252525;
+            position: relative;
+        }
+        .car-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
         
-        .car-info { padding: 20px; text-align: right; }
-        .car-box h3 { font-size: 18px; margin: 0 0 10px 0; color: #fff; }
-        .car-specs { font-size: 13px; color: #aaa; margin-bottom: 15px; line-height: 1.5; }
+        .car-info {
+            padding: 20px;
+            text-align: right;
+        }
+        .car-box h3 { 
+            font-size: 18px; 
+            margin: 0 0 10px 0; 
+            color: #fff;
+        }
+        .car-specs {
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
         .car-price {
             font-size: 16px;
             color: var(--gold);
@@ -153,8 +188,14 @@
             justify-content: space-between;
             align-items: center;
         }
-        .price-tag { background: rgba(197, 160, 89, 0.15); padding: 4px 10px; border-radius: 6px; font-size: 14px; }
+        .price-tag {
+            background: rgba(197, 160, 89, 0.15);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
 
+        /* النماذج والأزرار */
         .form-section { 
             background: var(--bg-card); 
             padding: 30px 25px; 
@@ -176,8 +217,12 @@
             color: #fff; 
             box-sizing: border-box; 
             font-size: 14px;
+            transition: border-color 0.3s;
         }
-        input:focus, select:focus { border-color: var(--gold); outline: none; }
+        input:focus, select:focus {
+            border-color: var(--gold);
+            outline: none;
+        }
         
         .btn-action { 
             background: var(--gold); 
@@ -190,15 +235,47 @@
             font-weight: bold; 
             width: 100%; 
             font-size: 15px;
+            transition: all 0.2s ease;
         }
-        .btn-action:hover { background: var(--dark-gold); }
-        .btn-test-payment { background: #e0b034 !important; color: #000 !important; font-size: 18px; animation: pulse 2s infinite; }
+        .btn-action:hover {
+            background: var(--dark-gold);
+        }
         
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-test-payment { 
+            background: #e0b034 !important; 
+            color: #000 !important; 
+            font-size: 18px; 
+            box-shadow: 0 0 15px rgba(224, 176, 52, 0.4); 
+            animation: pulse 2s infinite; 
+        }
+        @keyframes pulse { 
+            0% { transform: scale(1); } 
+            50% { transform: scale(1.02); } 
+            100% { transform: scale(1); } 
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        .footer { padding: 40px 20px; border-top: 1px solid #222; margin-top: 50px; background: #050505; }
-        .footer a { color: var(--gold); display: inline-block; margin: 0 15px 15px 15px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .footer { 
+            padding: 40px 20px; 
+            border-top: 1px solid #222; 
+            margin-top: 50px; 
+            background: #050505;
+        }
+        .footer a { 
+            color: var(--gold); 
+            display: inline-block; 
+            margin: 0 15px 15px 15px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 14px;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -213,14 +290,14 @@
         <p style="color: #aaa; margin-bottom: 0;">أول منصة يمنية لخدمات تداول السيارات عبر منظومة وعملة Pi</p>
     </div>
 
-    <div class="form-section" style="border: 2px solid #e0b034; padding: 35px 25px;">
+    <div class="form-section" style="border: 2px solid #e0b034; padding: 35px 25px; box-shadow: 0 0 20px rgba(224, 176, 52, 0.15);">
         <button class="btn-action btn-test-payment" id="paymentBtn" onclick="runPiTestPayment()">إرسال 1 Test-Pi وتأكيد التطبيق</button>
-        <p id="statusMessage" style="color: #e0b034; font-weight: bold; margin-top: 15px; font-size: 15px;"></p>
+        <p id="statusMessage" style="color: #e0b034; font-weight: bold; margin-top: 15px; font-size: 15px; margin-bottom: 0;"></p>
     </div>
 
     <div class="intro-text">
         <p style="color: #ffffff; font-size: 15px; line-height: 1.7; margin: 0;">
-            نرحب بك في مستقبل تداول السيارات! في <strong style="color:var(--gold);">‘Pi Auto Market 2026’</strong>، ندمج بين عراقة تداول السيارات وقوة البنية التحتية البرمجية لشبكة Pi.
+            نرحب بك في مستقبل تداول السيارات! في <strong style="color:var(--gold);">‘Pi Auto Market 2026’</strong>، ندمج بين عراقة تداول السيارات وقوة البنية التحتية البرمجية لشبكة Pi. هدفنا هو بناء مجتمع وساطة تجاري يمني آمن ومتطور كلياً. شكراً لكونك جزءاً من رحلتنا الواعدة!
         </p>
     </div>
 
@@ -229,44 +306,68 @@
     
     <div class="gallery-container">
         <div class="car-box">
-            <div class="car-image-wrapper"><img src="lexus-lx.png" alt="لكزس lx"></div>
+            <div class="car-image-wrapper">
+                <img src="lexus-lx.png" alt="لكزس lx">
+            </div>
             <div class="car-info">
                 <h3>لكزس LX 600 - مـوديل 2026</h3>
-                <div class="car-specs">V8 توين توربو، فل كامل كبار الشخصيات، دفع رباعي متطور.</div>
-                <div class="car-price"><span>السعر التقديري:</span><span class="price-tag">150 Test-Pi</span></div>
+                <div class="car-specs">V8 توين توربو، فل كامل فئة كبار الشخصيات، دفع رباعي متطور.</div>
+                <div class="car-price">
+                    <span>السعر التقديري الفحص:</span>
+                    <span class="price-tag">150 Test-Pi</span>
+                </div>
             </div>
         </div>
+
         <div class="car-box">
-            <div class="car-image-wrapper"><img src="toyota-camry.png" alt="تويوتا كامري"></div>
+            <div class="car-image-wrapper">
+                <img src="toyota-camry.png" alt="تويوتا كامري">
+            </div>
             <div class="car-info">
                 <h3>تويوتا كامري - مـوديل 2026</h3>
                 <div class="car-specs">محرك هايبرد اقتصادي، مواصفات ترفيه وأمان ذكية متكاملة.</div>
-                <div class="car-price"><span>السعر التقديري:</span><span class="price-tag">50 Test-Pi</span></div>
+                <div class="car-price">
+                    <span>السعر التقديري الفحص:</span>
+                    <span class="price-tag">50 Test-Pi</span>
+                </div>
             </div>
         </div>
+
         <div class="car-box">
-            <div class="car-image-wrapper"><img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=500&auto=format&fit=crop" alt="تيسلا موديل X"></div>
+            <div class="car-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=500&auto=format&fit=crop" alt="تيسلا موديل X">
+            </div>
             <div class="car-info">
                 <h3>تيسلا موديل X - مـوديل 2026</h3>
                 <div class="car-specs">كهربائية بالكامل، نظام القيادة الذاتية الفائق، أبواب أجنحة الصقر.</div>
-                <div class="car-price"><span>السعر التقديري:</span><span class="price-tag">200 Test-Pi</span></div>
+                <div class="car-price">
+                    <span>السعر التقديري الفحص:</span>
+                    <span class="price-tag">200 Test-Pi</span>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="form-section">
         <h3 style="color: var(--gold); margin-top: 0;">هل تملك سيارة وتريد عرضها عبر الوسيط?</h3>
+        <p style="color:#aaa; font-size:13px; margin-bottom: 15px;">ارفع بيانات ومواصفات سيارتك ليقوم فريق التدقيق بمراجعتها وعرضها تجريبياً.</p>
         <button class="btn-action" onclick="document.getElementById('sellerModal').style.display='flex'" style="background:transparent; color:var(--gold); border: 1px solid var(--gold);">عرض سيارتي للبيع</button>
     </div>
 
     <div id="sellerModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; overflow-y:auto; padding: 20px; box-sizing: border-box;">
-        <div style="background:#1a1a1a; padding:30px; border-radius:20px; width:95%; max-width: 500px; border:1px solid #c5a059; margin: 40px auto; text-align: right;">
+        <div style="background:#1a1a1a; padding:30px; border-radius:20px; width:95%; max-width: 500px; border:1px solid #c5a059; margin: 40px auto; text-align: right; box-sizing: border-box;">
             <h2 style="color:#c5a059; text-align: center; margin-top: 0;">بيانات السيارة المعروضة</h2>
             <input type="text" placeholder="اسم البائع الكامل">
             <input type="text" placeholder="نوع وموديل السيارة">
             <input type="text" placeholder="اللون">
-            <button class="btn-action" style="margin-top:20px;" onclick="alert('تم استلام البيانات بنجاح.'); document.getElementById('sellerModal').style.display='none';">إرسال للتدقيق</button>
-            <button class="btn-action" style="background:#333; color:#fff; margin-top:10px;" onclick="document.getElementById('sellerModal').style.display='none'">إغلاق</button>
+            <select style="background:#000; color:#fff; border:1px solid #c5a059;">
+                <option value="new">جديدة (أصفار)</option>
+                <option value="used">مستعملة بحالة ممتازة</option>
+            </select>
+            <label style="color:var(--gold); display:block; margin: 15px 0 5px 0; font-size:14px;">إرفاق صور السيارة المتاحة:</label>
+            <input type="file" multiple accept="image/*" style="border:none; padding:5px 0;">
+            <button class="btn-action" style="margin-top:20px;" onclick="alert('تم استلام البيانات، سنتواصل معك للتدقيق والتأكد.'); document.getElementById('sellerModal').style.display='none';">إرسال الطلب للتدقيق</button>
+            <button class="btn-action" style="background:#333; color:#fff; margin-top:10px;" onclick="document.getElementById('sellerModal').style.display='none'">إغلاق النافذة</button>
         </div>
     </div>
 
@@ -274,30 +375,32 @@
         <h2 style="color: var(--gold); margin-top: 0; font-size: 20px;">تقديم طلب شراء / استفسار تقديري 📝</h2>
         <form id="carOrderForm">
             <input type="text" id="piUsername" placeholder="اسم المستخدم في شبكة Pi (مثال: @username)" required>
-            <input type="text" id="carType" placeholder="نوع السيارة المطلوبة (مثال: لكزس)" required>
+            <input type="text" id="carType" placeholder="نوع السيارة المطلوبة (مثال: لكزس، تيسلا)" required>
             <input type="text" id="carSpecs" placeholder="الموديل والمواصفات (مثال: 2026 فل كامل)" required>
             <input type="text" id="carColor" placeholder="لون السيارة التي تريدها">
+            
             <button type="submit" class="btn-action">إرسال البيانات للوسيط الآمن</button>
         </form>
     </div>
 
     <div class="form-section" style="border-top: 3px solid var(--gold); background: #111;">
-        <h3 style="color: #fff; text-align: right; margin-top: 0; font-size: 15px;">
+        <h3 style="color: #fff; text-align: right; margin-top: 0; font-size: 15px; display: flex; align-items: center; gap: 8px;">
             <span>🔔</span> سجل طلبات المستخدمين الحية (متصل بقاعدة البيانات):
         </h3>
-        <div id="liveOrdersContainer" style="max-height: 300px; overflow-y: auto; text-align: right;">
+
+        <div id="liveOrdersContainer" style="max-height: 300px; overflow-y: auto; text-align: right; padding-left: 5px;">
             <p id="noOrdersMessage" style="color: #666; text-align: center; font-size: 14px; padding: 20px 0;">جاري تحميل الطلبات...</p>
         </div>
     </div>
 
     <div class="footer">
         <a href="track.html">متابعة حالة طلبي</a>
-        <a href="policy.html">سياسة الاستخدام</a>
-        <p style="color: #555; font-size: 13px; margin-top: 20px;">© 2026 جميع الحقوق محفوظة لمنصة الوسيط الآمن</p>
+        <a href="policy.html">سياسة الاستخدام وإخلاء المسؤولية</a>
+        <p style="color: #555; font-size: 13px; margin-top: 20px;">© 2026 جميع الحقوق البرمجية والتجارية محفوظة لمنصة الوسيط الآمن</p>
     </div>
 
     <script>
-    // ربط إرسال الطلبات بقاعدة بيانات Firebase المباشرة
+    // ربط استمارة الطلب بقاعدة البيانات مباشرة
     document.getElementById('carOrderForm').addEventListener('submit', async function(event) {
         event.preventDefault(); 
         
@@ -313,7 +416,7 @@
             alert('تم إرسال طلبك للوسيط الآمن وحفظه في قاعدة البيانات بنجاح!');
             this.reset();
         } catch (e) {
-            alert('حدث خطأ أثناء الإرسال.');
+            alert('حدث خطأ أثناء حفظ الطلب.');
         }
     });
 
@@ -343,39 +446,63 @@
     } catch (e) { console.error(e); }
 
     function updateStatus(text) {
-        const el = document.getElementById('statusMessage');
-        if (el) el.innerText = text;
+        const statusElement = document.getElementById('statusMessage');
+        if (statusElement) { statusElement.innerText = text; }
     }
 
     async function runPiTestPayment() {
         if (!window.Pi) {
-            alert("يرجى فتح الرابط من داخل تطبيق Pi Browser الرسمي.");
+            alert("يرجى فتح الرابط من داخل تطبيق Pi Browser الرسمي لتتمكن من محاكاة الدفع التجريبي.");
             return;
         }
+
         const btn = document.getElementById('paymentBtn');
         btn.disabled = true;
-        updateStatus("...جاري تفعيل توكن المصادقة");
+        updateStatus("...جاري تفعيل توكن المصادقة وقراءة حساب المطور المعتمد");
+
         try {
-            window.Pi.authenticate(['username', 'payments'], () => {}).then(function(auth) {
-                window.Pi.createPayment({
-                    amount: 1.0,
-                    memo: "تأكيد فحص المعاملة لمشروع Pi Auto Market 2026",
-                    metadata: { orderId: "step-verification" },
-                }, {
-                    onReadyForServerApproval: function(id) { updateStatus("...تم إنشاء الطلب وجاري الموافقة"); },
-                    onReadyForServerCompletion: function(id, txid) {
-                        updateStatus("ممتاز! تمت المعاملة بنجاح 🎉");
-                        btn.innerText = "تم تفعيل واجتياز المعاملة بنجاح";
-                        btn.style.backgroundColor = "#4caf50";
-                    },
-                    onCancel: function() { btn.disabled = false; updateStatus(""); },
-                    onError: function() { btn.disabled = false; updateStatus(""); }
-                });
+            const scopes = ['username', 'payments'];
+            window.Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
+                updateStatus("...تمت المصادقة بنجاح! جاري استدعاء نافذة محفظة الفحص للتطبيق");
+                executePaymentProcess();
             }).catch(function(error) {
-                updateStatus("فشلت المصادقة.");
+                updateStatus("فشلت المصادقة: " + error.message);
                 btn.disabled = false;
             });
-        } catch (err) { btn.disabled = false; }
+        } catch (err) {
+            btn.disabled = false;
+        }
+    }
+
+    function executePaymentProcess() {
+        const btn = document.getElementById('paymentBtn');
+        window.Pi.createPayment({
+            amount: 1.0,
+            memo: "تأكيد فحص المعاملة للخطوة 10 لمشروع Pi Auto Market 2026",
+            metadata: { orderId: "step-10-verification" },
+        }, {
+            onReadyForServerApproval: function(paymentId) {
+                updateStatus("...تم إنشاء الطلب بنجاح!");
+            },
+            onReadyForServerCompletion: function(paymentId, txid) {
+                updateStatus("ممتاز! تمت المعاملة بنجاح 🎉");
+                alert("تهانينا! اكتملت المعاملة بنجاح واجتزت الفحص النهائي للتطبيق المعتمد.");
+                btn.innerText = "تم تفعيل واجتياز المعاملة بنجاح";
+                btn.style.backgroundColor = "#4caf50";
+            },
+            onCancel: function(paymentId) {
+                updateStatus("تم إلغاء المعاملة");
+                btn.disabled = false;
+            },
+            onError: function(error, payment) {
+                updateStatus("خطأ في شبكة الفحص: " + error.message);
+                btn.disabled = false;
+            }
+        });
+    }
+
+    async function onIncompletePaymentFound(payment) {
+        console.log("معاملة معلقة:", payment);
     }
     </script>
 </body>
