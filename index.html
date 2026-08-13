@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pi Auto Market 2026</title>
     
-    <!-- استدعاء مكتبة الـ SDK الرسمية -->
+    <!-- استدعاء مكتبة الـ SDK الرسمية لشبكة Pi -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 
     <!-- استدعاء مكتبات Firebase للربط المباشر -->
@@ -52,7 +52,8 @@
                     callback(orders);
                 }, (error) => {
                     console.error("Firebase Snapshot Error:", error);
-                    document.getElementById('noOrdersMessage').innerText = "خطأ في قواعد الأمان أو الاتصال بقاعدة البيانات.";
+                    const msgElem = document.getElementById('noOrdersMessage');
+                    if (msgElem) msgElem.innerText = "خطأ في قواعد الأمان أو الاتصال بقاعدة البيانات.";
                 });
             } catch (e) {
                 console.error("Query Error:", e);
@@ -421,7 +422,7 @@
     </div>
 
     <script>
-    // إرسال طلب الشراء
+    // إرسال طلب الشراء إلى Firebase
     document.getElementById('carOrderForm').addEventListener('submit', async function(event) {
         event.preventDefault(); 
         
@@ -442,7 +443,7 @@
         }
     });
 
-    // إرسال سيارة للبيع
+    // إرسال سيارة للبيع إلى Firebase
     document.getElementById('sellerForm').addEventListener('submit', async function(event) {
         event.preventDefault();
 
@@ -479,9 +480,8 @@
         }
     });
 
-    // الاستماع للطلبات الحية وتحديث العداد
+    // تهيئة الصفحة والاستماع للبيانات
     window.addEventListener('load', () => {
-        // 1. تهيئة Pi SDK فور تحميل الصفحة لمنع خطأ Uninitialized
         if (window.Pi) {
             try {
                 window.Pi.init({ version: "2.0", sandbox: true });
@@ -491,30 +491,31 @@
             }
         }
 
-        // 2. الاستماع الفوري لقاعدة البيانات
         setTimeout(() => {
             if (window.listenForOrders) {
                 window.listenForOrders((orders) => {
                     const container = document.getElementById('liveOrdersContainer');
                     const countBadge = document.getElementById('ordersCount');
                     
-                    countBadge.innerText = orders.length;
+                    if (countBadge) countBadge.innerText = orders.length;
 
                     if (orders.length === 0) {
-                        container.innerHTML = '<p style="color: #666; text-align: center; font-size: 14px; padding: 20px 0;">لا توجد طلبات مرسلة حالياً. كن أول من يرسل طلبه!</p>';
+                        if (container) container.innerHTML = '<p style="color: #666; text-align: center; font-size: 14px; padding: 20px 0;">لا توجد طلبات مرسلة حالياً. كن أول من يرسل طلبه!</p>';
                         return;
                     }
                     
-                    container.innerHTML = orders.map(o => `
-                        <div style="background: #1a1a1a; padding: 12px 15px; border-radius: 10px; margin-bottom: 10px; border-right: 4px solid var(--gold); font-size: 14px; line-height: 1.6;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <strong style="color: var(--gold);">${o.username.startsWith('@') ? o.username : '@' + o.username}</strong>
-                                <span style="color: #666; font-size: 11px;">مباشر</span>
+                    if (container) {
+                        container.innerHTML = orders.map(o => `
+                            <div style="background: #1a1a1a; padding: 12px 15px; border-radius: 10px; margin-bottom: 10px; border-right: 4px solid var(--gold); font-size: 14px; line-height: 1.6;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                    <strong style="color: var(--gold);">${o.username.startsWith('@') ? o.username : '@' + o.username}</strong>
+                                    <span style="color: #666; font-size: 11px;">مباشر</span>
+                                </div>
+                                <div style="color: #ddd;">طلب شراء سيارة: <span style="color:#fff; font-weight:bold;">${o.car}</span> | المواصفات: ${o.specs} | اللون: ${o.color}</div>
+                                <div style="color: #e0b034; font-size: 12px; margin-top: 3px;">⏳ مسجل بقاعدة البيانات وجاري التدقيق</div>
                             </div>
-                            <div style="color: #ddd;">طلب شراء سيارة: <span style="color:#fff; font-weight:bold;">${o.car}</span> | المواصفات: ${o.specs} | اللون: ${o.color}</div>
-                            <div style="color: #e0b034; font-size: 12px; margin-top: 3px;">⏳ مسجل بقاعدة البيانات وجاري التدقيق</div>
-                        </div>
-                    `).join('');
+                        `).join('');
+                    }
                 });
             }
         }, 1000);
@@ -525,12 +526,11 @@
         if (statusElement) { statusElement.innerText = text; }
     }
 
-    // المعاملات غير المكتملة
-    async function onIncompletePaymentFound(payment) {
-        console.log("معاملة معلقة:", payment);
+    function onIncompletePaymentFound(payment) {
+        console.log("Incomplete payment found:", payment);
     }
 
-    // دالة تنفيذ الدفع المحدثة والمثالية
+    // دالة تنفيذ الدفع التجريبي المصححة
     async function runPiTestPayment() {
         if (!window.Pi) {
             alert("يرجى فتح الرابط من داخل تطبيق Pi Browser الرسمي لتتمكن من محاكاة الدفع التجريبي.");
@@ -539,48 +539,48 @@
 
         const btn = document.getElementById('paymentBtn');
         btn.disabled = true;
-        updateStatus("...جاري تفعيل المصادقة والربط بالحساب التجريبي");
+        updateStatus("...جاري تفعيل المصادقة والربط بالمحفظة");
 
         try {
             const scopes = ['username', 'payments'];
-            const auth = await window.Pi.authenticate(scopes, onIncompletePaymentFound);
-            updateStatus("...تمت المصادقة بنجاح! جاري تحضير المحفظة المعالجة");
+            await window.Pi.authenticate(scopes, onIncompletePaymentFound);
             
-            executePaymentProcess();
+            updateStatus("...تمت المصادقة! جاري تحضير نافذة المحفظة");
+
+            window.Pi.createPayment({
+                amount: 1.0,
+                memo: "تأكيد فحص المعاملة - Pi Auto Market 2026",
+                metadata: { orderId: "verification-test-" + Date.now() },
+            }, {
+                onReadyForServerApproval: function(paymentId) {
+                    updateStatus("...جاري التأكيد والموافقة على العملية");
+                    console.log("Ready for approval:", paymentId);
+                },
+                onReadyForServerCompletion: function(paymentId, txid) {
+                    updateStatus("ممتاز! تمت المعاملة بنجاح 🎉");
+                    alert("تهانينا! اكتملت عملية الدفع التجريبية بنجاح. رقم المعاملة: " + txid);
+                    btn.innerText = "تم تفعيل واجتياز المعاملة بنجاح ✅";
+                    btn.style.backgroundColor = "#4caf50";
+                    btn.disabled = false;
+                },
+                onCancel: function(paymentId) {
+                    updateStatus("تم إلغاء العملية من قبل المستخدم");
+                    btn.disabled = false;
+                },
+                onError: function(error, payment) {
+                    console.error("Payment Error:", error);
+                    updateStatus("خطأ: " + (error.message || "فشلت عملية الدفع"));
+                    btn.disabled = false;
+                }
+            });
+
         } catch (error) {
+            console.error("Auth Error:", error);
             updateStatus("فشلت المصادقة: " + (error.message || error));
             btn.disabled = false;
         }
     }
-
-    function executePaymentProcess() {
-        const btn = document.getElementById('paymentBtn');
-        
-        window.Pi.createPayment({
-            amount: 1.0,
-            memo: "تأكيد فحص المعاملة لـ Pi Auto Market 2026",
-            metadata: { orderId: "verification-step" },
-        }, {
-            onReadyForServerApproval: function(paymentId) {
-                updateStatus("...تم إنشاء الطلب وجاري الموافقة عليه!");
-            },
-            onReadyForServerCompletion: function(paymentId, txid) {
-                updateStatus("ممتاز! تمت المعاملة بنجاح 🎉");
-                alert("تهانينا! اكتملت المعاملة بنجاح واجتزت الفحص المباشر للتطبيق المعتمد.");
-                btn.innerText = "تم تفعيل واجتياز المعاملة بنجاح ✅";
-                btn.style.backgroundColor = "#4caf50";
-                btn.disabled = false;
-            },
-            onCancel: function(paymentId) {
-                updateStatus("تم إلغاء المعاملة من قبل المستخدم");
-                btn.disabled = false;
-            },
-            onError: function(error, payment) {
-                updateStatus("خطأ في عملية الدفع: " + (error.message || error));
-                btn.disabled = false;
-            }
-        });
-    }
     </script>
 </body>
 </html>
+
