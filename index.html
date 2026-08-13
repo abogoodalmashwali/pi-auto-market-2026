@@ -449,7 +449,6 @@
         const fileInput = document.getElementById('sellerImages');
         let imageBase64 = "";
 
-        // تحويل الصورة المرفقة إلى رابط محلي سريع
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
             const reader = new FileReader();
@@ -482,6 +481,17 @@
 
     // الاستماع للطلبات الحية وتحديث العداد
     window.addEventListener('load', () => {
+        // 1. تهيئة Pi SDK فور تحميل الصفحة لمنع خطأ Uninitialized
+        if (window.Pi) {
+            try {
+                window.Pi.init({ version: "2.0", sandbox: true });
+                console.log("Pi SDK Initialized Successfully!");
+            } catch (e) {
+                console.error("Pi Init Error:", e);
+            }
+        }
+
+        // 2. الاستماع الفوري لقاعدة البيانات
         setTimeout(() => {
             if (window.listenForOrders) {
                 window.listenForOrders((orders) => {
@@ -510,16 +520,17 @@
         }, 1000);
     });
 
-    // كود Pi SDK
-    try {
-        if (window.Pi) { window.Pi.init({ version: "2.0", sandbox: true }); }
-    } catch (e) { console.error(e); }
-
     function updateStatus(text) {
         const statusElement = document.getElementById('statusMessage');
         if (statusElement) { statusElement.innerText = text; }
     }
 
+    // المعاملات غير المكتملة
+    async function onIncompletePaymentFound(payment) {
+        console.log("معاملة معلقة:", payment);
+    }
+
+    // دالة تنفيذ الدفع المحدثة والمثالية
     async function runPiTestPayment() {
         if (!window.Pi) {
             alert("يرجى فتح الرابط من داخل تطبيق Pi Browser الرسمي لتتمكن من محاكاة الدفع التجريبي.");
@@ -528,51 +539,47 @@
 
         const btn = document.getElementById('paymentBtn');
         btn.disabled = true;
-        updateStatus("...جاري تفعيل توكن المصادقة وقراءة حساب المطور المعتمد");
+        updateStatus("...جاري تفعيل المصادقة والربط بالحساب التجريبي");
 
         try {
             const scopes = ['username', 'payments'];
-            window.Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
-                updateStatus("...تمت المصادقة بنجاح! جاري استدعاء نافذة محفظة الفحص للتطبيق");
-                executePaymentProcess();
-            }).catch(function(error) {
-                updateStatus("فشلت المصادقة: " + error.message);
-                btn.disabled = false;
-            });
-        } catch (err) {
+            const auth = await window.Pi.authenticate(scopes, onIncompletePaymentFound);
+            updateStatus("...تمت المصادقة بنجاح! جاري تحضير المحفظة المعالجة");
+            
+            executePaymentProcess();
+        } catch (error) {
+            updateStatus("فشلت المصادقة: " + (error.message || error));
             btn.disabled = false;
         }
     }
 
     function executePaymentProcess() {
         const btn = document.getElementById('paymentBtn');
+        
         window.Pi.createPayment({
             amount: 1.0,
-            memo: "تأكيد فحص المعاملة للخطوة 10 لمشروع Pi Auto Market 2026",
-            metadata: { orderId: "step-10-verification" },
+            memo: "تأكيد فحص المعاملة لـ Pi Auto Market 2026",
+            metadata: { orderId: "verification-step" },
         }, {
             onReadyForServerApproval: function(paymentId) {
-                updateStatus("...تم إنشاء الطلب بنجاح!");
+                updateStatus("...تم إنشاء الطلب وجاري الموافقة عليه!");
             },
             onReadyForServerCompletion: function(paymentId, txid) {
                 updateStatus("ممتاز! تمت المعاملة بنجاح 🎉");
-                alert("تهانينا! اكتملت المعاملة بنجاح واجتزت الفحص النهائي للتطبيق المعتمد.");
-                btn.innerText = "تم تفعيل واجتياز المعاملة بنجاح";
+                alert("تهانينا! اكتملت المعاملة بنجاح واجتزت الفحص المباشر للتطبيق المعتمد.");
+                btn.innerText = "تم تفعيل واجتياز المعاملة بنجاح ✅";
                 btn.style.backgroundColor = "#4caf50";
+                btn.disabled = false;
             },
             onCancel: function(paymentId) {
-                updateStatus("تم إلغاء المعاملة");
+                updateStatus("تم إلغاء المعاملة من قبل المستخدم");
                 btn.disabled = false;
             },
             onError: function(error, payment) {
-                updateStatus("خطأ في شبكة الفحص: " + error.message);
+                updateStatus("خطأ في عملية الدفع: " + (error.message || error));
                 btn.disabled = false;
             }
         });
-    }
-
-    async function onIncompletePaymentFound(payment) {
-        console.log("معاملة معلقة:", payment);
     }
     </script>
 </body>
